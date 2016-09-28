@@ -54,8 +54,11 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "jquery": "^3.1.1",
     "react": "^15.3.1",
-    "react-dom": "^15.3.1"
+    "react-bootstrap": "^0.30.3",
+    "react-dom": "^15.3.1",
+    "react-materialize": "^0.17.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
