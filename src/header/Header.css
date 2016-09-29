@@ -1,0 +1,14 @@
+.navbar-inverse {
+  background-image: none!important;
+  color: #fff!important;
+  background-color: #373a3c!important;
+}
+
+.navbar-brand {
+  color: #fff!important;
+}
+
+.title {
+  font-weight: 300;
+  font-size: 4.5rem;
+}

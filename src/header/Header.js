@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import './Header.css'
 import { Nav, Navbar, NavItem} from 'react-bootstrap'
+import './Header.css'
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.menuItems = props.menuItems;
-  } 
   render() {
     return (
-      <Navbar>
+      <Navbar inverse fixedTop>
         <Navbar.Header>
           <Navbar.Brand>
             <a href="#">HoboFitness</a>
@@ -18,8 +14,8 @@ class Header extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            {Object.keys(this.menuItems).map((key, index) => {
-              return <NavItem eventKey={index} href={this.menuItems[key]}>{key}</NavItem>
+            {this.props.menuItems.map((item, index) => {
+              return <NavItem key={index} href={item.link}>{item.title}</NavItem>
             })}
           </Nav>
         </Navbar.Collapse>

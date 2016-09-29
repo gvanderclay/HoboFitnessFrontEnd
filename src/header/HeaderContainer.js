@@ -4,10 +4,11 @@ import Header from './Header';
 class HeaderContainer extends Component {
   constructor(){
     super();
-    this.menuItems = {
-      "Sign Up": "#"
-    }
+    this.menuItems = [
+      {title: "Sign Up", link: "#"},
+    ]
   }
+
   render() {
     return <Header menuItems={this.menuItems}/>
   }
