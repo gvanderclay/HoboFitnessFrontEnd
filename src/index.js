@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app/App';
-import HomePage from './homepage/HomePage'
+import App from './components/App';
+import HomePage from './components/HomePage'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import './index.css';
+import './styles/index.scss';
 
 ReactDOM.render(
   <Router history={browserHistory}>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Nav, Navbar, NavItem} from 'react-bootstrap'
-import './Header.css'
+import '../styles/Header.scss'
 
 class Header extends Component {
   render() {
