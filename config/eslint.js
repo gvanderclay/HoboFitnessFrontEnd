@@ -14,7 +14,7 @@ module.exports = {
 
   // import plugin is temporarily disabled, scroll below to see why
   plugins: [/*'import', */'flowtype', 'jsx-a11y', 'react'],
-
+  
   env: {
     browser: true,
     commonjs: true,

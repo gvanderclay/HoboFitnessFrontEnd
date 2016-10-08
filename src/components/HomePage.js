@@ -27,7 +27,7 @@ class HomePage extends Component {
           <div className="container">
             <h1 className="title">Welcome To HoboFitness</h1>
             <p>Track your workouts effortlessly!</p>
-            <p><Button>Get Started</Button></p>
+            <p><Button href="/routines">Get Started</Button></p>
           </div>
         </Jumbotron>
         <div className="container">

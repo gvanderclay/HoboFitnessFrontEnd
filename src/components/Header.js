@@ -8,7 +8,7 @@ class Header extends Component {
       <Navbar inverse fixedTop>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#">HoboFitness</a>
+            <a href="/">HoboFitness</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
