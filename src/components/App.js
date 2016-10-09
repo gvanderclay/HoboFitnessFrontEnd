@@ -15,9 +15,6 @@ class App extends Component {
 }
 
 App.propTypes = {
-  params: PropTypes.shape({
-    filter: PropTypes.string,
-  })
 }
 
 export default App;

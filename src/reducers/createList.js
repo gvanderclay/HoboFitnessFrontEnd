@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
-const createList = () => {
+const createList = (type) => {
   const ids = (state = [], action) => {
     switch(action.type) {
-      case 'FETCH_ROUTINES_SUCCESS':
-        return action.response.map(routine => routine.id);
-      case 'ADD_ROUTINE_SUCCESS':
-        return [...state, action.response.id]
+      case 'FETCH_' + type + '_SUCCESS':
+        return action.response.result;
+      case 'ADD_' + type + '_SUCCESS':
+        return [...state, action.response.result]
       default:
         return state;
     }
@@ -14,11 +14,14 @@ const createList = () => {
   
   const isLoading = (state = false, action) => {
     switch(action.type) {
-      case 'FETCH_ROUTINES_REQUEST':
-      case 'ADD_ROUTINE_REQUEST':
+      case 'FETCH_' + type + '_REQUEST':
+      case 'ADD_' + type + '_REQUEST':
         return true;
-      case 'FETCH_ROUTINES_SUCCESS':
-      case 'FETCH_ROUTINES_FAILURE':
+      case 'FETCH_' + type + 'S_SUCCESS':
+      case 'FETCH_' + type + 'S_FAILURE':
+      case 'ADD_' + type + '_SUCCESS':
+      case 'ADD_' + type + '_FAILURE':
+
         return false;
       default:
         return state;
@@ -27,11 +30,11 @@ const createList = () => {
   
   const errorMessage = (state = null, action) => {
     switch(action.type) {
-      case 'FETCH_ROUTINES_FAILURE':
-      case 'ADD_ROUTINE_FAILURE':
+      case 'FETCH_' + type + 'S_FAILURE':
+      case 'ADD_' + type + '_FAILURE':
         return action.message;
-      case 'FETCH_ROUTINES_SUCCESS':
-      case 'ADD_ROUTINE_SUCCESS':
+      case 'FETCH_' + type + 'S_SUCCESS':
+      case 'ADD_' + type + '_SUCCESS':
         return null;
       default:
         return state;

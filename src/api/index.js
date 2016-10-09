@@ -21,25 +21,45 @@ export const saveState = (state) => {
   }
 }
 
-const delay = (ms) => 
-  new Promise(resolve => setTimeout(resolve, ms));
 
-export const fetchRoutines = () => {
-  delay(100).then(() => {
-    return loadState().routines;
+const state = loadState() && loadState().routines ? loadState() : 
+                                      {
+                                        routines: [],
+                                      };
+saveState(state);
+
+export const fetchRoutines = () => 
+  new Promise((resolve, reject) => {
+    try {
+      resolve(loadState().routines);
+    }
+    catch(err) {
+      reject(Error(err)); 
+    }
   });
-}
 
-export const addRoutine = ({ workouts = [], title }) => {
-  delay(100).then(() => {
+
+export const addRoutine = (title, workouts = []) =>  
+  new Promise((resolve, reject) => {
     const routine = {
       id: v4(),
       title,
       workouts, 
     }
-    var oldState = loadState();
-    oldState.routines.push(routine);
-    saveState(oldState);
-  })
-  
-}
+    try{
+      var oldState = loadState();
+      oldState.routines.push(routine);
+      saveState(oldState);
+      resolve(routine);
+    }
+    catch(err) {
+      reject(Error(err));
+    }    
+  });
+
+export const addWorkoutToRoutine = (id, workout) => (dispatch) =>
+  new Promise((resolve, reject) => {
+    const routine = loadState().routines.find(t => t.id === id);
+    routine.workouts.push(workout);
+    return routine;
+  });

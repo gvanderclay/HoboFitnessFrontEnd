@@ -1,14 +1,22 @@
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { addRoutine } from '../actions';
+import * as actions from '../actions'
 import '../styles/ListHeader.scss';
 
-const ListHeader = ({ type, dispatch }) => {
+const ListHeader = ({ type, dispatch, addObject }) => {
   return (
     <div className='list-header'>
       <h1>{type}</h1>
-      <Button bsSize='large' onClick={dispatch(addRoutine('test'))}>+ New {type}</Button>
+      <Button 
+        bsSize='large' 
+        onClick={() => {
+          dispatch(actions[addObject]('New Routine'));
+        } 
+          
+      }>
+        + New {type}
+      </Button>
     </div>  
   )
 }

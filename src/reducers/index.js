@@ -1,19 +1,29 @@
 import { combineReducers } from 'redux';
-import byId, * as fromById from './byId';
+import  * as fromById from './byId';
 import createList, * as fromList from './createList';
 
-const routineList = createList();
+const routineList = createList('ROUTINE');
+const workoutList = createList('WORKOUT');
+
+const routinesById = fromById.routinesById;
+const workoutsById = fromById.workoutsById;
 
 const routines = combineReducers({
-  byId,
+  routinesById,
+  workoutsById,
   routineList,
+  workoutList,
 })
 
 export default routines;
 
 export const getAllRoutines = (state) => {
-  const ids = fromList.getIds(state.list);
-  return ids.map(id => fromById.getRoutine(state.byId, id));
+  const ids = fromList.getIds(state.routineList);
+  return ids.map(id => fromById.getRoutine(state.routinesById, id));
+}
+
+export const getActiveRoutine = (state, id) => {
+  return fromById.getRoutine(id);  
 }
 
 export const getIsLoading = (state) => 
@@ -21,3 +31,5 @@ export const getIsLoading = (state) =>
   
 export const getErrorMessage = (state, filter) => 
   fromList.getErrorMessage(state.routineList);
+  
+  

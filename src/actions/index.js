@@ -1,7 +1,9 @@
+import { normalize } from 'normalizr';
+import * as schema from './schema';
 import * as api from '../api';
 import { getIsLoading } from '../reducers';
 
-export const fetchRoutines = (filter) => (dispatch, getState) => {
+export const fetchRoutines = () => (dispatch, getState) => {
     if (getIsLoading(getState())) {
         return Promise.resolve();
     }
@@ -14,7 +16,7 @@ export const fetchRoutines = (filter) => (dispatch, getState) => {
         response => {
             dispatch({
                 type: 'FETCH_ROUTINES_SUCCESS',
-                response,
+                response: normalize(response, schema.arrayOfRoutines) ,
             });
         },
         error => {
@@ -31,11 +33,15 @@ export const addRoutine = (title) => (dispatch, getState) => {
         return Promise.resolve();
     }
     
-    api.addRoutine(title).then(
+    dispatch({
+        type: 'ADD_ROUTINE_REQUEST'
+    });
+    
+    return api.addRoutine(title).then(
         response => {
             dispatch({
                 type: 'ADD_ROUTINE_SUCCESS',
-                response,
+                response: normalize(response, schema.routine),
             })
         },
         error => {
@@ -46,4 +52,53 @@ export const addRoutine = (title) => (dispatch, getState) => {
         }
     );
 }
+
+export const fetchWorkouts = () => (dispatch, getState) => {
+    if (getIsLoading(getState())) {
+        return Promise.resolve();
+    }
     
+    dispatch({
+        type: 'FETCH_WORKOUTS_REQUEST'
+    });
+    
+    return api.fetchRoutines().then(
+        response => {
+            dispatch({
+                type: 'FETCH_WORKOUTS_SUCCESS',
+                response: normalize(response, schema.arrayOfWorkouts) ,
+            });
+        },
+        error => {
+            dispatch({
+                type: 'FETCH_WORKOUTS_FAILURE',
+                message: error.message || 'Something went wrong.',
+            });
+        }
+    );
+};
+
+export const addWorkout = (title) => (dispatch, getState) => {
+    if(getIsLoading(getState())) {
+        return Promise.resolve();
+    }
+    
+    dispatch({
+        type: 'ADD_WORKOUT_REQUEST'
+    });
+    
+    return api.addRoutine(title).then(
+        response => {
+            dispatch({
+                type: 'ADD_WORKOUT_SUCCESS',
+                response: normalize(response, schema.workout),
+            })
+        },
+        error => {
+            dispatch({
+                type: 'ADD_WORKOUT_FAILURE',
+                message: error.message || 'Something went wrong',
+            })
+        }
+    );
+}

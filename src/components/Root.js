@@ -3,14 +3,14 @@ import { Provider } from 'react-redux';
 import {  IndexRoute, Router, Route, browserHistory } from 'react-router';
 import App from './App';
 import HomePage from './HomePage';
-import Routines from './Routines';
+import RoutineListContainer from '../containers/RoutineListContainer';
 
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path='/' component={App}>
         <IndexRoute component={HomePage}></IndexRoute>
-        <Route path='/routines' component={Routines}></Route>
+        <Route path='/routines' component={RoutineListContainer}> </Route>
       </Route>
     </Router>
   </Provider>
