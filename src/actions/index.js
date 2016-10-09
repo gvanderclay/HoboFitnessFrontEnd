@@ -43,12 +43,14 @@ export const addRoutine = (title) => (dispatch, getState) => {
                 type: 'ADD_ROUTINE_SUCCESS',
                 response: normalize(response, schema.routine),
             })
+            return Promise.resolve(response);
         },
         error => {
             dispatch({
                 type: 'ADD_ROUTINE_FAILURE',
                 message: error.message || 'Something went wrong',
             })
+            return Promise.resolve(error);
         }
     );
 }

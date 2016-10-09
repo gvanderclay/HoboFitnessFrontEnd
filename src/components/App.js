@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 // import logo from '../logo.svg';
 import '../styles/App.scss';
 import Header from '../containers/HeaderContainer';
@@ -12,9 +12,6 @@ class App extends Component {
       </div>
     );
   }
-}
-
-App.propTypes = {
 }
 
 export default App;

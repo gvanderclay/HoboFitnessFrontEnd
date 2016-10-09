@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 const createList = (type) => {
   const ids = (state = [], action) => {
     switch(action.type) {
-      case 'FETCH_' + type + '_SUCCESS':
+      case 'FETCH_' + type + 'S_SUCCESS':
         return action.response.result;
       case 'ADD_' + type + '_SUCCESS':
         return [...state, action.response.result]
@@ -11,6 +11,15 @@ const createList = (type) => {
         return state;
     }
   };
+  
+  const active = (state = null, action) => {
+    switch(action.type) {
+      case 'ADD_' + type + '_SUCCESS':
+        return action.response.result;
+      default: 
+        return state;
+    }
+  }
   
   const isLoading = (state = false, action) => {
     switch(action.type) {
@@ -21,7 +30,6 @@ const createList = (type) => {
       case 'FETCH_' + type + 'S_FAILURE':
       case 'ADD_' + type + '_SUCCESS':
       case 'ADD_' + type + '_FAILURE':
-
         return false;
       default:
         return state;
@@ -43,6 +51,7 @@ const createList = (type) => {
   
   return combineReducers({
     ids,
+    active,
     isLoading,
     errorMessage,
   });

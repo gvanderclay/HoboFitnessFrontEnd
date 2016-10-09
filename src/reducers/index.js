@@ -22,9 +22,9 @@ export const getAllRoutines = (state) => {
   return ids.map(id => fromById.getRoutine(state.routinesById, id));
 }
 
-export const getActiveRoutine = (state, id) => {
-  return fromById.getRoutine(id);  
-}
+export const getActiveRoutine = (state) => 
+  state.routineList.active; 
+
 
 export const getIsLoading = (state) => 
   fromList.getIsLoading(state.routineList);

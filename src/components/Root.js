@@ -11,6 +11,7 @@ const Root = ({ store }) => (
       <Route path='/' component={App}>
         <IndexRoute component={HomePage}></IndexRoute>
         <Route path='/routines' component={RoutineListContainer}> </Route>
+        <Route path='/routines/(:id)' component={HomePage}></Route>
       </Route>
     </Router>
   </Provider>

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import * as actions from '../actions';
 import { getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
 import ListHeader from '../components/ListHeader';
@@ -13,10 +12,8 @@ class ListContainer extends Component {
   }
   
   fetchData() {
-    const { fetchRoutines, listType } = this.props;
-    if(listType === 'Routine') {
-      fetchRoutines(); 
-    }
+    const { fetchObjects, dispatch } = this.props;
+    dispatch(fetchObjects()); 
   }
   
   render() {
@@ -54,7 +51,7 @@ ListContainer.propTypes = {
   objects: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired,
   addObject: PropTypes.string.isRequired,
-  listType: PropTypes.string.isRequired,
+  fetchObjects: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { params }) => {
@@ -69,7 +66,6 @@ const mapStateToProps = (state, { params }) => {
 
 ListContainer = withRouter(connect(
   mapStateToProps,
-  actions
 )(ListContainer));
 
 export default ListContainer;
