@@ -2,32 +2,33 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Col, Row, Button } from 'react-bootstrap';
-import { getAllRoutines, getErrorMessage, getIsLoading } from '../reducers';
+import { getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
 import LoadingError from '../components/LoadingError';
-import { fetchRoutines, addRoutine } from '../actions'
+import { fetchExercises, addExercise } from '../actions'
 import '../styles/ListHeader.scss';
 
-class RoutineListContainer extends Component {
+class ExerciseListContainer extends Component {
   componentDidMount() {
     this.fetchData();
+    console.log(this.props.exercises)
   }
   
   fetchData() {
     const { dispatch } = this.props;
-    dispatch(fetchRoutines());
+    dispatch(fetchExercises());
   }
   
   render() {
-    const { isLoading, errorMessage, routines, router, dispatch } = this.props;
-    if(isLoading&& !routines.length) {
+    const { isLoading, errorMessage, exercises, router, dispatch } = this.props;
+    if(isLoading&& !exercises.length) {
       return (
         <div className="container">
           <p>Loading...</p>
         </div>
       )
     }
-    if(errorMessage && !routines.length) {
+    if(errorMessage && !exercises.length) {
       return (
         <LoadingError
           message={errorMessage}
@@ -35,29 +36,28 @@ class RoutineListContainer extends Component {
         />
       );
     }
-    
     return (
       <div className="container list-header">
         <Row>
           <Col sm={9}>
-            <h1>Routines</h1>
+            <h1>Exercises</h1>
           </Col>
           <Col sm={3}>
           <Button 
             bsSize='large' 
             onClick={() => {
-              dispatch(addRoutine('New Routine')).then((result) => {
-                router.push('/routines/' + result.id); 
+              dispatch(addExercise('New Exercise')).then((result) => {
+                router.push('/exercises/' + result.id + '/edit'); 
               });
             } 
               
           }>
-            + New Routine
+            + New Exercise
           </Button>
           </Col>
         </Row>
         <List 
-          objects={routines}
+          objects={exercises}
           onObjectClick={() => {}}
         />
       </div>
@@ -65,9 +65,9 @@ class RoutineListContainer extends Component {
   }
 }
 
-RoutineListContainer.propTypes = {
+ExerciseListContainer.propTypes = {
   errorMessage: PropTypes.string,
-  routines: PropTypes.array.isRequired,
+  exercises: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
 
@@ -75,12 +75,12 @@ const mapStateToProps = (state, { params }) => {
   return {
     isLoading: getIsLoading(state),
     errorMessage: getErrorMessage(state),
-    routines: getAllRoutines(state),
+    exercises: getAllExercises(state),
   }
 }
 
-RoutineListContainer = withRouter(connect(
+ExerciseListContainer = withRouter(connect(
   mapStateToProps,
-)(RoutineListContainer));
+)(ExerciseListContainer));
 
-export default RoutineListContainer;
+export default ExerciseListContainer;

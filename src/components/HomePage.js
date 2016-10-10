@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Jumbotron, Row, Col, Button } from 'react-bootstrap';
+import { withRouter } from 'react-router';
 import '../styles/HomePage.scss'
 
 class HomePage extends Component {
@@ -27,14 +28,18 @@ class HomePage extends Component {
           <div className="container">
             <h1 className="title">Welcome To HoboFitness</h1>
             <p>Track your workouts effortlessly!</p>
-            <p><Button href="/routines">Get Started</Button></p>
+            <p><Button onClick={() => {
+              this.props.router.push('/routines');
+            }}>
+            Get Started
+            </Button></p>
           </div>
         </Jumbotron>
         <div className="container">
           <Row>
-            {this.sections.map(function(section) {
+            {this.sections.map(function(section, index) {
               return (
-                <Col md={4}>
+                <Col md={4} key={index}>
                   <h2>{section.title}</h2>
                   <p>{section.description}</p>
                 </Col>
@@ -47,4 +52,4 @@ class HomePage extends Component {
   }
 }
 
-export default HomePage;
+export default withRouter(HomePage);

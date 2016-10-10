@@ -7,7 +7,7 @@ const List = ({ objects, onObjectClick }) => (
       <tbody>
       {objects.map((object) => (
         <tr key={object.id}>
-          <td>{object.title}</td>
+          <td>{object.name}</td>
         </tr>
       ))}
       </tbody>
@@ -18,7 +18,7 @@ const List = ({ objects, onObjectClick }) => (
 List.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired).isRequired,
   onObjectClick: PropTypes.func.isRequired,
 };

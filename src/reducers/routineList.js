@@ -3,12 +3,10 @@ import { combineReducers } from 'redux';
 const createList = (type, childType) => {
   const ids = (state = [], action) => {
     switch(action.type) {
-      case 'FETCH_' + type + 'S_SUCCESS':
+      case 'FETCH_ROUTINES_SUCCESS':
         return action.response.result;
-      case 'ADD_' + type + '_SUCCESS':
+      case 'ADD_ROUTINE_SUCCESS':
         return [...state, action.response.result]
-      case 'ADD_' + childType + '_SUCCESS':
-        return [state]
       default:
         return state;
     }
@@ -16,7 +14,7 @@ const createList = (type, childType) => {
   
   const active = (state = null, action) => {
     switch(action.type) {
-      case 'ADD_' + type + '_SUCCESS':
+      case 'ADD_ROUTINE_SUCCESS':
         return action.response.result;
       default: 
         return state;
@@ -25,13 +23,13 @@ const createList = (type, childType) => {
   
   const isLoading = (state = false, action) => {
     switch(action.type) {
-      case 'FETCH_' + type + 'S_REQUEST':
-      case 'ADD_' + type + '_REQUEST':
+      case 'FETCH_ROUTINES_REQUEST':
+      case 'ADD_ROUTINE_REQUEST':
         return true;
-      case 'FETCH_' + type + 'S_SUCCESS':
-      case 'FETCH_' + type + 'S_FAILURE':
-      case 'ADD_' + type + '_SUCCESS':
-      case 'ADD_' + type + '_FAILURE':
+      case 'FETCH_ROUTINES_SUCCESS':
+      case 'FETCH_ROUTINES_FAILURE':
+      case 'ADD_ROUTINE_SUCCESS':
+      case 'ADD_ROUTINE_FAILURE':
         return false;
       default:
         return state;
@@ -40,11 +38,11 @@ const createList = (type, childType) => {
   
   const errorMessage = (state = null, action) => {
     switch(action.type) {
-      case 'FETCH_' + type + 'S_FAILURE':
-      case 'ADD_' + type + '_FAILURE':
+      case 'FETCH_ROUTINES_FAILURE':
+      case 'ADD_ROUTINE_FAILURE':
         return action.message;
-      case 'FETCH_' + type + 'S_SUCCESS':
-      case 'ADD_' + type + '_SUCCESS':
+      case 'FETCH_ROUTINES_SUCCESS':
+      case 'ADD_ROUTINE_SUCCESS':
         return null;
       default:
         return state;
@@ -63,4 +61,4 @@ export default createList;
 
 export const getIds = state => state.ids;
 export const getIsLoading = state => state.isLoading;
-export const getErrorMessage = state => state.errorMessage;
+export const getErrorMessage = state => state.errorMessag

@@ -2,13 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Col, Row, Button } from 'react-bootstrap';
-import { getAllRoutines, getErrorMessage, getIsLoading } from '../reducers';
+import { getRoutineWorkouts, getRoutineById, getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
 import LoadingError from '../components/LoadingError';
-import { fetchRoutines, addRoutine } from '../actions'
+import H1TextBox from '../components/H1TextBox';
+import { fetchRoutines, fetchWorkouts, addWorkoutToRoutine } from '../actions'
 import '../styles/ListHeader.scss';
 
-class RoutineListContainer extends Component {
+class RoutineWorkoutListContainer extends Component {
   componentDidMount() {
     this.fetchData();
   }
@@ -16,18 +17,19 @@ class RoutineListContainer extends Component {
   fetchData() {
     const { dispatch } = this.props;
     dispatch(fetchRoutines());
+    dispatch(fetchWorkouts());
   }
   
   render() {
-    const { isLoading, errorMessage, routines, router, dispatch } = this.props;
-    if(isLoading&& !routines.length) {
+    const { isLoading, errorMessage, workouts, routine, router, dispatch } = this.props;
+    if(isLoading&& !workouts.length) {
       return (
         <div className="container">
           <p>Loading...</p>
         </div>
       )
     }
-    if(errorMessage && !routines.length) {
+    if(errorMessage && !workouts.length) {
       return (
         <LoadingError
           message={errorMessage}
@@ -40,24 +42,24 @@ class RoutineListContainer extends Component {
       <div className="container list-header">
         <Row>
           <Col sm={9}>
-            <h1>Routines</h1>
+            <H1TextBox placeHolder="Workout Name" value={routine.title} />
           </Col>
           <Col sm={3}>
           <Button 
             bsSize='large' 
             onClick={() => {
-              dispatch(addRoutine('New Routine')).then((result) => {
-                router.push('/routines/' + result.id); 
+              dispatch(addWorkoutToRoutine('New Workout', routine.id)).then((result) => {
+                // router.push('/routines/' + routine.id + '/workout/' + result.id); 
               });
             } 
               
           }>
-            + New Routine
+            + New Workout
           </Button>
           </Col>
         </Row>
         <List 
-          objects={routines}
+          objects={workouts}
           onObjectClick={() => {}}
         />
       </div>
@@ -65,9 +67,10 @@ class RoutineListContainer extends Component {
   }
 }
 
-RoutineListContainer.propTypes = {
+RoutineWorkoutListContainer.propTypes = {
   errorMessage: PropTypes.string,
-  routines: PropTypes.array.isRequired,
+  workouts: PropTypes.array.isRequired,
+  routine: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
 
@@ -75,12 +78,13 @@ const mapStateToProps = (state, { params }) => {
   return {
     isLoading: getIsLoading(state),
     errorMessage: getErrorMessage(state),
-    routines: getAllRoutines(state),
+    workouts: getRoutineWorkouts(state, params.routineId),
+    routine: getRoutineById(state, params.routineId),
   }
 }
 
-RoutineListContainer = withRouter(connect(
+RoutineWorkoutListContainer = withRouter(connect(
   mapStateToProps,
-)(RoutineListContainer));
+)(RoutineWorkoutListContainer));
 
-export default RoutineListContainer;
+export default RoutineWorkoutListContainer;
