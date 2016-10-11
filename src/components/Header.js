@@ -1,12 +1,13 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import { Nav, Navbar, NavItem} from 'react-bootstrap'
 import '../styles/Header.scss'
 
-const Header = ({ menuItems }) => (
+const Header = ({ menuItems, router }) => (
       <Navbar inverse fixedTop>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/">HoboFitness</a>
+            <a onClick={() => router.push('/')}>HoboFitness</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -20,4 +21,4 @@ const Header = ({ menuItems }) => (
       </Navbar>
     );
 
-export default Header;
+export default withRouter(Header);

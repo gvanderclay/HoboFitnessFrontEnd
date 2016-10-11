@@ -53,6 +53,27 @@ export const fetchExercises = () =>
         reject(Error(err));
       }
     });
+
+export const updateExercise = (id, name, reps, sets, weight) => 
+  new Promise((resolve, reject) => {
+    try {
+      const db = loadDB();
+      const indexOfExercise = db.exercises.findIndex(exercise => exercise.id === id);
+      const oldExercise = db.exercises[indexOfExercise];
+      const newExercise = {
+        id,
+        name: name ? name : oldExercise.name,
+        reps: reps ? reps : oldExercise.reps,
+        sets: sets ? sets : oldExercise.sets,
+        weight: weight ? weight : oldExercise.weight,
+      }
+      db.exercises[indexOfExercise] = newExercise;
+      saveDB(db);
+      resolve(newExercise);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
   
 
 

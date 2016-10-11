@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 const ids = (state = [], action) => {
   switch(action.type) {
     case 'FETCH_EXERCISES_SUCCESS':
-      console.log(action.response.result);
       return action.response.result;
     case 'ADD_EXERCISE_SUCCESS':
       return [...state, action.response.result]
@@ -16,11 +15,14 @@ const isLoading = (state = false, action) => {
   switch(action.type) {
     case 'FETCH_EXERCISES_REQUEST':
     case 'ADD_EXERCISE_REQUEST':
+    case 'UPDATE_EXERCISE_REQUEST':
       return true;
     case 'FETCH_EXERCISES_SUCCESS':
     case 'FETCH_EXERCISES_FAILURE':
     case 'ADD_EXERCISE_SUCCESS':
     case 'ADD_EXERCISE_FAILURE':
+    case 'UPDATE_EXERCISE_SUCCESS':
+    case 'UPDATE_EXERCISE_FAILURE':
       return false;
     default:
       return state;

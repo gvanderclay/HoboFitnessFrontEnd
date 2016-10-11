@@ -1,15 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ExerciseHeaderContainer from './ExerciseHeaderContainer';
-import { getExerciseById } from '../reducers';
+import LoadingError from '../components/LoadingError';
+import { getExerciseById, getIsLoading, getErrorMessage } from '../reducers';
+import * as actions from '../actions';
 
 class ExerciseContainer extends Component { 
   componentDidMount() {
-    console.log(this.exercise);
+    this.props.fetchExercises();
   } 
 
   render() {
-    const { exercise } = this.props;
+    const { isLoading, errorMessage, exercise } = this.props;
+    if(isLoading&& !exercise) {
+      return (
+        <div className="container">
+          <p>Loading...</p>
+        </div>
+      )
+    }
+    if(errorMessage && !exercise) {
+      return (
+        <LoadingError
+          message={errorMessage}
+          onRetry={() => this.fetchData}
+        />
+      );
+    }
     return(
       <div>
         <ExerciseHeaderContainer exercise={exercise}/>
@@ -18,11 +35,19 @@ class ExerciseContainer extends Component {
   }
 }
 
-const mapStateToProps = (state, { params }) => {
-  return {
-    exercise: getExerciseById(state, params.exerciseId),
-  }
+ExerciseContainer.propTypes = {
+  errorMessage: PropTypes.string,
+  exercise: PropTypes.object,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 
-export default connect(mapStateToProps,)(ExerciseContainer);
+const mapStateToProps = (state, { params }) => {
+  return {
+    exercise: getExerciseById(state, params.exerciseId),
+    isLoading: getIsLoading(state),
+    errorMessage: getErrorMessage(state),
+  }
+}
+
+export default connect(mapStateToProps, actions)(ExerciseContainer);

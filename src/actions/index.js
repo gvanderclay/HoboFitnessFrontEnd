@@ -50,6 +50,34 @@ export const addExercise = (name, reps, sets, weight) => (dispatch, getState) =>
      return exercise;
 }
 
+export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getState) => {
+   if(getIsLoading(getState())) {
+        return Promise.resolve();
+    }
+    
+    dispatch({
+        type: 'UPDATE_EXERCISE_REQUEST'
+    });
+    
+    const exercise = api.updateExercise(id, name, reps, sets, weight).then(
+        response => {
+            dispatch({
+                type: 'UPDATE_EXERCISE_SUCCESS',
+                response: normalize(response, schema.exercise),
+            })
+            return Promise.resolve(response);
+        },
+        error => {
+            dispatch({
+                type: 'UPDATE_EXERCISE_FAILURE',
+                message: error.message || 'Something went wrong',
+            })
+            return Promise.resolve(error);
+        }
+    );
+     return exercise;
+}
+
 // export const fetchRoutines = () => (dispatch, getState) => {
 //     if (getIsLoading(getState())) {
 //         return Promise.resolve();

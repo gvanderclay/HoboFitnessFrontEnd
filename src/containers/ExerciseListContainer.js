@@ -9,9 +9,8 @@ import { fetchExercises, addExercise } from '../actions'
 import '../styles/ListHeader.scss';
 
 class ExerciseListContainer extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.fetchData();
-    console.log(this.props.exercises)
   }
   
   fetchData() {

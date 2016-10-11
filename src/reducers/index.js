@@ -23,7 +23,8 @@ export const getAllExercises = (state) => {
 }
 
 export const getExerciseById = (state, id) => {
-  return fromById.getExercise(state.exercisesById, id);
+  const exercise = fromById.getExercise(state.exercisesById, id);
+  return exercise;
 }
 
 export const getIsLoading = (state) =>
