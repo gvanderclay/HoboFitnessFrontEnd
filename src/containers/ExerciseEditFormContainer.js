@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Row, Col } from 'react-bootstrap';
-import { FormControl, Form, Button, ControlLabel } from 'react-bootstrap';
+import { FormControl, Button, ControlLabel } from 'react-bootstrap';
 import { updateExercise } from '../actions';
 import '../styles/ExerciseHeader.scss';
 
-class ExerciseHeaderContainer extends Component {
+class ExerciseEditContainer extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -39,8 +39,18 @@ class ExerciseHeaderContainer extends Component {
   }
 
   render() {
+      const { router } = this.props; 
       return(
+
       <div className="container list-header">
+        <Button style={{
+          float: "left",  
+        }}
+        onClick={() => {
+          router.push('/exercises');
+        }}>
+          {"<<"} Back To Exercises 
+        </Button>
         <form onSubmit={this.handleSubmit} >
           <Row>
             <Col sm={12}>
@@ -95,9 +105,11 @@ class ExerciseHeaderContainer extends Component {
             </Col>
           </Row>
           <Row>
+            <Col sm={12}> 
             <Button type="submit" >
               Save Changes
             </Button>
+            </Col>
           </Row>
         </form> 
       </div>
@@ -105,4 +117,4 @@ class ExerciseHeaderContainer extends Component {
   }
 }
 
-export default withRouter(connect()(ExerciseHeaderContainer));
+export default withRouter(connect()(ExerciseEditContainer));

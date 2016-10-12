@@ -1,0 +1,22 @@
+.menu{
+  display:inline-block;
+  $circle-size: 50px;
+  width:$circle-size;
+  height:$circle-size;
+  border-radius:$circle-size / 2;
+  font-size:15px;
+  color:#fff;
+  line-height:$circle-size;
+  text-align:center;
+  text-decoration:none;
+  background:#000;
+  margin-right: 5px;
+  .blank {
+    background:#FFF;
+  }
+}
+.menu:hover{
+  color:#ccc;
+  text-decoration:none;
+  background:#333
+ }

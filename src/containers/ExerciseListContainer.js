@@ -57,7 +57,12 @@ class ExerciseListContainer extends Component {
         </Row>
         <List 
           objects={exercises}
-          onObjectClick={() => {}}
+          editLink={(id) => {
+            return '/exercises/' + id + '/edit'; 
+          }}
+          startLink={(id) => {
+            return '/exercises/' + id;
+          }}
         />
       </div>
     );

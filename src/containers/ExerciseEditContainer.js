@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ExerciseHeaderContainer from './ExerciseHeaderContainer';
+import ExerciseEditFormContainer from './ExerciseEditFormContainer';
 import LoadingError from '../components/LoadingError';
 import { getExerciseById, getIsLoading, getErrorMessage } from '../reducers';
 import * as actions from '../actions';
@@ -29,7 +29,7 @@ class ExerciseContainer extends Component {
     }
     return(
       <div>
-        <ExerciseHeaderContainer exercise={exercise}/>
+        <ExerciseEditFormContainer exercise={exercise}/>
       </div> 
     );
   }
