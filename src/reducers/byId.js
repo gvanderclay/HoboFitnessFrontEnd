@@ -22,11 +22,11 @@ export const exercisesById = (state = {}, action) => {
   if(action.response) {
     return {
       ...state,
-      ...action.response.entities.exercises,
-    }
+      ...action.response.entities.exercises
+    };
   }
   return state;
-}
+};
 
 export const getExercise = (state, id) => state[id];
 

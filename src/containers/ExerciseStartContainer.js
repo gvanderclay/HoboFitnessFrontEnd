@@ -5,17 +5,18 @@ import _ from 'lodash';
 import LoadingError from '../components/LoadingError';
 import { getExerciseById, getIsLoading, getErrorMessage } from '../reducers';
 import * as actions from '../actions';
-import '../styles/ExerciseStartContainer.scss'
+import ExerciseButtons from '../components/ExerciseButtons';
+import '../styles/ExerciseStartContainer.scss';
 
 class ExerciseStartContainer extends Component {
   render() {
     const { isLoading, exercise, errorMessage } = this.props;
-    if(isLoading&& !exercise) {
+    if(isLoading && !exercise) {
       return (
         <div className="container">
           <p>Loading...</p>
         </div>
-      )
+      );
     }
     if(errorMessage && !exercise) {
       return (
@@ -32,20 +33,9 @@ class ExerciseStartContainer extends Component {
             <h1>{exercise.name}</h1>
           </Col>
         </Row>
-        <Row>
-          {_.times(exercise.sets, () => 
-            <a 
-              className="menu"
-              onClick={() =>
-                console.log('here') 
-              }
-            >
-              {exercise.reps}
-            </a>
-          )}
-        </Row>
+        <ExerciseButtons exercise={exercise} />
       </div>
-    )
+    );
   }
 
 }
@@ -53,16 +43,16 @@ class ExerciseStartContainer extends Component {
 ExerciseStartContainer.propTypes = {
   errorMessage: PropTypes.string,
   exercise: PropTypes.object,
-  isLoading: PropTypes.bool.isRequired,
-}
+  isLoading: PropTypes.bool.isRequired
+};
 
 
 const mapStateToProps = (state, { params }) => {
   return {
     exercise: getExerciseById(state, params.exerciseId),
     isLoading: getIsLoading(state),
-    errorMessage: getErrorMessage(state),
-  }
-}
+    errorMessage: getErrorMessage(state)
+  };
+};
 
-export default connect(mapStateToProps,)(ExerciseStartContainer);
+export default connect(mapStateToProps, actions)(ExerciseStartContainer);

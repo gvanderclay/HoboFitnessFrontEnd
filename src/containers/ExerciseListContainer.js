@@ -5,27 +5,27 @@ import { Col, Row, Button } from 'react-bootstrap';
 import { getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
 import LoadingError from '../components/LoadingError';
-import { fetchExercises, addExercise } from '../actions'
+import { fetchExercises, addExercise } from '../actions';
 import '../styles/ListHeader.scss';
 
 class ExerciseListContainer extends Component {
   componentWillMount() {
     this.fetchData();
   }
-  
+
   fetchData() {
     const { dispatch } = this.props;
     dispatch(fetchExercises());
   }
-  
+
   render() {
     const { isLoading, errorMessage, exercises, router, dispatch } = this.props;
-    if(isLoading&& !exercises.length) {
+    if(isLoading && !exercises.length) {
       return (
         <div className="container">
           <p>Loading...</p>
         </div>
-      )
+      );
     }
     if(errorMessage && !exercises.length) {
       return (
@@ -48,14 +48,13 @@ class ExerciseListContainer extends Component {
               dispatch(addExercise('New Exercise')).then((result) => {
                 router.push('/exercises/' + result.id + '/edit'); 
               });
-            } 
-              
+            }
           }>
             + New Exercise
           </Button>
           </Col>
         </Row>
-        <List 
+        <List
           objects={exercises}
           editLink={(id) => {
             return '/exercises/' + id + '/edit'; 
