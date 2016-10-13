@@ -20,7 +20,7 @@ class ExerciseListContainer extends Component {
   
   render() {
     const { isLoading, errorMessage, exercises, router, dispatch } = this.props;
-    if(isLoading&& !exercises.length) {
+    if(isLoading && !exercises.length) {
       return (
         <div className="container">
           <p>Loading...</p>

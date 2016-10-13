@@ -75,6 +75,17 @@ export const updateExercise = (id, name, reps, sets, weight) =>
     }
   });
   
+export const fetchExercise = (id) => 
+  new Promise((resolve, reject) => {
+    try {
+      fetchExercises().then((exercises) => {
+        resolve(exercises.find(exercise => exercise.id === id)); 
+      });
+    } catch(err) {
+      reject(Error(err));
+    }
+  })
+  
 
 
 // export const fetchRoutines = () => 

@@ -1,4 +1,5 @@
 import { normalize } from 'normalizr';
+import { v4 } from 'node-uuid';
 import * as schema from './schema';
 import * as api from '../api';
 import { getIsLoading } from '../reducers';
@@ -7,75 +8,100 @@ export const fetchExercises = () => (dispatch, getState) => {
     if(getIsLoading(getState())) {
         return Promise.resolve();
     }
-    
+
     dispatch({
-        type: 'FETCH_EXERCISES_REQUEST',
-    })
-    
+        type: 'FETCH_EXERCISES_REQUEST'
+    });
+
     return api.fetchExercises().then(
         response => {
             dispatch({
                 type: 'FETCH_EXERCISES_SUCCESS',
-                response: normalize(response, schema.arrayOfExercises),
-            })
+                response: normalize(response, schema.arrayOfExercises)
+            });
         }
-    )
-}
+    );
+};
 
 export const addExercise = (name, reps, sets, weight) => (dispatch, getState) => {
     if(getIsLoading(getState())) {
         return Promise.resolve();
     }
-    
+
     dispatch({
         type: 'ADD_EXERCISE_REQUEST'
     });
-    
+
     const exercise = api.addExercise(name, reps, sets, weight).then(
         response => {
             dispatch({
                 type: 'ADD_EXERCISE_SUCCESS',
-                response: normalize(response, schema.exercise),
-            })
+                response: normalize(response, schema.exercise)
+            });
             return Promise.resolve(response);
         },
         error => {
             dispatch({
                 type: 'ADD_EXERCISE_FAILURE',
-                message: error.message || 'Something went wrong',
-            })
+                message: error.message || 'Something went wrong'
+            });
+            return Promise.resolve(error);
+        }
+    );
+     return exercise;
+};
+
+export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getState) => {
+   if(getIsLoading(getState())) {
+        return Promise.resolve();
+    }
+
+    dispatch({
+        type: 'UPDATE_EXERCISE_REQUEST'
+    });
+
+    const exercise = api.updateExercise(id, name, reps, sets, weight).then(
+        response => {
+            dispatch({
+                type: 'UPDATE_EXERCISE_SUCCESS',
+                response: normalize(response, schema.exercise)
+            });
+            return Promise.resolve(response);
+        },
+        error => {
+            dispatch({
+                type: 'UPDATE_EXERCISE_FAILURE',
+                message: error.message || 'Something went wrong'
+            });
             return Promise.resolve(error);
         }
     );
      return exercise;
 }
 
-export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getState) => {
-   if(getIsLoading(getState())) {
-        return Promise.resolve();
-    }
-    
-    dispatch({
-        type: 'UPDATE_EXERCISE_REQUEST'
-    });
-    
-    const exercise = api.updateExercise(id, name, reps, sets, weight).then(
-        response => {
-            dispatch({
-                type: 'UPDATE_EXERCISE_SUCCESS',
-                response: normalize(response, schema.exercise),
-            })
-            return Promise.resolve(response);
-        },
-        error => {
-            dispatch({
-                type: 'UPDATE_EXERCISE_FAILURE',
-                message: error.message || 'Something went wrong',
-            })
-            return Promise.resolve(error);
+export const startExercise = (id) => (dispatch, getState) => {
+   if(getIsLoading(getState()))  {
+       return Promise.resolve();
+   }
+
+   dispatch({
+       type: 'START_EXERCISE_REQUEST'
+   });
+
+   const activeExercise = api.fetchExercise(id).then(
+    response => {
+        const activeExercise = {
+            id: v4(),
+            exerciseId: response.id,
+            setsPerRep: []
         }
-    );
-     return exercise;
+        dispatch({
+            type: 'START_EXERCISE_SUCCESS',
+            activeExercise: activeExercise,
+        })
+    }
+   );
+   return activeExercise;
 }
 
 // export const fetchRoutines = () => (dispatch, getState) => {
