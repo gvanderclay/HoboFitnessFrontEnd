@@ -46,7 +46,6 @@ ExerciseStartContainer.propTypes = {
   isLoading: PropTypes.bool.isRequired
 };
 
-
 const mapStateToProps = (state, { params }) => {
   return {
     exercise: getExerciseById(state, params.exerciseId),
