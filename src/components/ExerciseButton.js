@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
+import '../styles/ExerciseButton.scss'
 
-class ExerciseButton extends Component {
-    render() {
-      const { exercise } = this.props;
-      return (
-        <a
-            className="menu"
-            onClick={() =>
-                console.log('here')
-            }
-        >
-            {exercise.reps}
-        </a>
-      );
-    }
-}
+const ExerciseButton = ({ exercise }) => (
+    <a
+        className="exercise-button"
+        onClick={() =>
+            console.log('here')
+        }
+    >
+        {exercise.reps}
+    </a>
+)
 
 export default ExerciseButton;
