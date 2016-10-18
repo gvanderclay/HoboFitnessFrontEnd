@@ -1,11 +1,18 @@
-import { normalize } from 'normalizr';
-import { v4 } from 'node-uuid';
+import {
+    normalize
+} from 'normalizr';
+import {
+    v4
+} from 'node-uuid';
+import _ from 'lodash';
 import * as schema from './schema';
 import * as api from '../api';
-import { getIsLoading } from '../reducers';
+import {
+    getIsLoading
+} from '../reducers';
 
 export const fetchExercises = () => (dispatch, getState) => {
-    if(getIsLoading(getState())) {
+    if (getIsLoading(getState())) {
         return Promise.resolve();
     }
 
@@ -24,7 +31,7 @@ export const fetchExercises = () => (dispatch, getState) => {
 };
 
 export const addExercise = (name, reps, sets, weight) => (dispatch, getState) => {
-    if(getIsLoading(getState())) {
+    if (getIsLoading(getState())) {
         return Promise.resolve();
     }
 
@@ -48,11 +55,11 @@ export const addExercise = (name, reps, sets, weight) => (dispatch, getState) =>
             return Promise.resolve(error);
         }
     );
-     return exercise;
+    return exercise;
 };
 
 export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getState) => {
-   if(getIsLoading(getState())) {
+    if (getIsLoading(getState())) {
         return Promise.resolve();
     }
 
@@ -76,46 +83,50 @@ export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getSt
             return Promise.resolve(error);
         }
     );
-     return exercise;
+    return exercise;
 }
 
 export const startExercise = (id) => (dispatch, getState) => {
-   if(getIsLoading(getState()))  {
-       return Promise.resolve();
-   }
+    if (getIsLoading(getState())) {
+        return Promise.resolve();
+    }
 
-   dispatch({
-       type: 'START_EXERCISE_REQUEST'
-   });
+    dispatch({
+        type: 'START_EXERCISE_REQUEST'
+    });
 
-   const activeExercise = api.fetchExercise(id).then(
-    response => {
-        const activeExercise = {
-            id: v4(),
-            exerciseId: response.id,
-            setsPerRep: []
-        };
-        dispatch({
-            type: 'START_EXERCISE_SUCCESS',
-            activeExercise: activeExercise
-        });
-    },
-       error => {
+    const activeExercise = api.fetchExercise(id).then(
+        response => {
+            let setsPerRep = [];
+            _.times(response.sets, (index) => {
+                setsPerRep[index] = -1;
+            });
+            const activeExercise = {
+                id: v4(),
+                exerciseId: response.id,
+                setsPerRep
+            };
+            dispatch({
+                type: 'START_EXERCISE_SUCCESS',
+                activeExercise: activeExercise
+            });
+        },
+        error => {
 
-       }
-   );
-   return activeExercise;
+        }
+    );
+    return activeExercise;
 };
 
 // export const fetchRoutines = () => (dispatch, getState) => {
 //     if (getIsLoading(getState())) {
 //         return Promise.resolve();
 //     }
-    
+
 //     dispatch({
 //         type: 'FETCH_ROUTINES_REQUEST'
 //     });
-    
+
 //     return api.fetchRoutines().then(
 //         response => {
 //             dispatch({
@@ -136,11 +147,11 @@ export const startExercise = (id) => (dispatch, getState) => {
 //     if(getIsLoading(getState())) {
 //         return Promise.resolve();
 //     }
-    
+
 //     dispatch({
 //         type: 'ADD_ROUTINE_REQUEST'
 //     });
-    
+
 //     return api.addRoutine(title).then(
 //         response => {
 //             dispatch({
@@ -163,11 +174,11 @@ export const startExercise = (id) => (dispatch, getState) => {
 //     if (getIsLoading(getState())) {
 //         return Promise.resolve();
 //     }
-    
+
 //     dispatch({
 //         type: 'FETCH_WORKOUTS_REQUEST'
 //     });
-    
+
 //     return api.fetchRoutines().then(
 //         response => {
 //             dispatch({
@@ -188,11 +199,11 @@ export const startExercise = (id) => (dispatch, getState) => {
 //     if (getIsLoading(getState())) {
 //         return Promise.resolve();
 //     }
-    
+
 //     dispatch({
 //         type: 'FETCH_WORKOUTS_REQUEST',
 //     });
-    
+
 //     return api.fetchWorkoutsForRoutine(id).then(
 //         response => {
 //             dispatch({
@@ -215,12 +226,12 @@ export const startExercise = (id) => (dispatch, getState) => {
 //     if(getIsLoading(getState())) {
 //         return Promise.resolve();
 //     }
-    
+
 //     dispatch({
 //         type: 'ADD_WORKOUT_REQUEST',
 //         title: title,
 //     });
-    
+
 //     return api.addWorkoutToRoutine(title, id).then(
 //         response => {
 //             dispatch({
@@ -244,13 +255,13 @@ export const startExercise = (id) => (dispatch, getState) => {
 //     if(getIsLoading(getState())) {
 //         return Promise.resolve();
 //     }
-    
+
 //     dispatch({
 //         type: 'UPDATE_ROUTINE_REQUEST',
 //         title,
 //         workouts,
 //     });
-    
+
 //     return api.updateRoutine(id, title, workouts).then(
 //         response => {
 //             dispatch({

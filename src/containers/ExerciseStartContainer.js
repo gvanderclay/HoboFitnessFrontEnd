@@ -6,12 +6,19 @@ import LoadingError from '../components/LoadingError';
 import { getExerciseById, getIsLoading, getErrorMessage } from '../reducers';
 import * as actions from '../actions';
 import ExerciseButtons from '../components/ExerciseButtons';
-import '../styles/ExerciseStartContainer.scss';
 
 class ExerciseStartContainer extends Component {
+  componentWillMount() {
+    const { exercise, startExercise } = this.props;
+    if(exercise) {
+      startExercise(exercise.id);
+    }
+  }
+
   render() {
     const { isLoading, exercise, errorMessage } = this.props;
-    if(isLoading && !exercise) {
+    if(isLoading || !exercise) {
+      console.log('yo');
       return (
         <div className="container">
           <p>Loading...</p>
@@ -37,7 +44,6 @@ class ExerciseStartContainer extends Component {
       </div>
     );
   }
-
 }
 
 ExerciseStartContainer.propTypes = {
@@ -50,7 +56,7 @@ const mapStateToProps = (state, { params }) => {
   return {
     exercise: getExerciseById(state, params.exerciseId),
     isLoading: getIsLoading(state),
-    errorMessage: getErrorMessage(state)
+    errorMessage: getErrorMessage(state),
   };
 };
 

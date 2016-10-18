@@ -2,27 +2,22 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {Row} from 'react-bootstrap';
-import * as actions from '../actions';
 import ExerciseButton from './ExerciseButton';
 
 class ExerciseButtons extends Component {
-    componentDidMount() {
+  render() {
         const {
-            exercise,
-            dispatch
-        } = this.props;
-        dispatch(actions.startExercise(exercise.id));
-    }
-    render() {
-        const {
-            exercise
+          exercise,
+          activeExercise
         } = this.props;
         return (
         <Row>
           {_.times(exercise.sets, (index) =>
-            < ExerciseButton
+            <ExerciseButton
                 exercise={exercise}
                 key={index}
+                activeExercise={activeExercise}
+                setNumber={index}
             />
           )}
         </Row>
@@ -30,4 +25,10 @@ class ExerciseButtons extends Component {
     }
 }
 
-export default connect()(ExerciseButtons);
+const mapStateToProps = (state, { params }) => {
+  return {
+    activeExercise: state.activeExercise
+  };
+};
+
+export default connect(mapStateToProps)(ExerciseButtons);

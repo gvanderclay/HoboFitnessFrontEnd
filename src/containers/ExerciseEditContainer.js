@@ -8,7 +8,7 @@ import * as actions from '../actions';
 class ExerciseContainer extends Component { 
   componentDidMount() {
     this.props.fetchExercises();
-  } 
+  }
 
   render() {
     const { isLoading, errorMessage, exercise } = this.props;

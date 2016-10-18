@@ -1,4 +1,4 @@
-.menu{
+.exercise-button{
   display:inline-block;
   $circle-size: 50px;
   width:$circle-size;
@@ -15,8 +15,8 @@
     background:#FFF;
   }
 }
-.menu:hover{
+.exercise-button:hover{
   color:#ccc;
   text-decoration:none;
   background:#333
- }
+}

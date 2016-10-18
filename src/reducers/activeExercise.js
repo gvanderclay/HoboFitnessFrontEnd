@@ -5,7 +5,7 @@ export const activeExercise = (state = {}, action) => {
     case 'COMPLETE_EXERCISE_SUCCESS':
     	return {};
     default:
-      return state
+      return state;
   }
 }
 
