@@ -17,5 +17,4 @@ class ExerciseButton extends Component {
     }
 }
 
-
 export default ExerciseButton;
