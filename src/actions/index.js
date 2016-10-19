@@ -99,7 +99,7 @@ export const startExercise = (id) => (dispatch, getState) => {
         response => {
             let setsPerRep = [];
             _.times(response.sets, (index) => {
-                setsPerRep[index] = -1;
+              setsPerRep[index] = -1;
             });
             const activeExercise = {
                 id: v4(),
@@ -116,6 +116,20 @@ export const startExercise = (id) => (dispatch, getState) => {
         }
     );
     return activeExercise;
+};
+
+export const setActiveExerciseSet = (index, sets) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  const activeExercise = getState().activeExercise;
+  activeExercise[index] = sets;
+  dispatch({
+    type: 'SET_ACTIVE_SET',
+    activeExercise: activeExercise
+  });
+  return activeExercise;
 };
 
 // export const fetchRoutines = () => (dispatch, getState) => {
