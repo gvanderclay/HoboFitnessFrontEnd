@@ -44,6 +44,7 @@ class ExerciseStartContainer extends Component {
       </div>
     );
   }
+
 }
 
 ExerciseStartContainer.propTypes = {

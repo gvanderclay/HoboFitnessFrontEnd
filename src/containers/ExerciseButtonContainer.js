@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
-=======
 import { connect } from 'react-redux';
 import * as actions from '../actions';
->>>>>>> b00e33cf2270e69ee60e5de51dd70fcd4fb58676
 import ExerciseButton from '../components/ExerciseButton';
 
 class ExerciseButtonContainer extends Component {
 
-<<<<<<< HEAD
-    render() {
-    }
-=======
   handleClick() {
     const { dispatch, setNumber, maxReps, activeExercise } = this.props;
     const reps = activeExercise[setNumber];
-    console.log(maxReps);
     if(reps === -1) {
       dispatch(actions.setActiveExerciseSet(setNumber, maxReps))
     }
@@ -34,7 +26,6 @@ class ExerciseButtonContainer extends Component {
       />
     );
   }
->>>>>>> b00e33cf2270e69ee60e5de51dd70fcd4fb58676
 }
 
 export default connect()(ExerciseButtonContainer);
