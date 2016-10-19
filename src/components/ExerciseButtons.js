@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {Row} from 'react-bootstrap';
-import ExerciseButton from './ExerciseButton';
+import ExerciseButtonContainer from '../containers/ExerciseButtonContainer';
 
 class ExerciseButtons extends Component {
   render() {
@@ -13,8 +13,8 @@ class ExerciseButtons extends Component {
         return (
         <Row>
           {_.times(exercise.sets, (index) =>
-            <ExerciseButton
-                exercise={exercise}
+            <ExerciseButtonContainer
+                maxReps={exercise.reps}
                 key={index}
                 activeExercise={activeExercise}
                 setNumber={index}
