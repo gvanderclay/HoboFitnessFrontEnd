@@ -33,7 +33,7 @@ const isLoading = (state = false, action) => {
     default:
       return state;
   }
-}
+};
 
 const errorMessage = (state = null, action) => {
   switch(action.type) {
@@ -50,7 +50,7 @@ const errorMessage = (state = null, action) => {
     default:
       return state;
   }
-}
+};
 
 export default combineReducers({
   ids,

@@ -18,13 +18,13 @@ class ExerciseEditContainer extends Component {
       exerciseSets: props.exercise.sets,
       exerciseWeight: props.exercise.weight,
     }
-  } 
-  
+  }
+
   handleChange(event){
     this.setState({ [event.target.id]: event.target.value });
     // dispatch(updateExercise(exercise.id, event.target.value)); 
   }
-  
+
   handleSubmit(event) {
     const { exercise, dispatch } = this.props;
     event.preventDefault();
@@ -33,7 +33,7 @@ class ExerciseEditContainer extends Component {
     const exerciseSets= ReactDOM.findDOMNode(this.refs.exerciseSets).value;
     const exerciseWeight= ReactDOM.findDOMNode(this.refs.exerciseWeight).value;
     if(exerciseName === exercise.name && exerciseName === '') {
-      return; 
+      return;
     }
     dispatch(updateExercise(exercise.id, exerciseName, exerciseReps, exerciseSets, exerciseWeight)); 
   }

@@ -8,7 +8,6 @@ class ExerciseButtons extends Component {
   render() {
         const {
           exercise,
-          activeExercise
         } = this.props;
         return (
         <Row>
@@ -16,7 +15,6 @@ class ExerciseButtons extends Component {
             <ExerciseButtonContainer
                 maxReps={exercise.reps}
                 key={index}
-                activeExercise={activeExercise}
                 setNumber={index}
             />
           )}
@@ -25,10 +23,4 @@ class ExerciseButtons extends Component {
     }
 }
 
-const mapStateToProps = (state, { params }) => {
-  return {
-    activeExercise: state.activeExercise
-  };
-};
-
-export default connect(mapStateToProps)(ExerciseButtons);
+export default connect()(ExerciseButtons);

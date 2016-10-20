@@ -1,31 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import { getRepsOnSet } from '../reducers/activeExercise';
 import ExerciseButton from '../components/ExerciseButton';
 
 class ExerciseButtonContainer extends Component {
-
   handleClick() {
-    const { dispatch, setNumber, maxReps, activeExercise } = this.props;
-    const reps = activeExercise[setNumber];
-    if(reps === -1) {
+    const { dispatch, maxReps, repsOnSet, setNumber } = this.props;
+    if(repsOnSet === -1) {
       dispatch(actions.setActiveExerciseSet(setNumber, maxReps))
     }
     else {
-      dispatch(actions.setActiveExerciseSet(setNumber, reps - 1));
+      dispatch(actions.setActiveExerciseSet(setNumber, repsOnSet - 1));
     }
   }
 
+  isActive() {
+    const { repsOnSet } = this.props;
+    return "exercise-button " + (repsOnSet === -1 ? "empty" : "");
+  }
+
   render() {
-    const { activeExercise, setNumber } = this.props;
+    const { repsOnSet } = this.props;
     return(
       <ExerciseButton
-          activeExercise={activeExercise}
-          setNumber={setNumber}
+          isActive={this.isActive.bind(this)}
+          repsOnSet={repsOnSet}
           handleClick={this.handleClick.bind(this)}
       />
     );
   }
 }
 
-export default connect()(ExerciseButtonContainer);
+const mapStateToProps = (state, { setNumber }) => {
+   return { repsOnSet: getRepsOnSet(state.activeExercise, setNumber) }
+};
+
+export default connect(mapStateToProps)(ExerciseButtonContainer);

@@ -10,7 +10,7 @@ export const loadDB = () => {
   } catch (err) {
     return undefined;
   }
-}
+};
 
 export const saveDB = (state) => {
   try {
@@ -19,7 +19,7 @@ export const saveDB = (state) => {
   } catch(err) {
     // TODO findout how to handle write errors
   }
-}
+};
 
 let state = loadDB();
 state = state ? state : {exercises: []};
@@ -34,16 +34,16 @@ export const fetchExercises = () =>
       reject(Error(err));
     }
   })
-  
-  export const addExercise = (name, reps = 5, sets = 5, weight = 45) => 
+
+  export const addExercise = (name, reps = 5, sets = 5, weight = 45) =>
     new Promise((resolve, reject) => {
       const exercise = {
         id: v4(),
         name,
         reps,
         sets,
-        weight,
-      }
+        weight
+      };
       try {
         var oldState = loadDB();
         oldState.exercises.push(exercise);

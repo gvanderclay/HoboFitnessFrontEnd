@@ -84,7 +84,7 @@ export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getSt
         }
     );
     return exercise;
-}
+};
 
 export const startExercise = (id) => (dispatch, getState) => {
     if (getIsLoading(getState())) {
@@ -102,13 +102,13 @@ export const startExercise = (id) => (dispatch, getState) => {
               setsPerRep[index] = -1;
             });
             const activeExercise = {
-                id: v4(),
                 exerciseId: response.id,
                 setsPerRep
             };
             dispatch({
-                type: 'START_EXERCISE_SUCCESS',
-                activeExercise: activeExercise
+              type: 'START_EXERCISE_SUCCESS',
+              exerciseId: response.id,
+              setsPerRep
             });
         },
         error => {
@@ -123,13 +123,13 @@ export const setActiveExerciseSet = (index, sets) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  const activeExercise = getState().activeExercise;
-  activeExercise[index] = sets;
+  const setsPerRep = getState().activeExercise.setsPerRep;
+  const newSetsPerRep = [...setsPerRep.slice(0, index), sets, ...setsPerRep.slice(index + 1)];
   dispatch({
     type: 'SET_ACTIVE_SET',
-    activeExercise: activeExercise
+    setsPerRep: newSetsPerRep
   });
-  return activeExercise;
+  return setsPerRep;
 };
 
 // export const fetchRoutines = () => (dispatch, getState) => {

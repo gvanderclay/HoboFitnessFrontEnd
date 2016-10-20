@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import '../styles/ExerciseButton.scss';
 
-const ExerciseButton = ({ activeExercise, setNumber, handleClick }) => (
+const ExerciseButton = ({ isActive, activeExercise, repsOnSet, handleClick }) => (
   <a
-      className="exercise-button"
+      className={isActive()}
       onClick={handleClick}
   >
-    {activeExercise.setsPerRep[setNumber]}
+    {repsOnSet}
   </a>
 );
 
