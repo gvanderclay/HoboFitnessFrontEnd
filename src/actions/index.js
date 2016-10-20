@@ -1,9 +1,6 @@
 import {
     normalize
 } from 'normalizr';
-import {
-    v4
-} from 'node-uuid';
 import _ from 'lodash';
 import * as schema from './schema';
 import * as api from '../api';
@@ -101,10 +98,6 @@ export const startExercise = (id) => (dispatch, getState) => {
             _.times(response.sets, (index) => {
               setsPerRep[index] = -1;
             });
-            const activeExercise = {
-                exerciseId: response.id,
-                setsPerRep
-            };
             dispatch({
               type: 'START_EXERCISE_SUCCESS',
               exerciseId: response.id,

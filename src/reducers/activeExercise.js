@@ -1,7 +1,5 @@
 import { combineReducers } from 'redux';
 
-const INITIAL_STATE = {exerciseId: null, setsPerRep: []};
-
 const exerciseId = (state = null, action) => {
   switch(action.type) {
     case 'START_EXERCISE_SUCCESS':
