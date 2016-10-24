@@ -22,7 +22,7 @@ export const saveDB = (state) => {
 };
 
 let state = loadDB();
-state = state ? state : {exercises: []};
+state = state ? state : {exercises: [], completedExercises: []};
 saveDB(state);
 
 export const fetchExercises = () =>
@@ -35,26 +35,26 @@ export const fetchExercises = () =>
     }
   })
 
-  export const addExercise = (name, reps = 5, sets = 5, weight = 45) =>
-    new Promise((resolve, reject) => {
-      const exercise = {
-        id: v4(),
-        name,
-        reps,
-        sets,
-        weight
-      };
-      try {
-        var oldState = loadDB();
-        oldState.exercises.push(exercise);
-        saveDB(oldState);
-        resolve(exercise);
-      } catch(err) {
-        reject(Error(err));
-      }
-    });
+export const addExercise = (name, reps = 5, sets = 5, weight = 45) =>
+  new Promise((resolve, reject) => {
+    const exercise = {
+      id: v4(),
+      name,
+      reps,
+      sets,
+      weight
+    };
+    try {
+      var oldState = loadDB();
+      oldState.exercises.push(exercise);
+      saveDB(oldState);
+      resolve(exercise);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
 
-export const updateExercise = (id, name, reps, sets, weight) => 
+export const updateExercise = (id, name, reps, sets, weight) =>
   new Promise((resolve, reject) => {
     try {
       const db = loadDB();
@@ -65,8 +65,8 @@ export const updateExercise = (id, name, reps, sets, weight) =>
         name: name ? name : oldExercise.name,
         reps: reps ? reps : oldExercise.reps,
         sets: sets ? sets : oldExercise.sets,
-        weight: weight ? weight : oldExercise.weight,
-      }
+        weight: weight ? weight : oldExercise.weight
+      };
       db.exercises[indexOfExercise] = newExercise;
       saveDB(db);
       resolve(newExercise);
@@ -74,7 +74,7 @@ export const updateExercise = (id, name, reps, sets, weight) =>
       reject(Error(err));
     }
   });
-  
+
 export const fetchExercise = (id) => 
   new Promise((resolve, reject) => {
     try {
@@ -86,6 +86,22 @@ export const fetchExercise = (id) =>
     }
   })
   
+export const addCompletedExercise = ({ exerciseId, setsPerRep }) =>
+  new Promise((resolve, reject) => {
+    try {
+      const exercise = fetchExercise(exerciseId);
+      const completedExercise = {
+        exerciseId,
+        setsPerRep
+      };
+      const db = loadDB();
+      db.completedExercises.push(completedExercise);
+      saveDB(db);
+      resolve(completedExercise);
+    } catch(err) {
+      reject(Error(err)); 
+    }
+  });
 
 
 // export const fetchRoutines = () => 

@@ -125,6 +125,29 @@ export const setActiveExerciseSet = (index, sets) => (dispatch, getState) => {
   return setsPerRep;
 };
 
+export const completeActiveExercise = () => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'COMPLETE_EXERCISE_REQUEST'
+  });
+  const activeExercise = getState().activeExercise;
+  const completedExercise = api.addCompletedExercise(activeExercise).then(
+    response => {
+      dispatch({
+        type: 'COMPLETE_EXERCISE_SUCCESS',
+        completedExercise: response
+      });
+    },
+    error => {
+
+    }
+  );
+  return completedExercise;
+};
+
 // export const fetchRoutines = () => (dispatch, getState) => {
 //     if (getIsLoading(getState())) {
 //         return Promise.resolve();

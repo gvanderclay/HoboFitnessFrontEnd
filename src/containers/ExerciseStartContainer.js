@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import LoadingError from '../components/LoadingError';
 import { getExerciseById, getIsLoading, getErrorMessage } from '../reducers';
@@ -15,10 +15,14 @@ class ExerciseStartContainer extends Component {
     }
   }
 
+  handleClick() {
+    const { completeActiveExercise } = this.props;
+    completeActiveExercise();
+  }
+
   render() {
     const { isLoading, exercise, errorMessage } = this.props;
     if(isLoading || !exercise) {
-      console.log('yo');
       return (
         <div className="container">
           <p>Loading...</p>
@@ -41,6 +45,7 @@ class ExerciseStartContainer extends Component {
           </Col>
         </Row>
         <ExerciseButtons exercise={exercise} />
+        <Button onClick={this.handleClick.bind(this)}>Complete Exercise</Button>
       </div>
     );
   }

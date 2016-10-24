@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import  * as fromById from './byId';
 import exerciseList from './exerciseList';
 import activeExercise from './activeExercise';
+import completedExercises from './completedExercise';
 import * as fromList from './createList';
 
 // const routineList = createList('ROUTINE');
@@ -14,7 +15,8 @@ const exercisesById = fromById.exercisesById;
 const routines = combineReducers({
   exerciseList,
   exercisesById,
-  activeExercise
+  activeExercise,
+  completedExercises
 });
 
 export default routines;
