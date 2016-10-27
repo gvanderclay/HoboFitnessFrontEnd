@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import LoadingError from '../components/LoadingError';
@@ -16,8 +17,9 @@ class ExerciseStartContainer extends Component {
   }
 
   handleClick() {
-    const { completeActiveExercise } = this.props;
+    const { router, completeActiveExercise } = this.props;
     completeActiveExercise();
+    router.push('/exercises');
   }
 
   render() {
@@ -66,4 +68,4 @@ const mapStateToProps = (state, { params }) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(ExerciseStartContainer);
+export default withRouter(connect(mapStateToProps, actions)(ExerciseStartContainer));

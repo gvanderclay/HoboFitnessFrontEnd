@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ExerciseEditFormContainer from './ExerciseEditFormContainer';
 import LoadingError from '../components/LoadingError';
+import Loading from '../components/Loading';
 import { getExerciseById, getIsLoading, getErrorMessage } from '../reducers';
 import * as actions from '../actions';
 
@@ -12,11 +13,9 @@ class ExerciseContainer extends Component {
 
   render() {
     const { isLoading, errorMessage, exercise } = this.props;
-    if(isLoading&& !exercise) {
+    if(isLoading || !exercise) {
       return (
-        <div className="container">
-          <p>Loading...</p>
-        </div>
+        <Loading />
       )
     }
     if(errorMessage && !exercise) {

@@ -1,38 +1,24 @@
 import React, { PropTypes } from 'react';
 import pluralize from 'pluralize';
-import { withRouter } from 'react-router';
 import { Button, Row, Col } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { getActiveRoutine } from '../reducers';
-import * as actions from '../actions'
-import H1TextBox from './H1TextBox';
 import '../styles/ListHeader.scss';
 
-const ListHeader = ({ name, type, dispatch, addObject, active, router, editable, id }) => {
+const ListHeader = ({ name, handleClick }) => {
   return (
     <div className='list-header'>
       <Row>
         <Col sm={9}>
-        {editable ? 
-          <H1TextBox type={type} value={name} /> :
-          <h1>{capitalizeFirstWord(pluralize(type))}</h1>
-        }
+          <h1>{capitalizeFirstWord(pluralize(name))}</h1>
         </Col>
         <Col sm={3}>
         <Button 
           bsSize='large' 
-          onClick={() => {
-            dispatch(actions[addObject]('New ' + type, id)).then((result) => {
-              router.push('/routines/' + result.id); 
-            });
-          } 
-            
-        }>
+          onClick={handleClick}>
           + New {name}
         </Button>
         </Col>
       </Row>
-    </div>  
+    </div>
   )
 }
 
@@ -42,15 +28,8 @@ function capitalizeFirstWord(word) {
 
 ListHeader.propTypes = { 
   name: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state) => {
-  return {
-    active: getActiveRoutine(state), 
-  }
-}
 
-export default withRouter(connect(
-  mapStateToProps,
-)(ListHeader));
+export default ListHeader;

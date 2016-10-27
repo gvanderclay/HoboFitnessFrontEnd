@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Col, Row, Button } from 'react-bootstrap';
 import { getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
+import ListHeader from '../components/ListHeader';
 import LoadingError from '../components/LoadingError';
-import { fetchExercises, addExercise } from '../actions';
+import * as actions from '../actions';
 import '../styles/ListHeader.scss';
 
 class ExerciseListContainer extends Component {
@@ -14,8 +14,15 @@ class ExerciseListContainer extends Component {
   }
 
   fetchData() {
-    const { dispatch } = this.props;
-    dispatch(fetchExercises());
+    const { fetchExercises } = this.props;
+    fetchExercises();
+  }
+
+  addExercise() {
+    const { addExercise, router } = this.props;
+    addExercise('New Exercise').then((result) => {
+      router.push('/exercises/' + result.id + '/edit'); 
+    });
   }
 
   render() {
@@ -35,25 +42,13 @@ class ExerciseListContainer extends Component {
         />
       );
     }
+
     return (
-      <div className="container list-header">
-        <Row>
-          <Col sm={9}>
-            <h1>Exercises</h1>
-          </Col>
-          <Col sm={3}>
-          <Button 
-            bsSize='large' 
-            onClick={() => {
-              dispatch(addExercise('New Exercise')).then((result) => {
-                router.push('/exercises/' + result.id + '/edit'); 
-              });
-            }
-          }>
-            + New Exercise
-          </Button>
-          </Col>
-        </Row>
+      <div className="container">
+        <ListHeader
+            name="exercise"
+            handleClick={this.addExercise.bind(this)}
+        />
         <List
           objects={exercises}
           editLink={(id) => {
@@ -84,6 +79,7 @@ const mapStateToProps = (state, { params }) => {
 
 ExerciseListContainer = withRouter(connect(
   mapStateToProps,
+  actions
 )(ExerciseListContainer));
 
 export default ExerciseListContainer;

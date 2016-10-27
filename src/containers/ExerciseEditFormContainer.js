@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Row, Col } from 'react-bootstrap';
-import { FormControl, Button, ControlLabel } from 'react-bootstrap';
+import { Row, Col, FormControl, Button, ControlLabel } from 'react-bootstrap';
 import { updateExercise } from '../actions';
 import '../styles/ExerciseHeader.scss';
 

@@ -6,6 +6,7 @@ import HomePage from './HomePage';
 import ExerciseListContainer from '../containers/ExerciseListContainer';
 import ExerciseEditContainer from '../containers/ExerciseEditContainer';
 import ExerciseStartContainer from '../containers/ExerciseStartContainer';
+import WorkoutListContainer from '../containers/WorkoutListContainer';
 
 const Root = ({ store }) => (
   <Provider store={store}>
@@ -15,6 +16,7 @@ const Root = ({ store }) => (
         <Route path='/exercises' component={ExerciseListContainer}> </Route>
         <Route path='/exercises/:exerciseId/edit' component={ExerciseEditContainer}> </Route>
         <Route path='/exercises/:exerciseId' component={ExerciseStartContainer}> </Route>
+        <Route path='/workouts' component={WorkoutListContainer}> </Route>
       </Route>
     </Router>
   </Provider>

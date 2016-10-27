@@ -13,20 +13,16 @@ const List = ({ objects, editLink, startLink }) => (
           <tr key={object.id}>
              <td onClick={boundEdit}>
               {object.name}
-              <Link style={{
-                float: "right",
-                marginRight: "10px",
-              }}
+              <Link 
+                className="list-link"
                 to={boundEdit}
               >
                 Edit
                 {" "}
               </Link>
-              <Link style={{
-                float: 'right',
-                marginRight: "10px",
-              }}
-               to={boundStart}
+              <Link
+                  className="list-link"
+                  to={boundStart}
               >
                 Start
                 {" "}

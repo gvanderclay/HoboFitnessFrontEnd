@@ -3,7 +3,9 @@ import  * as fromById from './byId';
 import exerciseList from './exerciseList';
 import activeExercise from './activeExercise';
 import completedExercises from './completedExercise';
-import * as fromList from './createList';
+import workoutList from './workoutList';
+import * as fromExerciseList from './exerciseList';
+import * as fromWorkoutList from './workoutList';
 
 // const routineList = createList('ROUTINE');
 // const workoutList = createList('WORKOUT');
@@ -12,17 +14,21 @@ import * as fromList from './createList';
 // const workoutsById = fromById.workoutsById;
 const exercisesById = fromById.exercisesById;
 
+const workoutsById = fromById.workoutsById;
+
 const routines = combineReducers({
   exerciseList,
   exercisesById,
   activeExercise,
-  completedExercises
+  completedExercises,
+  workoutList,
+  workoutsById
 });
 
 export default routines;
 
 export const getAllExercises = (state) => {
-  const ids = fromList.getIds(state.exerciseList);
+  const ids = fromExerciseList.getIds(state.exerciseList);
   return ids.map(id => fromById.getExercise(state.exercisesById, id));
 };
 
@@ -31,14 +37,19 @@ export const getExerciseById = (state, id) => {
   return exercise;
 };
 
+export const getAllWorkouts = (state) => {
+  const ids = fromWorkoutList.getIds(state.workoutList);
+  return ids.map(id => fromById.getWorkout(state.workoutsById, id));
+};
+
 export const getIsLoading = (state) =>
-  fromList.getIsLoading(state.exerciseList);
+  fromExerciseList.getIsLoading(state.exerciseList);
 
 export const getErrorMessage = (state, filter) =>
-  fromList.getErrorMessage(state.exerciseList);
+  fromExerciseList.getErrorMessage(state.exerciseList);
 
 // export const getAllRoutines = (state) => {
-//   const ids = fromList.getIds(state.routineList);
+//   const ids = fromExerciseList.getIds(state.routineList);
 //   return ids.map(id => fromById.getRoutine(state.routinesById, id));
 // }
 
@@ -51,13 +62,13 @@ export const getErrorMessage = (state, filter) =>
 //   state.routineList.active; 
 
 // export const getIsLoading = (state) => 
-//   fromList.getIsLoading(state.routineList);
+//   fromExerciseList.getIsLoading(state.routineList);
   
 // export const getErrorMessage = (state, filter) => 
-//   fromList.getErrorMessage(state.routineList);
+//   fromExerciseList.getErrorMessage(state.routineList);
   
 // export const getRoutineWorkouts = (state, id) => {
 //   const routineWorkoutList = fromById.getRoutine(state.routinesById, id).workouts;
-//   const workoutIds = fromList.getIds(state.workoutList);
+//   const workoutIds = fromExerciseList.getIds(state.workoutList);
 //   return workoutIds.filter(id => routineWorkoutList.indexOf(id) > -1); 
 // }

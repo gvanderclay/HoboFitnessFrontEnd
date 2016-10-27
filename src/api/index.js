@@ -89,7 +89,6 @@ export const fetchExercise = (id) =>
 export const addCompletedExercise = ({ exerciseId, setsPerRep }) =>
   new Promise((resolve, reject) => {
     try {
-      const exercise = fetchExercise(exerciseId);
       const completedExercise = {
         exerciseId,
         setsPerRep
