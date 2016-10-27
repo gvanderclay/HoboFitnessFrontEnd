@@ -10,14 +10,20 @@ import '../styles/ListHeader.scss';
 
 class WorkoutListContainer extends Component {
   componentDidMount() {
-    /* this.fetchData();*/
+    this.fetchData();
   }
 
-  /* fetchData() {
-   *   const { dispatch } = this.props;
-   *   dispatch(fetchRoutines());
-   *   dispatch(fetchWorkouts());
-   * }*/
+  fetchData() {
+    const { fetchWorkouts } = this.props;
+    fetchWorkouts();
+  }
+
+  addWorkout() {
+    const { addWorkout, router } = this.props;
+    addWorkout('New Workout').then(result =>
+      router.push('/workouts/' + result.id + '/edit')
+    );
+  }
 
   render() {
     const { isLoading, errorMessage, workouts } = this.props;
@@ -41,11 +47,12 @@ class WorkoutListContainer extends Component {
       <div className="container list-header">
         <ListHeader
             name="workout"
-            handleClick={() => {}}
+            handleClick={this.addWorkout.bind(this)}
         />
         <List
           objects={workouts}
-          onObjectClick={() => {}}
+          editLink={ id => '/workouts/' + id + '/edit' }
+          startLink={ id => '/workouts/' + id }
         />
       </div>
     );
@@ -55,7 +62,6 @@ class WorkoutListContainer extends Component {
 WorkoutListContainer.propTypes = {
   errorMessage: PropTypes.string,
   workouts: PropTypes.array.isRequired,
-  routine: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
 

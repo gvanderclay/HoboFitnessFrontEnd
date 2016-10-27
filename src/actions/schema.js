@@ -3,8 +3,14 @@ import { Schema, arrayOf } from 'normalizr';
 export const exercise = new Schema('exercises');
 export const arrayOfExercises = arrayOf(exercise);
 
-export const workout = new Schema('workouts').define({
+const workout = new Schema('workouts');
+
+workout.define({
   exercises: arrayOf(exercise)
 });
+
+export { workout };
+
+export const arrayOfWorkouts = arrayOf(workout);
 
 

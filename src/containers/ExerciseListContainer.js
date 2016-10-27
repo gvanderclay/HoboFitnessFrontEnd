@@ -6,7 +6,6 @@ import List from '../components/List';
 import ListHeader from '../components/ListHeader';
 import LoadingError from '../components/LoadingError';
 import * as actions from '../actions';
-import '../styles/ListHeader.scss';
 
 class ExerciseListContainer extends Component {
   componentWillMount() {
@@ -20,13 +19,13 @@ class ExerciseListContainer extends Component {
 
   addExercise() {
     const { addExercise, router } = this.props;
-    addExercise('New Exercise').then((result) => {
-      router.push('/exercises/' + result.id + '/edit'); 
-    });
+    addExercise('New Exercise').then(result => 
+      router.push('/exercises/' + result.id + '/edit')
+    );
   }
 
   render() {
-    const { isLoading, errorMessage, exercises, router, dispatch } = this.props;
+    const { isLoading, errorMessage, exercises } = this.props;
     if(isLoading && !exercises.length) {
       return (
         <div className="container">
@@ -51,12 +50,8 @@ class ExerciseListContainer extends Component {
         />
         <List
           objects={exercises}
-          editLink={(id) => {
-            return '/exercises/' + id + '/edit'; 
-          }}
-          startLink={(id) => {
-            return '/exercises/' + id;
-          }}
+          editLink={ id => '/exercises/' + id + '/edit' }
+          startLink={ id =>  '/exercises/' + id }
         />
       </div>
     );

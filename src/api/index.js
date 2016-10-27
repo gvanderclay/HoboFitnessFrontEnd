@@ -22,7 +22,7 @@ export const saveDB = (state) => {
 };
 
 let state = loadDB();
-state = state ? state : {exercises: [], completedExercises: []};
+state = state ? state : {exercises: [], completedExercises: [], workouts: []};
 saveDB(state);
 
 export const fetchExercises = () =>
@@ -33,7 +33,7 @@ export const fetchExercises = () =>
     } catch (err) {
       reject(Error(err));
     }
-  })
+  });
 
 export const addExercise = (name, reps = 5, sets = 5, weight = 45) =>
   new Promise((resolve, reject) => {
@@ -75,17 +75,17 @@ export const updateExercise = (id, name, reps, sets, weight) =>
     }
   });
 
-export const fetchExercise = (id) => 
+export const fetchExercise = (id) =>
   new Promise((resolve, reject) => {
     try {
       fetchExercises().then((exercises) => {
-        resolve(exercises.find(exercise => exercise.id === id)); 
+        resolve(exercises.find(exercise => exercise.id === id));
       });
     } catch(err) {
       reject(Error(err));
     }
-  })
-  
+  });
+
 export const addCompletedExercise = ({ exerciseId, setsPerRep }) =>
   new Promise((resolve, reject) => {
     try {
@@ -99,6 +99,62 @@ export const addCompletedExercise = ({ exerciseId, setsPerRep }) =>
       resolve(completedExercise);
     } catch(err) {
       reject(Error(err)); 
+    }
+  });
+
+export const fetchWorkouts = () =>
+  new Promise((resolve, reject) => {
+    try {
+      const db = loadDB();
+      resolve(db.workouts);
+    } catch (err) {
+      reject(Error(err));
+    }
+  });
+
+export const addWorkout = (name) => 
+  new Promise((resolve, reject) => {
+    const workout = {
+      id: v4(),
+      name,
+      exercises: []
+    };
+    try {
+      var oldDB = loadDB();
+      oldDB.workouts.push(workout);
+      saveDB(oldDB);
+      resolve(workout);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
+export const updateWorkout = (id, name, newExercise) =>
+  new Promise((resolve, reject) => {
+    const db = loadDB();
+    try {
+      const indexOfWorkout = db.workouts.findIndex(workout => workout.id === id);
+      const oldWorkout = db.exercises[indexOfWorkout];
+      oldWorkout.name = name;
+      if(newExercise){
+        oldWorkout.exercises.push(newExercise);
+      }
+      db.workouts[indexOfWorkout] = oldWorkout;
+      saveDB(db);
+      resolve(oldWorkout);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
+export const fetchWorkout = (id) => 
+  new Promise((resolve, reject) => {
+    try {
+      fetchWorkouts.then((workouts) => {
+        resolve(workouts.find(workout => workout.id === id));
+      });
+    } catch(err) {
+      reject(Error(err));
     }
   });
 
