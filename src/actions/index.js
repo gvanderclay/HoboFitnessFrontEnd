@@ -148,6 +148,81 @@ export const completeActiveExercise = () => (dispatch, getState) => {
   return completedExercise;
 };
 
+export const fetchWorkouts = () => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'FETCH_WORKOUTS_REQUEST'
+  });
+
+  return api.fetchWorkouts().then(
+    response => {
+      console.log(response);
+      dispatch({
+        type: 'FETCH_WORKOUTS_SUCCESS',
+        response: normalize(response, schema.arrayOfWorkouts)
+      });
+    }
+  );
+};
+
+export const addWorkout = (name) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'ADD_WORKOUT_REQUEST'
+  });
+
+  const workout = api.addWorkout(name).then(
+    response => {
+      dispatch({
+        type: 'ADD_WORKOUT_SUCCESS',
+        response: normalize(response, schema.workout)
+      });
+      return Promise.resolve(response);
+    },
+    error => {
+      dispatch({
+        type: 'ADD_WORKOUT_FAILURE',
+        message: error.message || 'Something went wrong'
+      });
+      return Promise.resolve(error);
+    }
+  );
+  return workout;
+};
+
+export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'UPDATE_WORKOUT_REQUEST'
+  });
+
+  const workout = api.updateExercise(id, name, newExercise).then(
+    response => {
+      dispatch({
+        type: 'UPDATE_WORKOUT_SUCCESS',
+        response: normalize(response, schema.exercise)
+      });
+      return Promise.resolve(response);
+    },
+    error => {
+      dispatch({
+        type: 'UPDATE_WORKOUT_FAILURE',
+        message: error.message || 'Something went wrong'
+      });
+    }
+  );
+  return workout;
+};
+
 // export const fetchRoutines = () => (dispatch, getState) => {
 //     if (getIsLoading(getState())) {
 //         return Promise.resolve();
