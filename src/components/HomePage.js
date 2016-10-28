@@ -29,7 +29,7 @@ class HomePage extends Component {
             <h1 className="title">Welcome To HoboFitness</h1>
             <p>Track your workouts effortlessly!</p>
             <p><Button onClick={() => {
-              this.props.router.push('/exercises');
+              this.props.router.push('/workouts');
             }}>
             Get Started
             </Button></p>

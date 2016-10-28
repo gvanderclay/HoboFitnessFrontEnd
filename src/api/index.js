@@ -134,10 +134,10 @@ export const updateWorkout = (id, name, newExercise) =>
     const db = loadDB();
     try {
       const indexOfWorkout = db.workouts.findIndex(workout => workout.id === id);
-      const oldWorkout = db.exercises[indexOfWorkout];
+      const oldWorkout = db.workouts[indexOfWorkout];
       oldWorkout.name = name;
       if(newExercise){
-        oldWorkout.exercises.push(newExercise);
+        oldWorkout.exercises.push(newExercise.id);
       }
       db.workouts[indexOfWorkout] = oldWorkout;
       saveDB(db);
@@ -159,84 +159,3 @@ export const fetchWorkout = (id) =>
   });
 
 
-// export const fetchRoutines = () => 
-//   new Promise((resolve, reject) => {
-//     try {
-//       const state = loadDB();
-//       const routines = state.routineList.ids.map(id => state.routinesById[id]);
-//       resolve(routines);
-//     }
-//     catch(err) {
-//       reject(Error(err)); 
-//     }
-//   });
-
-
-// export const addRoutine = (title, workouts = []) =>  
-//   new Promise((resolve, reject) => {
-//     const routine = {
-//       id: v4(),
-//       title,
-//       workouts, 
-//     }
-//     try{
-//       var oldState = loadDB();
-//       oldState.routinesById[routine.id] = routine;
-//       oldState.routineList.ids.push(routine.id);
-//       saveDB(oldState);
-//       resolve(routine);
-//     }
-//     catch(err) {
-//       reject(Error(err));
-//     }    
-//   });
-  
-// export const updateRoutine = (id, title, workouts) => 
-//   new Promise((resolve, reject) => {
-//     let index;
-//     let state = loadDB().routines;
-//     state.routinesById[index].title = title;
-//     state.routinesById[index].workouts = workouts;
-//     saveDB(state);
-//   });
-  
-// export const fetchWorkouts = () => 
-//    new Promise((resolve, reject) => {
-//       try {
-//         resolve(loadDB().workouts);
-//       }
-//       catch(err) {
-//         reject(Error(err)); 
-//       }
-//     }); 
-    
-// export const fetchWorkoutsForRoutine = (id) => 
-//   new Promise((resolve, reject) => {
-//     try {
-//       const routine = loadDB().routinesById[id];
-//       resolve(routine.workouts); 
-//     } catch (err) {
-//       reject(Error(err));
-//     }
-//   })
-  
-// export const addWorkoutToRoutine = (title, id, exercises = []) =>
-//   new Promise((resolve, reject) => {
-//     try {
-//       const oldState = loadDB();
-//       const routine = oldState.routinesById[id];
-//       const workout = {
-//         id: v4(),
-//         title,
-//         exercises,
-//       }
-//       routine.workouts.push(workout);
-//       oldState.routinesById[id] = routine;
-//       oldState.workoutsById[workout.id] = workout;
-//       oldState.workoutList.ids.push(workout.id); 
-//       saveDB(oldState);
-//       resolve(workout);
-//     } catch(err) {
-//       reject(Error(err));
-//     }
-//   });

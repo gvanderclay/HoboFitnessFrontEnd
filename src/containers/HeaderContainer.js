@@ -7,10 +7,14 @@ class HeaderContainer extends Component {
     this.menuItems = [
       {title: "Sign Up", link: "#"},
     ]
+    this.dropDownItems = [
+      { title: "Workouts", route: "/workouts" },
+      { title: "Exercises", route: "/exercises" },
+    ]
   }
 
   render() {
-    return <Header menuItems={this.menuItems}/>
+    return <Header menuItems={this.menuItems} dropDownItems={this.dropDownItems}/>
   }
 }
 

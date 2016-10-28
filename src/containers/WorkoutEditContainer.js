@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
+import { getExercisesForWorkout, getWorkoutById, getErrorMessage, getIsLoading,  } from '../reducers';
 import List from '../components/List';
 import ListHeader from '../components/ListHeader';
 import LoadingError from '../components/LoadingError';
@@ -13,23 +13,30 @@ class WorkoutEditContainer extends Component {
   }
 
   fetchData() {
-    
+    const { fetchEntities } = this.props;
+    fetchEntities();
   }
 
   addExerciseToWorkout() {
-
+    const { addExercise, updateWorkout, workout, router } = this.props;
+    addExercise('New ' + workout.name + ' exercise').then(exercise => {
+      console.log(exercise);
+      updateWorkout(workout.id, workout.name, exercise).then(workout => {
+        router.push('/exercises/' + exercise.id + '/edit')
+      })
+    })
   }
 
   render() {
     const { isLoading, errorMessage, exercises, workout } = this.props;
-    if(isLoading && !exercises.length) {
+    if(isLoading || !exercises || !workout) {
       return (
         <div className="container">
           <p>Loading...</p>
         </div>
       );
     }
-    if(errorMessage && !exercises.length) {
+    if(errorMessage && !exercises.length && !workout) {
       return (
         <LoadingError
           message={errorMessage}
@@ -37,6 +44,8 @@ class WorkoutEditContainer extends Component {
         />
       );
     }
+
+    console.log(JSON.parse(localStorage.fakeDB));
 
     return (
       <div className="container">
@@ -62,13 +71,16 @@ WorkoutEditContainer.propTypes = {
   workout: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, props) => ({
-  exercises: null,
+const mapStateToProps = (state, { params }) => ({
+  workout: getWorkoutById(state, params.workoutId),
+  exercises: getExercisesForWorkout(state, params.workoutId),
   errorMessage: getErrorMessage(state),
-  workout: null
+  isLoading: getIsLoading(state)
 });
 
 WorkoutEditContainer = withRouter(connect(
   mapStateToProps,
   actions
-));
+)(WorkoutEditContainer));
+
+export default WorkoutEditContainer;

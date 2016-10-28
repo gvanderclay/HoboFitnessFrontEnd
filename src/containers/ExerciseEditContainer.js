@@ -27,9 +27,8 @@ class ExerciseContainer extends Component {
       );
     }
     return(
-      <div>
-        <ExerciseEditFormContainer exercise={exercise}/>
-      </div> 
+      <ExerciseEditFormContainer
+          exercise={exercise}/>
     );
   }
 }

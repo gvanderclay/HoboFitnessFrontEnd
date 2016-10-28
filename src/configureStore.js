@@ -1,8 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
-import * as storage from 'redux-storage';
-import createEngine from 'redux-storage-engine-localstorage';
 import hoboFitness from './reducers';
 
 const configureStore = () => {
@@ -11,17 +9,13 @@ const configureStore = () => {
     middlewares.push(createLogger());
   }
 
-  const reducer = storage.reducer(hoboFitness);
+  const reducer = hoboFitness;
 
-  const engine = createEngine('hoboFitness');
-  middlewares.push(storage.createMiddleware(engine));
   const store = createStore(
     reducer,
     applyMiddleware(...middlewares)
   );
-  const load = storage.createLoader(engine);
 
-  load(store);
   return store;
 };
 

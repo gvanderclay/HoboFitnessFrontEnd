@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { getRepsOnSet } from '../reducers/activeExercise';
@@ -30,6 +30,10 @@ class ExerciseButtonContainer extends Component {
       />
     );
   }
+}
+
+ExerciseButtonContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state, { setNumber }) => {

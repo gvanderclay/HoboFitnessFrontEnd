@@ -168,6 +168,37 @@ export const fetchWorkouts = () => (dispatch, getState) => {
   );
 };
 
+export const fetchEntities = () => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+  dispatch({
+    type: 'FETCH_WORKOUTS_REQUEST'
+  });
+
+  return api.fetchWorkouts().then(
+    response => {
+      console.log(response);
+      dispatch({
+        type: 'FETCH_WORKOUTS_SUCCESS',
+        response: normalize(response, schema.arrayOfWorkouts)
+      });
+    }
+  );
+  dispatch({
+    type: 'FETCH_EXERCISES_REQUEST'
+  });
+
+  return api.fetchExercises().then(
+    response => {
+      dispatch({
+        type: 'FETCH_EXERCISES_SUCCESS',
+        response: normalize(response, schema.arrayOfExercises)
+      });
+    }
+  );
+};
+
 export const addWorkout = (name) => (dispatch, getState) => {
   if(getIsLoading(getState())) {
     return Promise.resolve();
@@ -205,7 +236,7 @@ export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => 
     type: 'UPDATE_WORKOUT_REQUEST'
   });
 
-  const workout = api.updateExercise(id, name, newExercise).then(
+  const workout = api.updateWorkout(id, name, newExercise).then(
     response => {
       dispatch({
         type: 'UPDATE_WORKOUT_SUCCESS',
@@ -222,6 +253,7 @@ export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => 
   );
   return workout;
 };
+
 
 // export const fetchRoutines = () => (dispatch, getState) => {
 //     if (getIsLoading(getState())) {
