@@ -1,35 +1,48 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { getExercisesForWorkout, getWorkoutById, getErrorMessage, getIsLoading,  } from '../reducers';
 import List from '../components/List';
-import ListHeader from '../components/ListHeader';
+import EditListHeader from '../components/EditListHeader';
 import LoadingError from '../components/LoadingError';
 import * as actions from '../actions';
 
 class WorkoutEditContainer extends Component {
+  constructor() {
+    super();
+    this.changeWorkoutName = _.debounce(this.changeWorkoutName, 500);
+  }
   componentWillMount() {
     this.fetchData();
   }
 
   fetchData() {
-    const { fetchEntities } = this.props;
-    fetchEntities();
+    const { fetchWorkout, params } = this.props;
+    fetchWorkout(params.workoutId);
   }
 
   addExerciseToWorkout() {
     const { addExercise, updateWorkout, workout, router } = this.props;
     addExercise('New ' + workout.name + ' exercise').then(exercise => {
-      console.log(exercise);
       updateWorkout(workout.id, workout.name, exercise).then(workout => {
-        router.push('/exercises/' + exercise.id + '/edit')
+        router.push('/workouts/' + workout.id + '/exercise/' + exercise.id)
       })
     })
   }
 
+  handleChange(event) {
+    this.changeWorkoutName(event.target.value);
+  }
+
+  changeWorkoutName(name) {
+    const { updateWorkout, workout } = this.props; 
+    updateWorkout(workout.id, name);
+  }
+
   render() {
     const { isLoading, errorMessage, exercises, workout } = this.props;
-    if(isLoading || !exercises || !workout) {
+    if(isLoading || exercises === null || _.isEmpty(workout))  {
       return (
         <div className="container">
           <p>Loading...</p>
@@ -44,18 +57,20 @@ class WorkoutEditContainer extends Component {
         />
       );
     }
-
-    console.log(JSON.parse(localStorage.fakeDB));
+    console.log(this);
 
     return (
       <div className="container">
-        <ListHeader
-            name={workout.name}
+        <EditListHeader
+            addType={"Exercise To Workout"}
             handleClick={this.addExerciseToWorkout.bind(this)}
+            placeHolder="Workout Name"
+            value={workout.name}
+            handleChange={this.handleChange.bind(this)}
         />
         <List
             objects={exercises}
-            editLink={ id => '/exercises/' + id + '/edit'}
+            editLink={ id => '/workouts/' + workout.id + '/exercise/' + id}
             startLink={ id => '/exercises/' + id }
         />
       </div>

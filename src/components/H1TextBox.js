@@ -5,10 +5,10 @@ import '../styles/H1TextBox.scss';
 const H1TextBox = ({ placeholder, value, handleChange }) => (
   <div>
     <FormControl 
-        ref={node => { this.input = node }} 
+        autoFocus
         type='text' 
         placeholder={placeholder} 
-        value={value} 
+        defaultValue={value}
         onChange={handleChange}
     />
   </div>

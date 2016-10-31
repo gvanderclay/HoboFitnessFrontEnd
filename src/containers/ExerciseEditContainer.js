@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Button, Row, Col } from 'react-bootstrap';
+import { withRouter } from 'react-router';
 import ExerciseEditFormContainer from './ExerciseEditFormContainer';
 import LoadingError from '../components/LoadingError';
 import Loading from '../components/Loading';
@@ -12,7 +14,7 @@ class ExerciseContainer extends Component {
   }
 
   render() {
-    const { isLoading, errorMessage, exercise } = this.props;
+    const { isLoading, errorMessage, exercise, router, backRoute, backText } = this.props;
     if(isLoading || !exercise) {
       return (
         <Loading />
@@ -27,8 +29,24 @@ class ExerciseContainer extends Component {
       );
     }
     return(
-      <ExerciseEditFormContainer
-          exercise={exercise}/>
+      <div className="container">
+        <Row>
+          <Col sm={12}>
+            <Button style={{
+                float: "left",
+                marginTop:"10px"
+              }}
+              onClick={() => {
+                router.push(backRoute);
+              }}
+            >
+                {"<<" + backText}
+            </Button>
+          </Col>
+        </Row>
+        <ExerciseEditFormContainer
+            exercise={exercise}/>
+      </div>
     );
   }
 }
@@ -48,4 +66,4 @@ const mapStateToProps = (state, { params }) => {
   }
 }
 
-export default connect(mapStateToProps, actions)(ExerciseContainer);
+export default withRouter(connect(mapStateToProps, actions)(ExerciseContainer));

@@ -38,18 +38,8 @@ class ExerciseEditContainer extends Component {
   }
 
   render() {
-      const { router } = this.props; 
       return(
-
-      <div className="container list-header">
-        <Button style={{
-          float: "left",  
-        }}
-        onClick={() => {
-          router.push('/exercises');
-        }}>
-          {"<<"} Back To Exercises 
-        </Button>
+      <div className="list-header">
         <form onSubmit={this.handleSubmit} >
           <Row>
             <Col sm={12}>

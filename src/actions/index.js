@@ -159,7 +159,6 @@ export const fetchWorkouts = () => (dispatch, getState) => {
 
   return api.fetchWorkouts().then(
     response => {
-      console.log(response);
       dispatch({
         type: 'FETCH_WORKOUTS_SUCCESS',
         response: normalize(response, schema.arrayOfWorkouts)
@@ -168,36 +167,26 @@ export const fetchWorkouts = () => (dispatch, getState) => {
   );
 };
 
-export const fetchEntities = () => (dispatch, getState) => {
+export const fetchWorkout = (id) => (dispatch, getState) => {
   if(getIsLoading(getState())) {
     return Promise.resolve();
   }
+
   dispatch({
-    type: 'FETCH_WORKOUTS_REQUEST'
+    type: 'FETCH_WORKOUT_REQUEST'
   });
 
-  return api.fetchWorkouts().then(
-    response => {
-      console.log(response);
-      dispatch({
-        type: 'FETCH_WORKOUTS_SUCCESS',
-        response: normalize(response, schema.arrayOfWorkouts)
-      });
-    }
-  );
-  dispatch({
-    type: 'FETCH_EXERCISES_REQUEST'
-  });
-
-  return api.fetchExercises().then(
+  return api.fetchWorkout(id).then(
     response => {
       dispatch({
-        type: 'FETCH_EXERCISES_SUCCESS',
-        response: normalize(response, schema.arrayOfExercises)
+        type: 'FETCH_WORKOUT_SUCCESS',
+        response: normalize(response, schema.workout)
       });
+      dispatch(fetchExercises());
     }
   );
 };
+
 
 export const addWorkout = (name) => (dispatch, getState) => {
   if(getIsLoading(getState())) {
@@ -240,7 +229,7 @@ export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => 
     response => {
       dispatch({
         type: 'UPDATE_WORKOUT_SUCCESS',
-        response: normalize(response, schema.exercise)
+        response: normalize(response, schema.workout)
       });
       return Promise.resolve(response);
     },
@@ -255,164 +244,3 @@ export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => 
 };
 
 
-// export const fetchRoutines = () => (dispatch, getState) => {
-//     if (getIsLoading(getState())) {
-//         return Promise.resolve();
-//     }
-
-//     dispatch({
-//         type: 'FETCH_ROUTINES_REQUEST'
-//     });
-
-//     return api.fetchRoutines().then(
-//         response => {
-//             dispatch({
-//                 type: 'FETCH_ROUTINES_SUCCESS',
-//                 response: normalize(response, schema.arrayOfRoutines) ,
-//             });
-//         },
-//         error => {
-//             dispatch({
-//                 type: 'FETCH_ROUTINES_FAILURE',
-//                 message: error.message || 'Something went wrong.',
-//             });
-//         }
-//     );
-// };
-
-// export const addRoutine = (title) => (dispatch, getState) => {
-//     if(getIsLoading(getState())) {
-//         return Promise.resolve();
-//     }
-
-//     dispatch({
-//         type: 'ADD_ROUTINE_REQUEST'
-//     });
-
-//     return api.addRoutine(title).then(
-//         response => {
-//             dispatch({
-//                 type: 'ADD_ROUTINE_SUCCESS',
-//                 response: normalize(response, schema.routine),
-//             })
-//             return Promise.resolve(response);
-//         },
-//         error => {
-//             dispatch({
-//                 type: 'ADD_ROUTINE_FAILURE',
-//                 message: error.message || 'Something went wrong',
-//             })
-//             return Promise.resolve(error);
-//         }
-//     );
-// }
-
-// export const fetchWorkouts = () => (dispatch, getState) => {
-//     if (getIsLoading(getState())) {
-//         return Promise.resolve();
-//     }
-
-//     dispatch({
-//         type: 'FETCH_WORKOUTS_REQUEST'
-//     });
-
-//     return api.fetchRoutines().then(
-//         response => {
-//             dispatch({
-//                 type: 'FETCH_WORKOUTS_SUCCESS',
-//                 response: normalize(response, schema.arrayOfRoutines) ,
-//             });
-//         },
-//         error => {
-//             dispatch({
-//                 type: 'FETCH_WORKOUTS_FAILURE',
-//                 message: error.message || 'Something went wrong.',
-//             });
-//         }
-//     )    
-// }
-
-// export const fetchWorkoutsForRoutine = (id) => (dispatch, getState) => {
-//     if (getIsLoading(getState())) {
-//         return Promise.resolve();
-//     }
-
-//     dispatch({
-//         type: 'FETCH_WORKOUTS_REQUEST',
-//     });
-
-//     return api.fetchWorkoutsForRoutine(id).then(
-//         response => {
-//             dispatch({
-//                 type: 'FETCH_WORKOUTS_SUCCESS',
-//                 response: normalize(response, schema.arrayOfWorkouts) ,
-//             });
-//             return Promise.resolve(response)
-//         },
-//         error => {
-//             dispatch({
-//                 type: 'FETCH_WORKOUTS_FAILURE',
-//                 message: error.message || 'Something went wrong.',
-//             });
-//             return Promise.reject(error);
-//         }
-//     );
-// };
-
-// export const addWorkoutToRoutine = (title, id) => (dispatch, getState) => {
-//     if(getIsLoading(getState())) {
-//         return Promise.resolve();
-//     }
-
-//     dispatch({
-//         type: 'ADD_WORKOUT_REQUEST',
-//         title: title,
-//     });
-
-//     return api.addWorkoutToRoutine(title, id).then(
-//         response => {
-//             dispatch({
-//                 type: 'ADD_WORKOUT_SUCCESS',
-//                 response: normalize(response, schema.workout),
-//                 routineId: id,
-//             })
-//             return Promise.resolve(response)
-//         },
-//         error => {
-//             dispatch({
-//                 type: 'ADD_WORKOUT_FAILURE',
-//                 message: error.message || 'Something went wrong',
-//             })
-//             return Promise.reject(error);
-//         }
-//     );
-// }
-
-// export const updateRoutine = (id, title, workouts) => (dispatch, getState) => {
-//     if(getIsLoading(getState())) {
-//         return Promise.resolve();
-//     }
-
-//     dispatch({
-//         type: 'UPDATE_ROUTINE_REQUEST',
-//         title,
-//         workouts,
-//     });
-
-//     return api.updateRoutine(id, title, workouts).then(
-//         response => {
-//             dispatch({
-//                 type: 'UPDATE_ROUTINE_SUCCESS',
-//                 response: normalize(response, schema.routine)
-//             })
-//             return Promise.resolve(response);
-//         },
-//         error => {
-//             dispatch({
-//                 type: 'UPDATE_WORKOUT_FAILURE',
-//                 message: error.message || 'Something went wrong',
-//             })
-//             return Promise.reject(error)
-//         }
-//     )
-// }

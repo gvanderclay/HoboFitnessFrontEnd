@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import _ from 'lodash';
 import  * as fromById from './byId';
 import exerciseList from './exerciseList';
 import activeExercise from './activeExercise';
@@ -44,18 +45,27 @@ export const getAllWorkouts = (state) => {
 
 export const getWorkoutById = (state, id) => {
   const workout = fromById.getWorkout(state.workoutsById, id);
+  if(!workout) {
+    return {};
+  }
   return workout;
 };
 
 export const getExercisesForWorkout = (state, workoutId) => {
   const workout = getWorkoutById(state,workoutId);
-  if(!workout) {
-    return null;
+  if(_.isEmpty(workout)) {
+    return [];
   }
-  return workout.exercises.map(id => getExerciseById(state, id));
+  return workout.exercises.reduce((result, id) => {
+    const exercise = getExerciseById(state, id);
+    if(exercise) {
+      result.push(getExerciseById(state, id));
+    }
+    return result;
+  }, []);
 };
 
-export const getIsLoading = (state) =>
+export const getIsLoading = (state) => 
   fromExerciseList.getIsLoading(state.exerciseList) ||
   fromWorkoutList.getIsLoading(state.workoutList);
 

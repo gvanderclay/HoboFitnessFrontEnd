@@ -150,7 +150,7 @@ export const updateWorkout = (id, name, newExercise) =>
 export const fetchWorkout = (id) => 
   new Promise((resolve, reject) => {
     try {
-      fetchWorkouts.then((workouts) => {
+      fetchWorkouts().then((workouts) => {
         resolve(workouts.find(workout => workout.id === id));
       });
     } catch(err) {
