@@ -6,7 +6,7 @@ const H1TextBox = ({ placeholder, value, handleChange }) => (
   <div>
     <FormControl 
         autoFocus
-        type='text' 
+        type='text'
         placeholder={placeholder} 
         defaultValue={value}
         onChange={handleChange}

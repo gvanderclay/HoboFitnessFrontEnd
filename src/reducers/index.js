@@ -1,21 +1,19 @@
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 import  * as fromById from './byId';
-import exerciseList from './exerciseList';
+import createList from './createList';
 import activeExercise from './activeExercise';
-import completedExercises from './completedExercise';
-import workoutList from './workoutList';
-import workoutInstanceList from './workoutInstanceList';
-import exerciseInstanceList from './exerciseInstanceList';
-import * as fromExerciseList from './exerciseList';
-import * as fromWorkoutList from './workoutList';
-import * as fromExerciseInstanceList from './exerciseInstanceList';
-import * as fromWorkoutInstanceList from './workoutInstanceList';
+import * as fromCreateList from './createList';
 
 const exercisesById = fromById.exercisesById;
 const workoutsById = fromById.workoutsById;
 const exerciseInstancesById = fromById.exerciseInstancesById;
 const workoutInstancesById = fromById.workoutInstancesById;
+
+const exerciseList = createList("exercise");
+const workoutList = createList("workout");
+const workoutInstanceList = createList("workout_instance");
+const exerciseInstanceList = createList("exercise_instance");
 
 const state = combineReducers({
   exerciseList,
@@ -23,7 +21,6 @@ const state = combineReducers({
   exerciseInstanceList,
   exerciseInstancesById,
   activeExercise,
-  completedExercises,
   workoutList,
   workoutsById,
   workoutInstanceList,
@@ -33,7 +30,7 @@ const state = combineReducers({
 export default state;
 
 export const getAllExercises = (state) => {
-  const ids = fromExerciseList.getIds(state.exerciseList);
+  const ids = fromCreateList.getIds(state.exerciseList);
   return ids.map(id => fromById.getExercise(state.exercisesById, id));
 };
 
@@ -43,7 +40,7 @@ export const getExerciseById = (state, id) => {
 };
 
 export const getAllWorkouts = (state) => {
-  const ids = fromWorkoutList.getIds(state.workoutList);
+  const ids = fromCreateList.getIds(state.workoutList);
   return ids.map(id => fromById.getWorkout(state.workoutsById, id));
 };
 
@@ -70,9 +67,9 @@ export const getExercisesForWorkout = (state, workoutId) => {
 };
 
 export const getIsLoading = (state) => 
-  fromExerciseList.getIsLoading(state.exerciseList) ||
-  fromWorkoutList.getIsLoading(state.workoutList);
+  fromCreateList.getIsLoading(state.exerciseList) ||
+  fromCreateList.getIsLoading(state.workoutList);
 
 export const getErrorMessage = (state, filter) =>
-  fromExerciseList.getErrorMessage(state.exerciseList);
+  fromCreateList.getErrorMessage(state.exerciseList);
 

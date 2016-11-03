@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { Link } from 'react-bootstrap';
 import { getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
 import ListHeader from '../components/ListHeader';
@@ -22,6 +23,31 @@ class ExerciseListContainer extends Component {
     addExercise('New Exercise').then(result => 
       router.push('/exercises/' + result.id + '/edit')
     );
+  }
+
+  actionComponent(id, text, route) {
+    return (
+      <Link
+          className="list-link"
+          to={route(id)}
+      >
+        {text}
+      </Link>
+    );
+  }
+
+  startExerciseComponent(id) {
+    const route = id => "/exercises/" + id;
+    return this.actionComponent(id, "Start", route);
+  }
+
+  editExerciseComponent(id) {
+    const route = id => "/exercises/" + id + "/edit";
+    return this.actionComponent(id, "Edit", route);
+  }
+
+  deleteExerciseComponent(id) {
+   
   }
 
   render() {
