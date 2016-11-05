@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Link } from 'react-bootstrap';
+import { Link } from 'react-router';
 import { getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
 import ListHeader from '../components/ListHeader';
@@ -20,7 +20,7 @@ class ExerciseListContainer extends Component {
 
   addExercise() {
     const { addExercise, router } = this.props;
-    addExercise('New Exercise').then(result => 
+    addExercise('New Exercise').then(result =>
       router.push('/exercises/' + result.id + '/edit')
     );
   }
@@ -46,8 +46,22 @@ class ExerciseListContainer extends Component {
     return this.actionComponent(id, "Edit", route);
   }
 
-  deleteExerciseComponent(id) {
-   
+ /* deleteExerciseComponent(id) {
+   *   return (
+   *     <Link>
+   *       className="list-link"
+   *       onClick={}
+   *     </Link>
+   *   );
+   * }*/
+
+  exerciseActionComponents(exercise) {
+    const { id } = exercise;
+    // put the components in the opposite order you want them to appear on screen
+    return [
+      this.editExerciseComponent(id),
+      this.startExerciseComponent(id),
+    ]
   }
 
   render() {
@@ -76,8 +90,7 @@ class ExerciseListContainer extends Component {
         />
         <List
           objects={exercises}
-          editLink={ id => '/exercises/' + id + '/edit' }
-          startLink={ id =>  '/exercises/' + id }
+          actionComponents={this.exerciseActionComponents.bind(this)}
         />
       </div>
     );

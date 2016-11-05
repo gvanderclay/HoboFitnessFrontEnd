@@ -243,4 +243,30 @@ export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => 
   return workout;
 };
 
+export const deleteWorkout = (id) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
 
+  dispatch({
+    type: 'DELETE_WORKOUT_REQUEST'
+  });
+
+  // index of the deleted workout is returned
+  const workout = api.deleteWorkout(id).then(
+    response => {
+      dispatch({
+        type: 'DELETE_WORKOUT_SUCCESS',
+        index: response
+      });
+      return Promise.resolve(response);
+    },
+    error => {
+      dispatch({
+        type: 'DELETE_WORKOUT_FAILURE',
+        message: error.message || 'Something went wrong'
+      });
+    }
+  );
+  return workout;
+};

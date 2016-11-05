@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { getErrorMessage, getIsLoading, getAllWorkouts } from '../reducers';
+import { Link } from 'react-router';
 import List from '../components/List';
 import ListHeader from '../components/ListHeader';
 import LoadingError from '../components/LoadingError';
@@ -23,6 +24,49 @@ class WorkoutListContainer extends Component {
     addWorkout('New Workout').then(result =>
       router.push('/workouts/' + result.id + '/edit')
     );
+  }
+
+  actionComponent(id, text, route) {
+    return (
+      <Link
+          className="list-link"
+          to={route(id)}
+      >
+        {text}
+      </Link>
+    );
+  }
+
+  startWorkoutComponent(id) {
+    const route = id => "/workouts/" + id;
+    return this.actionComponent(id, "Start", route);
+  }
+
+  editWorkoutComponent(id) {
+    const route = id => "/workouts/" + id + "/edit";
+    return this.actionComponent(id, "Edit", route);
+  }
+
+  deleteWorkoutComponent(id) {
+    const { deleteWorkout } = this.props;
+    return (
+      <Link
+        className="list-link"
+        onClick={deleteWorkout.bind(this, id)}
+      >
+        Delete
+      </Link>
+    );
+  }
+
+  workoutActionComponents(workout) {
+    const { id } = workout;
+    // put the components in the opposite order you want theme to appear on screen
+    return [
+      this.deleteWorkoutComponent(id),
+      this.editWorkoutComponent(id),
+      this.startWorkoutComponent(id),
+    ];
   }
 
   render() {
@@ -51,8 +95,7 @@ class WorkoutListContainer extends Component {
         />
         <List
           objects={workouts}
-          editLink={ id => '/workouts/' + id + '/edit' }
-          startLink={ id => '/workouts/' + id }
+          actionComponents={this.workoutActionComponents.bind(this)}
         />
       </div>
     );

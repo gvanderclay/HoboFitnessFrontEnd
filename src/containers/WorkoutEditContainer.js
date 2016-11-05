@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter, Link } from 'react-router';
 import { getExercisesForWorkout, getWorkoutById, getErrorMessage, getIsLoading,  } from '../reducers';
 import List from '../components/List';
 import EditListHeader from '../components/EditListHeader';
@@ -36,9 +36,48 @@ class WorkoutEditContainer extends Component {
   }
 
   changeWorkoutName(name) {
-    const { updateWorkout, workout } = this.props; 
+    const { updateWorkout, workout } = this.props;
     updateWorkout(workout.id, name);
-  }
+  };
+
+  actionComponent(id, text, route) {
+    return (
+      <Link
+          className="list-link"
+          to={route(id)}
+      >
+        {text}
+      </Link>
+    );
+  };
+
+  startExerciseComponent(id) {
+    const route = id => "/exercises/" + id;
+    return this.actionComponent(id, "Start", route);
+  };
+
+  editExerciseComponent(id) {
+    const route = id => "/exercises/" + id + "/edit";
+    return this.actionComponent(id, "Edit", route);
+  };
+
+ /* deleteExerciseComponent(id) {
+   *   return (
+   *     <Link>
+   *       className="list-link"
+   *       onClick={}
+   *     </Link>
+   *   );
+   * }*/
+
+  exerciseActionComponents(exercise) {
+    const { id } = exercise;
+    // put the components in the opposite order you want them to appear on screen
+    return [
+      this.editExerciseComponent(id),
+      this.startExerciseComponent(id),
+    ]
+  };
 
   render() {
     const { isLoading, errorMessage, exercises, workout } = this.props;
@@ -57,7 +96,6 @@ class WorkoutEditContainer extends Component {
         />
       );
     }
-    console.log(this);
 
     return (
       <div className="container">
@@ -70,8 +108,7 @@ class WorkoutEditContainer extends Component {
         />
         <List
             objects={exercises}
-            editLink={ id => '/workouts/' + workout.id + '/exercise/' + id}
-            startLink={ id => '/exercises/' + id }
+            actionComponents={this.exerciseActionComponents.bind(this)}
         />
       </div>
     );

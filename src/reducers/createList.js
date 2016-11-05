@@ -17,6 +17,11 @@ const createList = (object) => {
           action.response.result,
           ...state.slice(index+1)
         ];
+      case 'DELETE_' + object + '_SUCCESS':
+        return [
+          ...state.slice(0, action.index),
+          ...state.slice(action.index + 1)
+        ];
       default:
         return state;
     }
@@ -30,6 +35,7 @@ const createList = (object) => {
       case 'UPDATE_' + object + '_REQUEST':
       case 'START_' + object + '_REQUEST':
       case 'COMPLETE_' + object + '_REQUEST':
+      case 'DELETE_' + object + '_CONTAINER':
         return true;
       case 'FETCH_' + object + 'S_SUCCESS':
       case 'FETCH_' + object + '_SUCCESS':
@@ -42,6 +48,8 @@ const createList = (object) => {
       case 'START_' + object + '_FAILURE':
       case 'COMPLETE_' + object + '_SUCCESS':
       case 'COMPLETE_' + object + '_FAILURE':
+      case 'DELETE_' + object + '_SUCCESS':
+      case 'DELETE_' + object + '_FAILURE':
         return false;
       default:
         return state;

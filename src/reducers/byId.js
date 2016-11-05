@@ -1,42 +1,21 @@
-export const exercisesById = (state = {}, action) => {
+const createById = (objects) => (state = {}, action) => {
   if(action.response) {
     return {
       ...state,
-      ...action.response.entities.exercises
+      ...action.response.entities[objects]
     };
   }
   return state;
 };
 
-export const workoutsById = (state= {}, action) => {
-  if(action.response) {
-    return {
-      ...state,
-      ...action.response.entities.workouts
-    };
-  }
-  return state;
-};
 
-export const workoutInstancesById = (state = {}, action) => {
-  if(action.response) {
-    return {
-      ...state,
-      ...action.response.entities.workoutInstances
-    };
-  }
-  return state;
-};
+export const exercisesById = createById("exercises");
 
-export const exerciseInstancesById = (state = {}, action) => {
-  if(action.response) {
-    return {
-      ...state,
-      ...action.response.entities.exerciseInstances
-    };
-  }
-  return state;
-};
+export const workoutsById = createById("workouts");
+
+export const workoutInstancesById = createById("workoutInstances");
+
+export const exerciseInstancesById = createById("exerciseInstances");
 
 export const getExercise = (state, id) => state[id];
 

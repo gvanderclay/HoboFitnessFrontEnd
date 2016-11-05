@@ -98,7 +98,7 @@ export const addCompletedExercise = ({ exerciseId, setsPerRep }) =>
       saveDB(db);
       resolve(completedExercise);
     } catch(err) {
-      reject(Error(err)); 
+      reject(Error(err));
     }
   });
 
@@ -112,7 +112,7 @@ export const fetchWorkouts = () =>
     }
   });
 
-export const addWorkout = (name) => 
+export const addWorkout = (name) =>
   new Promise((resolve, reject) => {
     const workout = {
       id: v4(),
@@ -147,7 +147,7 @@ export const updateWorkout = (id, name, newExercise) =>
     }
   });
 
-export const fetchWorkout = (id) => 
+export const fetchWorkout = (id) =>
   new Promise((resolve, reject) => {
     try {
       fetchWorkouts().then((workouts) => {
@@ -158,4 +158,16 @@ export const fetchWorkout = (id) =>
     }
   });
 
-
+export const deleteWorkout = (id) =>
+  new Promise((resolve, reject) => {
+    try {
+      const db = loadDB();
+      const index = db.workouts.findIndex(workout => workout.id === id);
+      if (index > -1) {
+        db.workouts.splice(index, 1);
+      }
+      saveDB(db);
+      resolve(index);
+    } catch(err) {
+    }
+  });

@@ -1,32 +1,20 @@
 import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router';
 
-const List = ({ objects, editLink, startLink }) => (
+const List = ({ objects, actionComponents }) => (
   <div className='routine-list'>
     <Table bordered>
       <tbody>
       {objects.map((object) => {
-        const boundEdit = editLink.bind(this, object.id); 
-        const boundStart = startLink.bind(this, object.id);
+        const actions = actionComponents(object);
+        console.log(actions);
         return (
           <tr key={object.id}>
-             <td onClick={boundEdit}>
+            <td>
               {object.name}
-              <Link 
-                className="list-link"
-                to={boundEdit}
-              >
-                Edit
-                {" "}
-              </Link>
-              <Link
-                  className="list-link"
-                  to={boundStart}
-              >
-                Start
-                {" "}
-              </Link>
+              {actions.map((actionComponent) => {
+                return actionComponent;
+               })}
             </td>
           </tr>
         );
@@ -41,8 +29,6 @@ List.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired).isRequired,
-  editLink: PropTypes.func.isRequired,
-  startLink: PropTypes.func.isRequired,
 };
 
 
