@@ -17,7 +17,7 @@ const Root = ({ store }) => (
         <IndexRoute component={HomePage}></IndexRoute>
         <Route path='/exercises' component={ExerciseListContainer}> </Route>
         <Route path='/exercises/:exerciseId/edit' component={MainExerciseEdit}> </Route>
-        <Route path='/exercises/:exerciseId' component={ExerciseStartContainer}> </Route>
+        <Route path='/exercises/:exerciseInstanceId' component={ExerciseStartContainer}> </Route>
         <Route path='/workouts' component={WorkoutListContainer}> </Route>
         <Route path='/workouts/:workoutId/edit' component={WorkoutEditContainer}> </Route>
         <Route path='/workouts/:workoutId/exercise/:exerciseId' component={WorkoutExerciseEdit}> </Route>

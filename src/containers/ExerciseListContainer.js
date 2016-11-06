@@ -25,11 +25,11 @@ class ExerciseListContainer extends Component {
     );
   }
 
-  actionComponent(id, text, route) {
+  actionComponent(id, text, props) {
     return (
       <Link
           className="list-link"
-          to={route(id)}
+          {...props}
       >
         {text}
       </Link>
@@ -37,23 +37,23 @@ class ExerciseListContainer extends Component {
   }
 
   startExerciseComponent(id) {
-    const route = id => "/exercises/" + id;
-    return this.actionComponent(id, "Start", route);
+    const { addExerciseInstance, router } = this.props;
+    const props = {
+      onClick: () => {
+        addExerciseInstance(id).then(exerciseInstance => {
+          router.push("/exercises/" + exerciseInstance.id);
+        });
+      }
+    };
+    return this.actionComponent(id, "Start", props);
   }
 
   editExerciseComponent(id) {
-    const route = id => "/exercises/" + id + "/edit";
-    return this.actionComponent(id, "Edit", route);
+    const props = {
+      to: id => "/exercises/" + id + "/edit"
+    }
+    return this.actionComponent(id, "Edit", props);
   }
-
- /* deleteExerciseComponent(id) {
-   *   return (
-   *     <Link>
-   *       className="list-link"
-   *       onClick={}
-   *     </Link>
-   *   );
-   * }*/
 
   exerciseActionComponents(exercise) {
     const { id } = exercise;

@@ -6,26 +6,30 @@ import ExerciseButton from '../components/ExerciseButton';
 
 class ExerciseButtonContainer extends Component {
   handleClick() {
-    const { dispatch, maxReps, repsOnSet, setNumber } = this.props;
+    const { setExerciseInstanceSet, setNumber, exerciseInstance, maxReps } = this.props;
+    const repsOnSet = exerciseInstance.repsPerSet[setNumber];
+
     if(repsOnSet === -1) {
-      dispatch(actions.setActiveExerciseSet(setNumber, maxReps))
+      setExerciseInstanceSet(exerciseInstance.id, setNumber, maxReps)
     }
     else {
-      dispatch(actions.setActiveExerciseSet(setNumber, repsOnSet - 1));
+      setExerciseInstanceSet(exerciseInstance.id, setNumber, repsOnSet - 1);
     }
   }
 
   isActive() {
-    const { repsOnSet } = this.props;
-    return "exercise-button " + (repsOnSet === -1 ? "empty" : "");
+    const { exerciseInstance, setNumber } = this.props;
+    const { repsPerSet } = exerciseInstance;
+    return "exercise-button " + (repsPerSet[setNumber] === -1 ? "empty" : "");
   }
 
   render() {
-    const { repsOnSet } = this.props;
+    const { exerciseInstance, setNumber } = this.props;
+
     return(
       <ExerciseButton
           isActive={this.isActive.bind(this)}
-          repsOnSet={repsOnSet}
+          repsOnSet={exerciseInstance.repsPerSet[setNumber]}
           handleClick={this.handleClick.bind(this)}
       />
     );
@@ -33,11 +37,10 @@ class ExerciseButtonContainer extends Component {
 }
 
 ExerciseButtonContainer.propTypes = {
-  dispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state, { setNumber }) => {
-   return { repsOnSet: getRepsOnSet(state.activeExercise, setNumber) }
+   return {  }
 };
 
-export default connect(mapStateToProps)(ExerciseButtonContainer);
+export default connect(mapStateToProps, actions)(ExerciseButtonContainer);

@@ -83,69 +83,71 @@ export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getSt
     return exercise;
 };
 
-export const startExercise = (id) => (dispatch, getState) => {
+export const addExerciseInstance = (id) => (dispatch, getState) => {
     if (getIsLoading(getState())) {
         return Promise.resolve();
     }
 
     dispatch({
-        type: 'START_EXERCISE_REQUEST'
+        type: 'ADD_EXERCISE_INSTANCE_REQUEST'
     });
 
-    const activeExercise = api.fetchExercise(id).then(
+    const exerciseInstance = api.addExerciseInstance(id).then(
         response => {
-            let setsPerRep = [];
+            let repsPerSet = [];
             _.times(response.sets, (index) => {
-              setsPerRep[index] = -1;
+              repsPerSet[index] = -1;
             });
             dispatch({
-              type: 'START_EXERCISE_SUCCESS',
-              exerciseId: response.id,
-              setsPerRep
+              type: 'ADD_EXERCISE_INSTANCE_SUCCESS',
+              response: normalize(response, schema.exerciseInstance)
             });
+          return Promise.resolve(response);
         },
         error => {
 
         }
     );
-    return activeExercise;
+    return exerciseInstance;
 };
 
-export const setActiveExerciseSet = (index, sets) => (dispatch, getState) => {
-  if(getIsLoading(getState())) {
-    return Promise.resolve();
-  }
-
-  const setsPerRep = getState().activeExercise.setsPerRep;
-  const newSetsPerRep = [...setsPerRep.slice(0, index), sets, ...setsPerRep.slice(index + 1)];
-  dispatch({
-    type: 'SET_ACTIVE_SET',
-    setsPerRep: newSetsPerRep
-  });
-  return setsPerRep;
-};
-
-export const completeActiveExercise = () => (dispatch, getState) => {
+export const fetchExerciseInstance = (id) => (dispatch, getState) => {
   if(getIsLoading(getState())) {
     return Promise.resolve();
   }
 
   dispatch({
-    type: 'COMPLETE_EXERCISE_REQUEST'
+    type: 'FETCH_EXERCISE_INSTANCE_REQUEST'
   });
-  const activeExercise = getState().activeExercise;
-  const completedExercise = api.addCompletedExercise(activeExercise).then(
+
+  return api.fetchExerciseInstance(id).then(
     response => {
       dispatch({
-        type: 'COMPLETE_EXERCISE_SUCCESS',
-        completedExercise: response
+        type: 'FETCH_EXERCISE_INSTANCE_SUCCESS',
+        response: normalize(response, schema.exerciseInstance)
       });
-    },
-    error => {
-
+      dispatch(fetchExercises());
     }
   );
-  return completedExercise;
+};
+
+export const setExerciseInstanceSet = (id, setNumber, reps) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'UPDATE_EXERCISE_INSTANCE_REQUEST'
+  });
+
+  return api.setExerciseInstanceSet(id, setNumber, reps).then(
+    response => {
+      dispatch({
+        type: 'UPDATE_EXERCISE_INSTANCE_SUCCESS',
+        response: normalize(response, schema.exerciseInstance)
+      });
+    }
+  );
 };
 
 export const fetchWorkouts = () => (dispatch, getState) => {

@@ -7,7 +7,6 @@ const List = ({ objects, actionComponents }) => (
       <tbody>
       {objects.map((object) => {
         const actions = actionComponents(object);
-        console.log(actions);
         return (
           <tr key={object.id}>
             <td>

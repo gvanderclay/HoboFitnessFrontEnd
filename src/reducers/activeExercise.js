@@ -11,14 +11,14 @@ const exerciseId = (state = null, action) => {
   }
 };
 
-const setsPerRep = (state = [], action) => {
+const repsPerSet = (state = [], action) => {
   switch(action.type) {
     case 'START_EXERCISE_SUCCESS':
-      return action.setsPerRep;
+      return action.repsPerSet;
     case 'COMPLETE_EXERCISE_SUCCESS':
       return [];
     case 'SET_ACTIVE_SET':
-      return action.setsPerRep;
+      return action.repsPerSet;
     default:
       return state;
   }
@@ -28,9 +28,9 @@ const setsPerRep = (state = [], action) => {
 
 export default combineReducers({
   exerciseId,
-  setsPerRep
+  repsPerSet
 });
 
 export const getRepsOnSet = (state, index) => {
-  return state.setsPerRep[index];
+  return state.repsPerSet[index];
 };

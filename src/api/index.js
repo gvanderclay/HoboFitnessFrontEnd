@@ -1,4 +1,5 @@
 import { v4 } from 'node-uuid';
+import _ from 'lodash';
 
 export const loadDB = () => {
   try {
@@ -22,7 +23,7 @@ export const saveDB = (state) => {
 };
 
 let state = loadDB();
-state = state ? state : {exercises: [], completedExercises: [], workouts: []};
+state = state ? state : {exercises: [], workouts: [], workoutInstances: [], exerciseInstances: []};
 saveDB(state);
 
 export const fetchExercises = () =>
@@ -86,21 +87,64 @@ export const fetchExercise = (id) =>
     }
   });
 
-export const addCompletedExercise = ({ exerciseId, setsPerRep }) =>
+export const fetchExerciseInstances = () =>
   new Promise((resolve, reject) => {
     try {
-      const completedExercise = {
-        exerciseId,
-        setsPerRep
-      };
-      const db = loadDB();
-      db.completedExercises.push(completedExercise);
-      saveDB(db);
-      resolve(completedExercise);
+      const state = loadDB();
+      resolve(state.exerciseInstances);
+    } catch (err) {
+      reject(Error(err));
+    }
+  });
+
+// id is id of the exercise not the instance
+export const addExerciseInstance = (id) =>
+  new Promise((resolve, reject) => {
+    try {
+      fetchExercise(id).then((exercise) => {
+        const db = loadDB();
+        let repsPerSet = [];
+        _.times(exercise.sets, index => repsPerSet[index] = -1);
+        const exerciseInstance = {
+          id: v4(),
+          exerciseId:  exercise.id,
+          repsPerSet,
+          completed: false
+        };
+        db.exerciseInstances.push(exerciseInstance);
+        saveDB(db);
+        resolve(exerciseInstance);
+      });
     } catch(err) {
       reject(Error(err));
     }
   });
+
+export const setExerciseInstanceSet = (id, setNumber, reps) =>
+  new Promise((resolve, reject) => {
+    try {
+      let db = loadDB();
+      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+      db.exerciseInstances[index].repsPerSet[setNumber] = reps;
+      saveDB(db);
+      resolve(db.exerciseInstances[index]);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
+
+export const fetchExerciseInstance = (id) =>
+  new Promise((resolve, reject) => {
+    try {
+      fetchExerciseInstances().then((exerciseInstances) => {
+        resolve(exerciseInstances.find(workout => workout.id === id));
+      });
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
 
 export const fetchWorkouts = () =>
   new Promise((resolve, reject) => {

@@ -4,16 +4,14 @@ import { withRouter } from 'react-router';
 import { Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import LoadingError from '../components/LoadingError';
-import { getExerciseById, getIsLoading, getErrorMessage } from '../reducers';
+import { getExerciseInstanceById, getExerciseByInstanceId, getIsLoading, getErrorMessage } from '../reducers';
 import * as actions from '../actions';
 import ExerciseButtons from '../components/ExerciseButtons';
 
 class ExerciseStartContainer extends Component {
   componentWillMount() {
-    const { exercise, startExercise } = this.props;
-    if(exercise) {
-      startExercise(exercise.id);
-    }
+    const { fetchExerciseInstance, params } = this.props;
+    fetchExerciseInstance(params.exerciseInstanceId);
   }
 
   handleClick() {
@@ -23,7 +21,7 @@ class ExerciseStartContainer extends Component {
   }
 
   render() {
-    const { isLoading, exercise, errorMessage } = this.props;
+    const { isLoading, exercise, exerciseInstance, errorMessage } = this.props;
     if(isLoading || !exercise) {
       return (
         <div className="container">
@@ -46,7 +44,7 @@ class ExerciseStartContainer extends Component {
             <h1>{exercise.name}</h1>
           </Col>
         </Row>
-        <ExerciseButtons exercise={exercise} />
+        <ExerciseButtons exerciseInstance={exerciseInstance} exercise={exercise}/>
         <Button onClick={this.handleClick.bind(this)}>Complete Exercise</Button>
       </div>
     );
@@ -62,7 +60,8 @@ ExerciseStartContainer.propTypes = {
 
 const mapStateToProps = (state, { params }) => {
   return {
-    exercise: getExerciseById(state, params.exerciseId),
+    exerciseInstance: getExerciseInstanceById(state, params.exerciseInstanceId),
+    exercise: getExerciseByInstanceId(state, params.exerciseInstanceId),
     isLoading: getIsLoading(state),
     errorMessage: getErrorMessage(state),
   };

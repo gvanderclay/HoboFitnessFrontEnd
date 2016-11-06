@@ -39,6 +39,17 @@ export const getExerciseById = (state, id) => {
   return exercise;
 };
 
+export const getExerciseInstanceById = (state, id) =>
+  fromById.getExerciseInstance(state.exerciseInstancesById, id);
+
+export const getRepsOnSet = (state, id, setNumber) =>
+  fromById.getExerciseInstance(state.exerciseInstancesById, id).repsPerSet[setNumber];
+
+export const getExerciseByInstanceId = (state, id) => {
+  const exerciseInstance = getExerciseInstanceById(state, id);
+  return _.isEmpty(exerciseInstance) ?  null : getExerciseById(state, exerciseInstance.exerciseId);
+};
+
 export const getAllWorkouts = (state) => {
   const ids = fromCreateList.getIds(state.workoutList);
   return ids.map(id => fromById.getWorkout(state.workoutsById, id));
@@ -66,10 +77,9 @@ export const getExercisesForWorkout = (state, workoutId) => {
   }, []);
 };
 
-export const getIsLoading = (state) => 
+export const getIsLoading = (state) =>
   fromCreateList.getIsLoading(state.exerciseList) ||
   fromCreateList.getIsLoading(state.workoutList);
 
 export const getErrorMessage = (state, filter) =>
   fromCreateList.getErrorMessage(state.exerciseList);
-
