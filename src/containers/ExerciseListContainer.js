@@ -57,7 +57,7 @@ class ExerciseListContainer extends Component {
 
   editExerciseComponent(id) {
     const props = {
-      to: id => "/exercises/" + id + "/edit"
+      to: "/exercises/" + id + "/edit"
     }
     return this.actionComponent(id, "Edit", props);
   }

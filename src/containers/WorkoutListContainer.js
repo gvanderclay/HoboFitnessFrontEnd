@@ -39,7 +39,6 @@ class WorkoutListContainer extends Component {
   }
 
   startWorkoutComponent(id) {
-    const { addExerciseInstance } = this.props;
     const route = id => "/workouts/" + id;
     return this.actionComponent(id, "Start", route);
   }
