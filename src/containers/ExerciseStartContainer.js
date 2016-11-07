@@ -44,8 +44,12 @@ class ExerciseStartContainer extends Component {
             <h1>{exercise.name}</h1>
           </Col>
         </Row>
-        <ExerciseButtons exerciseInstance={exerciseInstance} exercise={exercise}/>
-        <Button onClick={this.handleClick.bind(this)}>Complete Exercise</Button>
+        <Row>
+          <Col>
+            <ExerciseButtons exerciseInstance={exerciseInstance} exercise={exercise}/>
+            <Button onClick={this.handleClick.bind(this)}>Complete Exercise</Button>
+         </Col>
+        </Row>
       </div>
     );
   }
