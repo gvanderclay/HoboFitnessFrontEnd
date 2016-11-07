@@ -15,8 +15,8 @@ class ExerciseStartContainer extends Component {
   }
 
   handleClick() {
-    const { router, completeActiveExercise } = this.props;
-    completeActiveExercise();
+    const { router, completeExerciseInstance, exerciseInstance } = this.props;
+    completeExerciseInstance(exerciseInstance.id);
     router.push('/exercises');
   }
 

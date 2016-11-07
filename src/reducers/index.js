@@ -39,6 +39,11 @@ export const getExerciseById = (state, id) => {
   return exercise;
 };
 
+export const getAllExerciseInstances = (state) => {
+  const ids = fromCreateList.getIds(state.exerciseInstanceList);
+  return ids.map(id => fromById.getExerciseInstance(state.exerciseInstancesById, id));
+};
+
 export const getExerciseInstanceById = (state, id) =>
   fromById.getExerciseInstance(state.exerciseInstancesById, id);
 
@@ -79,7 +84,9 @@ export const getExercisesForWorkout = (state, workoutId) => {
 
 export const getIsLoading = (state) =>
   fromCreateList.getIsLoading(state.exerciseList) ||
-  fromCreateList.getIsLoading(state.workoutList);
+  fromCreateList.getIsLoading(state.workoutList) ||
+  fromCreateList.getIsLoading(state.exerciseInstanceList) ||
+  fromCreateList.getIsLoading(state.workoutInstanceList);
 
 export const getErrorMessage = (state, filter) =>
   fromCreateList.getErrorMessage(state.exerciseList);

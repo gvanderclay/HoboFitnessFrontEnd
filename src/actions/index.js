@@ -150,6 +150,25 @@ export const setExerciseInstanceSet = (id, setNumber, reps) => (dispatch, getSta
   );
 };
 
+export const completeExerciseInstance = (id) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'UPDATE_EXERCISE_INSTANCE_REQUEST'
+  });
+
+  return api.completeExerciseInstance(id).then(
+    response => {
+      dispatch({
+        type: 'UPDATE_EXERCISE_INSTANCE_SUCCESS',
+        response: normalize(response, schema.exerciseInstance)
+      });
+    }
+  );
+};
+
 export const fetchWorkouts = () => (dispatch, getState) => {
   if(getIsLoading(getState())) {
     return Promise.resolve();

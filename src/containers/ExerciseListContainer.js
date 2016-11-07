@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router';
-import { getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
+import { getAllExerciseInstances, getAllExercises, getErrorMessage, getIsLoading } from '../reducers';
 import List from '../components/List';
 import ListHeader from '../components/ListHeader';
 import LoadingError from '../components/LoadingError';
@@ -37,12 +38,18 @@ class ExerciseListContainer extends Component {
   }
 
   startExerciseComponent(id) {
-    const { addExerciseInstance, router } = this.props;
+    const { addExerciseInstance, router, exerciseInstances } = this.props;
     const props = {
       onClick: () => {
-        addExerciseInstance(id).then(exerciseInstance => {
-          router.push("/exercises/" + exerciseInstance.id);
-        });
+        let exerciseInstance = exerciseInstances.find((instance) => id === instance.exerciseId && !instance.completed)
+        if(_.isEmpty(exerciseInstance)) {
+          addExerciseInstance(id).then(instance => {
+            exerciseInstance = instance;
+            router.push("/exercises/" + exerciseInstance.id);
+          });
+          return;
+        }
+        router.push("/exercises/" + exerciseInstance.id);
       }
     };
     return this.actionComponent(id, "Start", props);
@@ -65,8 +72,8 @@ class ExerciseListContainer extends Component {
   }
 
   render() {
-    const { isLoading, errorMessage, exercises } = this.props;
-    if(isLoading && !exercises.length) {
+    const { isLoading, errorMessage, exercises, exerciseInstances } = this.props;
+    if(isLoading && !exercises.length && !exerciseInstances.length) {
       return (
         <div className="container">
           <p>Loading...</p>
@@ -108,6 +115,7 @@ const mapStateToProps = (state, { params }) => {
     isLoading: getIsLoading(state),
     errorMessage: getErrorMessage(state),
     exercises: getAllExercises(state),
+    exerciseInstances: getAllExerciseInstances(state)
   }
 }
 

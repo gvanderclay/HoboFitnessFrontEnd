@@ -133,6 +133,19 @@ export const setExerciseInstanceSet = (id, setNumber, reps) =>
     }
   });
 
+export const completeExerciseInstance = (id, setNumber, reps) =>
+  new Promise((resolve, reject) => {
+    try {
+      let db = loadDB();
+      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+      db.exerciseInstances[index].completed = true;
+      saveDB(db);
+      resolve(db.exerciseInstances[index]);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
 
 export const fetchExerciseInstance = (id) =>
   new Promise((resolve, reject) => {
