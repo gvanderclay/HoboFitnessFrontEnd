@@ -8,24 +8,30 @@ import {
     getIsLoading
 } from '../reducers';
 
-export const fetchExercises = () => (dispatch, getState) => {
-    if (getIsLoading(getState())) {
-        return Promise.resolve();
+const fetchEntities = (entity) => () => (dispatch, getState) => {
+  if (getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: `FETCH_${entity.toUpperCase()}S_REQUEST`
+  });
+
+  const capitalized = entity.charAt(0).toUpperCase(0) + entity.slice(1);
+  const test = `fetch${capitalized}s`;
+  return api[`fetch${capitalized}s`]().then(
+    response => {
+      dispatch({
+        type: `FETCH_${entity.toUpperCase()}S_SUCCESS`,
+        response: normalize(response, schema[`arrayOf${capitalized}s`])
+      });
     }
-
-    dispatch({
-        type: 'FETCH_EXERCISES_REQUEST'
-    });
-
-    return api.fetchExercises().then(
-        response => {
-            dispatch({
-                type: 'FETCH_EXERCISES_SUCCESS',
-                response: normalize(response, schema.arrayOfExercises)
-            });
-        }
-    );
+  );
 };
+
+export const fetchExercises = fetchEntities("exercise");
+
+export const fetchWorkouts = fetchEntities("workout");
 
 export const addExercise = (name, reps, sets, weight) => (dispatch, getState) => {
     if (getIsLoading(getState())) {
@@ -164,25 +170,6 @@ export const completeExerciseInstance = (id) => (dispatch, getState) => {
       dispatch({
         type: 'UPDATE_EXERCISE_INSTANCE_SUCCESS',
         response: normalize(response, schema.exerciseInstance)
-      });
-    }
-  );
-};
-
-export const fetchWorkouts = () => (dispatch, getState) => {
-  if(getIsLoading(getState())) {
-    return Promise.resolve();
-  }
-
-  dispatch({
-    type: 'FETCH_WORKOUTS_REQUEST'
-  });
-
-  return api.fetchWorkouts().then(
-    response => {
-      dispatch({
-        type: 'FETCH_WORKOUTS_SUCCESS',
-        response: normalize(response, schema.arrayOfWorkouts)
       });
     }
   );
