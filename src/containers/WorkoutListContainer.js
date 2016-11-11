@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { getErrorMessage, getIsLoading, getAllWorkouts } from '../reducers';
+import { getErrorMessage, getIsLoading, getAllWorkouts, getAllWorkoutInstances } from '../reducers';
 import { Link } from 'react-router';
 import List from '../components/List';
 import ListHeader from '../components/ListHeader';
@@ -26,12 +27,11 @@ class WorkoutListContainer extends Component {
     );
   }
 
-  actionComponent(id, text, route, props) {
+  actionComponent(id, text, props) {
     return (
       <Link
           className="list-link"
-          to={route(id)}
-          props
+          {...props}
       >
         {text}
       </Link>
@@ -39,25 +39,36 @@ class WorkoutListContainer extends Component {
   }
 
   startWorkoutComponent(id) {
-    const route = id => "/workouts/" + id;
-    return this.actionComponent(id, "Start", route);
+    const { addWorkoutInstance, router, workoutInstances } = this.props;
+    const props = {
+      onClick: () => {
+        let workoutInstance = workoutInstances.find((instance) => id === instance.workoutId && !instance.completed)
+        if(_.isEmpty(workoutInstance)) {
+          addWorkoutInstance(id).then(instance => {
+            workoutInstance = instance;
+            router.push("/workouts/" + workoutInstance.id);
+          });
+          return;
+        }
+        router.push("/workouts/" + workoutInstance.id);
+      }
+    };
+    return this.actionComponent(id, "Start", props);
   }
 
   editWorkoutComponent(id) {
-    const route = id => "/workouts/" + id + "/edit";
-    return this.actionComponent(id, "Edit", route);
+    const props = {
+      to: "/workouts/" + id + "/edit"
+    }
+    return this.actionComponent(id, "Edit", props);
   }
 
   deleteWorkoutComponent(id) {
     const { deleteWorkout } = this.props;
-    return (
-      <Link
-        className="list-link"
-        onClick={deleteWorkout.bind(this, id)}
-      >
-        Delete
-      </Link>
-    );
+    const props = {
+      onClick: deleteWorkout.bind(this, id)
+    }
+    return this.actionComponent(id, "Delete", props);
   }
 
   workoutActionComponents(workout) {
@@ -113,7 +124,8 @@ const mapStateToProps = (state, { params }) => {
   return {
     isLoading: getIsLoading(state),
     errorMessage: getErrorMessage(state),
-    workouts: getAllWorkouts(state)
+    workouts: getAllWorkouts(state),
+    workoutInstances: getAllWorkoutInstances(state),
   }
 }
 

@@ -151,7 +151,7 @@ export const fetchExerciseInstance = (id) =>
   new Promise((resolve, reject) => {
     try {
       fetchExerciseInstances().then((exerciseInstances) => {
-        resolve(exerciseInstances.find(workout => workout.id === id));
+        resolve(exerciseInstances.find(exerciseInstance => exerciseInstance.id === id));
       });
     } catch(err) {
       reject(Error(err));
@@ -242,11 +242,48 @@ export const addWorkoutInstance = (id) =>
           exerciseInstances: [],
           completed: false
         };
+        createExerciseInstancesForWorkout(workout).then((result) => {
+          console.log(result);
+          workoutInstance.exerciseInstances = result;
+        });
         db.workoutInstances.push(workoutInstance);
         saveDB(db);
         resolve(workoutInstance);
       });
     } catch(err) {
+      reject(Error(err));
+    }
+  });
+
+const createExerciseInstancesForWorkout = (workout) =>
+      new Promise((resolve, reject) => {
+        try {
+          let result = workout.exercises.map((exerciseId) => {
+            return addExerciseInstance(exerciseId).then(exerciseInstance => exerciseInstance.id);
+          });
+          resolve(result);
+        } catch(err) {
+          reject(Error(err));
+        }
+      })
+
+export const fetchWorkoutInstance = (id) =>
+  new Promise((resolve, reject) => {
+    try {
+      fetchWorkoutInstances().then((workoutInstances) => {
+        resolve(workoutInstances.find(workout => workout.id === id));
+      });
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
+export const fetchWorkoutInstances = () =>
+  new Promise((resolve, reject) => {
+    try {
+      const state = loadDB();
+      resolve(state.workoutInstances);
+    } catch (err) {
       reject(Error(err));
     }
   });

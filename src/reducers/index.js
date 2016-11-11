@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import _ from 'lodash';
 import  * as fromById from './byId';
 import createList from './createList';
-import activeExercise from './activeExercise';
 import * as fromCreateList from './createList';
 
 const exercisesById = fromById.exercisesById;
@@ -20,7 +19,6 @@ const state = combineReducers({
   exercisesById,
   exerciseInstanceList,
   exerciseInstancesById,
-  activeExercise,
   workoutList,
   workoutsById,
   workoutInstanceList,
@@ -86,6 +84,11 @@ export const getExercisesForWorkout = (state, workoutId) => {
 export const getWorkoutInstanceById = (state, id) =>
   fromById.getWorkoutInstance(state.workoutInstancesById, id);
 
+export const getAllWorkoutInstances = (state) => {
+  const ids = fromCreateList.getIds(state.workoutInstanceList);
+  return ids.map(id => fromById.getWorkoutInstance(state.workoutInstancesById, id));
+};
+
 export const getExerciseInstancesForWorkoutInstance = (state, workoutInstanceId) => {
   const workoutInstance = getWorkoutInstanceById(state, workoutInstanceId);
   if(_.isEmpty(workoutInstance)) {
@@ -100,6 +103,20 @@ export const getExerciseInstancesForWorkoutInstance = (state, workoutInstanceId)
   }, []);
 };
 
+export const getExercisesForWorkoutInstance = (state, workoutInstanceId) => {
+  const workoutInstance = getWorkoutInstanceById(state, workoutInstanceId);
+  if(_.isEmpty(workoutInstance)) {
+    return [];
+  }
+  return workoutInstance.exerciseInstances.reduce((result, id) => {
+    const exerciseInstance = getExerciseInstanceById(state, id);
+    const exercise = getExerciseByInstanceId(state, id);
+    if(exercise) {
+      result.push(exercise);
+    }
+    return result;
+  }, []);
+};
 
 export const getIsLoading = (state) =>
   fromCreateList.getIsLoading(state.exerciseList) ||

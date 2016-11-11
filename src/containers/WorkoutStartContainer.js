@@ -1,28 +1,28 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import LoadingError from '../components/LoadingError';
-import { getIsLoading, getErrorMessage, getWorkoutInstanceById, getExerciseInstancesForWorkoutInstance } from '../reducers';
+import { getIsLoading, getErrorMessage, getExerciseInstancesForWorkoutInstance, getExercisesForWorkoutInstance } from '../reducers';
 import * as actions from '../actions';
 import ExerciseButtons from '../components/ExerciseButtons';
 
 class WorkoutStartContainer extends Component {
   componentWillMount() {
-
+    const { params, fetchWorkoutInstance } = this.props;
+    fetchWorkoutInstance(params.workoutInstanceId);
   }
 
   render() {
-    const { isLoading, exerciseInstances } = this.props;
-    if(isLoading || !exercises ||  !exerciseInstances) {
+    const { isLoading, errorMessage, exerciseInstances, exercises } = this.props;
+    if(isLoading ||  !exerciseInstances) {
       return (
         <div className="container">
           <p>Loading...</p>
         </div>
       );
     }
-    if(errorMessage && !exercises) {
+    if(errorMessage && !exerciseInstances) {
       return (
         <LoadingError
           message={errorMessage}
@@ -37,8 +37,8 @@ class WorkoutStartContainer extends Component {
       <div className="container">
         {_.each(exerciseInstances, (exerciseInstance, index) => {
           return (<ExerciseButtons
-            exercise={exercisesById[exerciseInstance.exerciseId]}
             exerciseInstance={exerciseInstance}
+            exercise={exercisesById[exerciseInstance.exerciseId]}
             index={index}
           />
          )})}
@@ -51,7 +51,8 @@ const mapStateToProps = (state, { params }) => {
   return {
     isLoading: getIsLoading(state),
     errorMessage: getErrorMessage(state),
-    exerciseInstances: getExerciseInstancesForWorkoutInstance(state, params.id)
+    exerciseInstances: getExerciseInstancesForWorkoutInstance(state, params.workoutInstanceId),
+    exercises: getExercisesForWorkoutInstance(state, params.workoutInstanceId)
   }
 }
 

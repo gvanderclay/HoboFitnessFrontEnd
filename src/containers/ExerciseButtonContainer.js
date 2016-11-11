@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { getRepsOnSet } from '../reducers/activeExercise';
 import ExerciseButton from '../components/ExerciseButton';
 
 class ExerciseButtonContainer extends Component {

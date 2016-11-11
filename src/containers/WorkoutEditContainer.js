@@ -40,44 +40,32 @@ class WorkoutEditContainer extends Component {
     updateWorkout(workout.id, name);
   };
 
-  actionComponent(id, text, route) {
+  actionComponent(id, text, props) {
     return (
       <Link
           className="list-link"
-          to={route(id)}
+          {...props}
       >
         {text}
       </Link>
     );
-  };
-
-  startExerciseComponent(id) {
-    const route = id => "/exercises/" + id;
-    return this.actionComponent(id, "Start", route);
-  };
+  }
 
   editExerciseComponent(id) {
-    const route = id => "/exercises/" + id + "/edit";
-    return this.actionComponent(id, "Edit", route);
-  };
-
- /* deleteExerciseComponent(id) {
-   *   return (
-   *     <Link>
-   *       className="list-link"
-   *       onClick={}
-   *     </Link>
-   *   );
-   * }*/
+    const { workout } = this.props;
+    const props = {
+      to: "/workouts/" + workout.id + "/exercise/" + id
+    }
+    return this.actionComponent(id, "Edit", props);
+  }
 
   exerciseActionComponents(exercise) {
     const { id } = exercise;
     // put the components in the opposite order you want them to appear on screen
     return [
-      this.editExerciseComponent(id),
-      this.startExerciseComponent(id),
+      this.editExerciseComponent(id)
     ]
-  };
+  }
 
   render() {
     const { isLoading, errorMessage, exercises, workout } = this.props;

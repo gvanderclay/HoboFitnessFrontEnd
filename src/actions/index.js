@@ -257,7 +257,28 @@ export const addWorkoutInstance = (workoutId) => (dispatch, getState) => {
   );
   return workoutInstance;
 
-}
+};
+
+export const fetchWorkoutInstance = (id) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'FETCH_WORKOUT_INSTANCE_REQUEST'
+  });
+
+  return api.fetchWorkoutInstance(id).then(
+    response => {
+      dispatch({
+        type: 'FETCH_WORKOUT_INSTANCE_SUCCESS',
+        response: normalize(response, schema.workoutInstance)
+      });
+      dispatch(fetchExercises());
+      dispatch(fetchExerciseInstances());
+    }
+  );
+};
 
 export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => {
   if(getIsLoading(getState())) {

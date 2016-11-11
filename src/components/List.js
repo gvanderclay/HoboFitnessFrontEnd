@@ -11,8 +11,12 @@ const List = ({ objects, actionComponents }) => (
           <tr key={object.id}>
             <td>
               {object.name}
-              {actions.map((actionComponent) => {
-                return actionComponent;
+              {actions.map((actionComponent, index) => {
+                return(
+                  <span key={index}>
+                    {actionComponent}
+                  </span>
+                );
                })}
             </td>
           </tr>
