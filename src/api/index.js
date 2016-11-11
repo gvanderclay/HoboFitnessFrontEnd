@@ -228,3 +228,25 @@ export const deleteWorkout = (id) =>
     } catch(err) {
     }
   });
+
+// id is id of the workout not the instance
+export const addWorkoutInstance = (id) =>
+  new Promise((resolve, reject) => {
+    try {
+      fetchWorkout(id).then((workout) => {
+        const db = loadDB();
+        let repsPerSet = [];
+        const workoutInstance = {
+          id: v4(),
+          workoutId: workout.id,
+          exerciseInstances: [],
+          completed: false
+        };
+        db.workoutInstances.push(workoutInstance);
+        saveDB(db);
+        resolve(workoutInstance);
+      });
+    } catch(err) {
+      reject(Error(err));
+    }
+  });

@@ -52,7 +52,8 @@ export const getRepsOnSet = (state, id, setNumber) =>
 
 export const getExerciseByInstanceId = (state, id) => {
   const exerciseInstance = getExerciseInstanceById(state, id);
-  return _.isEmpty(exerciseInstance) ?  null : getExerciseById(state, exerciseInstance.exerciseId);
+  return _.isEmpty(exerciseInstance) ?
+    null : getExerciseById(state, exerciseInstance.exerciseId);
 };
 
 export const getAllWorkouts = (state) => {
@@ -76,11 +77,29 @@ export const getExercisesForWorkout = (state, workoutId) => {
   return workout.exercises.reduce((result, id) => {
     const exercise = getExerciseById(state, id);
     if(exercise) {
-      result.push(getExerciseById(state, id));
+      result.push(exercise);
     }
     return result;
   }, []);
 };
+
+export const getWorkoutInstanceById = (state, id) =>
+  fromById.getWorkoutInstance(state.workoutInstancesById, id);
+
+export const getExerciseInstancesForWorkoutInstance = (state, workoutInstanceId) => {
+  const workoutInstance = getWorkoutInstanceById(state, workoutInstanceId);
+  if(_.isEmpty(workoutInstance)) {
+    return [];
+  }
+  return workoutInstance.exerciseInstances.reduce((result, id) => {
+    const exerciseInstance = getExerciseInstanceById(state, id);
+    if(exerciseInstance) {
+      result.push(exerciseInstance);
+    }
+    return result;
+  }, []);
+};
+
 
 export const getIsLoading = (state) =>
   fromCreateList.getIsLoading(state.exerciseList) ||

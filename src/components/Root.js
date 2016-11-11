@@ -7,6 +7,7 @@ import ExerciseListContainer from '../containers/ExerciseListContainer';
 import MainExerciseEdit from '../components/MainExerciseEdit';
 import WorkoutExerciseEdit from '../components/WorkoutExerciseEdit';
 import ExerciseStartContainer from '../containers/ExerciseStartContainer';
+import WorkoutStartContainer from '../containers/WorkoutStartContainer';
 import WorkoutListContainer from '../containers/WorkoutListContainer';
 import WorkoutEditContainer from '../containers/WorkoutEditContainer';
 
@@ -21,6 +22,7 @@ const Root = ({ store }) => (
         <Route path='/workouts' component={WorkoutListContainer}> </Route>
         <Route path='/workouts/:workoutId/edit' component={WorkoutEditContainer}> </Route>
         <Route path='/workouts/:workoutId/exercise/:exerciseId' component={WorkoutExerciseEdit}> </Route>
+        <Route path='/workouts/:workoutInstanceId' component={WorkoutStartContainer}> </Route>
       </Route>
     </Router>
   </Provider>

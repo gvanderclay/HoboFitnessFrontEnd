@@ -2,6 +2,7 @@ import {
     normalize
 } from 'normalizr';
 import _ from 'lodash';
+import toSnakeCase from 'to-snake-case';
 import * as schema from './schema';
 import * as api from '../api';
 import {
@@ -13,12 +14,12 @@ const fetchEntities = (entity) => () => (dispatch, getState) => {
     return Promise.resolve();
   }
 
+  var type = `FETCH_${toSnakeCase(entity).toUpperCase()}S_REQUEST`;
   dispatch({
-    type: `FETCH_${entity.toUpperCase()}S_REQUEST`
+    type: `FETCH_${toSnakeCase(entity).toUpperCase()}S_REQUEST`
   });
 
   const capitalized = entity.charAt(0).toUpperCase(0) + entity.slice(1);
-  const test = `fetch${capitalized}s`;
   return api[`fetch${capitalized}s`]().then(
     response => {
       dispatch({
@@ -32,6 +33,10 @@ const fetchEntities = (entity) => () => (dispatch, getState) => {
 export const fetchExercises = fetchEntities("exercise");
 
 export const fetchWorkouts = fetchEntities("workout");
+
+export const fetchExerciseInstances = fetchEntities("exerciseInstance");
+
+export const fetchWorkoutInstances = fetchEntities("workoutInstance");
 
 export const addExercise = (name, reps, sets, weight) => (dispatch, getState) => {
     if (getIsLoading(getState())) {
@@ -223,6 +228,36 @@ export const addWorkout = (name) => (dispatch, getState) => {
   );
   return workout;
 };
+
+export const addWorkoutInstance = (workoutId) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'ADD_WORKOUT_INSTANCE_REQUEST'
+  });
+
+  const workoutInstance = api.addWorkoutInstance(workoutId).then(
+    response => {
+      dispatch({
+        type: 'ADD_WORKOUT_INSTANCE_SUCCESS',
+        response: normalize(response, schema.workoutInstance)
+      });
+      fetchExerciseInstances();
+      return Promise.resolve(response);
+    },
+    error => {
+      dispatch({
+        type: 'ADD_WORKOUT_INSTANCE_FAILURE',
+        message: error.message || 'Something went wrong'
+      });
+      return Promise.resolve(error);
+    }
+  );
+  return workoutInstance;
+
+}
 
 export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => {
   if(getIsLoading(getState())) {
