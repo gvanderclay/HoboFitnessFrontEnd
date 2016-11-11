@@ -239,6 +239,7 @@ export const addWorkoutInstance = (workoutId) => (dispatch, getState) => {
   });
 
   const workoutInstance = api.addWorkoutInstance(workoutId).then(
+    this.startExerciseComponent(id),
     response => {
       dispatch({
         type: 'ADD_WORKOUT_INSTANCE_SUCCESS',
