@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import LoadingError from '../components/LoadingError';
 import { getIsLoading, getErrorMessage, getExerciseInstancesForWorkoutInstance, getExercisesForWorkoutInstance } from '../reducers';
@@ -13,16 +14,22 @@ class WorkoutStartContainer extends Component {
     fetchWorkoutInstance(params.workoutInstanceId);
   }
 
+  handleClick () {
+    const { router, completeWorkoutInstance, workoutInstance } = this.props;
+    completeWorkoutInstance(workoutInstance.id);
+    router.push('workouts');
+  }
+
   render() {
     const { isLoading, errorMessage, exerciseInstances, exercises } = this.props;
-    if(isLoading ||  !exerciseInstances) {
+    if(isLoading || _.isEmpty(exerciseInstances) || _.isEmpty(exercises)) {
       return (
         <div className="container">
           <p>Loading...</p>
         </div>
       );
     }
-    if(errorMessage && !exerciseInstances) {
+    if(errorMessage && _.isEmpty(exerciseInstances) && _.isEmpty(exercises)) {
       return (
         <LoadingError
           message={errorMessage}
@@ -31,20 +38,34 @@ class WorkoutStartContainer extends Component {
       );
     }
 
-    const exercisesById = _.keyBy("id", exercises);
+    const exercisesById = _.keyBy(exercises, 'id');
 
     return (
       <div className="container">
-        {_.each(exerciseInstances, (exerciseInstance, index) => {
-          return (<ExerciseButtons
-            exerciseInstance={exerciseInstance}
-            exercise={exercisesById[exerciseInstance.exerciseId]}
-            index={index}
-          />
-         )})}
+        {
+          exerciseInstances.map((exerciseInstance, index) => {
+            return (
+              <ExerciseButtons
+                exerciseInstance={exerciseInstance}
+                exercise={exercisesById[exerciseInstance.exerciseId]}
+                key={index}
+              />
+            );
+          })
+        }
+        <Row>
+          <Col>
+            <Button onClick={null}>Complete Workout</Button>
+          </Col>
+        </Row>
       </div>
     );
   }
+}
+
+WorkoutStartContainer.propTypes = {
+  exercises: PropTypes.array,
+  exerciseInstances: PropTypes.array
 }
 
 const mapStateToProps = (state, { params }) => {

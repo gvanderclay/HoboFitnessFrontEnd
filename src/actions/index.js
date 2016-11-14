@@ -23,7 +23,7 @@ const fetchEntities = (entity) => () => (dispatch, getState) => {
   return api[`fetch${capitalized}s`]().then(
     response => {
       dispatch({
-        type: `FETCH_${entity.toUpperCase()}S_SUCCESS`,
+        type: `FETCH_${toSnakeCase(entity).toUpperCase()}S_SUCCESS`,
         response: normalize(response, schema[`arrayOf${capitalized}s`])
       });
     }
@@ -180,6 +180,26 @@ export const completeExerciseInstance = (id) => (dispatch, getState) => {
   );
 };
 
+export const completeWorkoutInstance = (id) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'UPDATE_WORKOUT_INSTANCE_REQUEST'
+  });
+
+  return api.completeWorkoutInstance(id).then(
+    response => {
+      dispatch({
+        type: 'UPDATE_WORKOUT_INSTANCE_SUCCESS',
+        response: normalize(response, schema.workoutInstance)
+      });
+    }
+  );
+};
+
+
 export const fetchWorkout = (id) => (dispatch, getState) => {
   if(getIsLoading(getState())) {
     return Promise.resolve();
@@ -239,7 +259,6 @@ export const addWorkoutInstance = (workoutId) => (dispatch, getState) => {
   });
 
   const workoutInstance = api.addWorkoutInstance(workoutId).then(
-    this.startExerciseComponent(id),
     response => {
       dispatch({
         type: 'ADD_WORKOUT_INSTANCE_SUCCESS',
@@ -275,8 +294,9 @@ export const fetchWorkoutInstance = (id) => (dispatch, getState) => {
         type: 'FETCH_WORKOUT_INSTANCE_SUCCESS',
         response: normalize(response, schema.workoutInstance)
       });
-      dispatch(fetchExercises());
-      dispatch(fetchExerciseInstances());
+      dispatch(fetchExerciseInstances()).then(() => {
+        dispatch(fetchExercises());
+      });
     }
   );
 };

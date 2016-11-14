@@ -6,6 +6,9 @@ import ExerciseButtonContainer from '../containers/ExerciseButtonContainer';
 
 const ExerciseButtons = ({ exercise, exerciseInstance }) => (
         <Row>
+          <h3>
+            {exercise.name}
+          </h3>
           {_.times(exercise.sets, (index) =>
             <ExerciseButtonContainer
                 maxReps={exercise.reps}

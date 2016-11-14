@@ -234,7 +234,6 @@ export const addWorkoutInstance = (id) =>
   new Promise((resolve, reject) => {
     try {
       fetchWorkout(id).then((workout) => {
-        const db = loadDB();
         let repsPerSet = [];
         const workoutInstance = {
           id: v4(),
@@ -242,30 +241,41 @@ export const addWorkoutInstance = (id) =>
           exerciseInstances: [],
           completed: false
         };
-        createExerciseInstancesForWorkout(workout).then((result) => {
-          console.log(result);
-          workoutInstance.exerciseInstances = result;
+        const instances = createExerciseInstancesForWorkout(workout);
+        Promise.all(instances).then(values => {
+          console.log(values);
+          workoutInstance.exerciseInstances = values;
+          const db = loadDB();
+          db.workoutInstances.push(workoutInstance);
+          saveDB(db);
+          resolve(workoutInstance);
         });
-        db.workoutInstances.push(workoutInstance);
-        saveDB(db);
-        resolve(workoutInstance);
       });
     } catch(err) {
       reject(Error(err));
     }
   });
 
-const createExerciseInstancesForWorkout = (workout) =>
-      new Promise((resolve, reject) => {
-        try {
-          let result = workout.exercises.map((exerciseId) => {
-            return addExerciseInstance(exerciseId).then(exerciseInstance => exerciseInstance.id);
-          });
-          resolve(result);
-        } catch(err) {
-          reject(Error(err));
-        }
-      })
+export const completeWorkoutInstance = (id, setNumber, reps) =>
+  new Promise((resolve, reject) => {
+    try {
+      let db = loadDB();
+      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+      db.exerciseInstances[index].completed = true;
+      saveDB(db);
+      resolve(db.exerciseInstances[index]);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
+const createExerciseInstancesForWorkout = (workout) => {
+  return _.map(workout.exercises, (exerciseId) => {
+    return addExerciseInstance(exerciseId).then((exerciseInstance) => {
+      return exerciseInstance.id;
+    });
+  });
+};
 
 export const fetchWorkoutInstance = (id) =>
   new Promise((resolve, reject) => {
