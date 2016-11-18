@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router';
+import { withRouter, Link } from 'react-router';
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
 import '../styles/Header.scss'
 
@@ -7,7 +7,7 @@ const Header = ({ menuItems, dropDownItems, router }) => (
       <Navbar inverse fixedTop>
         <Navbar.Header>
           <Navbar.Brand>
-            <a onClick={() => router.push('/')}>HoboFitness</a>
+            <Link to='/'>HoboFitness</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>

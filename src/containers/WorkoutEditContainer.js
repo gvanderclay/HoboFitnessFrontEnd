@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
 import { getExercisesForWorkout, getWorkoutById, getErrorMessage, getIsLoading,  } from '../reducers';
@@ -87,6 +88,11 @@ class WorkoutEditContainer extends Component {
 
     return (
       <div className="container">
+        <Link
+            to="/workouts"
+            className="btn btn-default">
+          Back To Workouts
+        </Link>
         <EditListHeader
             addType={"Exercise To Workout"}
             handleClick={this.addExerciseToWorkout.bind(this)}
