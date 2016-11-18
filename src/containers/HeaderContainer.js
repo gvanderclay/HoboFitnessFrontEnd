@@ -1,4 +1,4 @@
-import React, { Component } from 'react'; 
+import React, { Component } from 'react';
 import Header from '../components/Header';
 
 class HeaderContainer extends Component {
@@ -10,6 +10,7 @@ class HeaderContainer extends Component {
     this.dropDownItems = [
       { title: "Workouts", route: "/workouts" },
       { title: "Exercises", route: "/exercises" },
+      { title: "History", route: "/workoutHistory"}
     ]
   }
 

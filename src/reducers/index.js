@@ -89,6 +89,17 @@ export const getAllWorkoutInstances = (state) => {
   return ids.map(id => fromById.getWorkoutInstance(state.workoutInstancesById, id));
 };
 
+export const getWorkoutInstancesForWorkout = (state, workoutId) =>  {
+  const ids = fromCreateList.getIds(state.workoutInstanceList);
+  return ids.reduce((result, id) => {
+    const workoutInstance = getWorkoutInstanceById(state, id);
+    if(workoutInstance && workoutInstance.workoutId === workoutId) {
+      result.push(workoutInstance);
+    }
+    return result;
+  }, []);
+};
+
 export const getExerciseInstancesForWorkoutInstance = (state, workoutInstanceId) => {
   const workoutInstance = getWorkoutInstanceById(state, workoutInstanceId);
   if(_.isEmpty(workoutInstance)) {

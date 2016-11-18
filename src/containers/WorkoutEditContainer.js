@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
-import { getExercisesForWorkout, getWorkoutById, getErrorMessage, getIsLoading,  } from '../reducers';
+import { getExercisesForWorkout, getWorkoutById, getErrorMessage, getIsLoading, getWorkoutInstancesForWorkout } from '../reducers';
 import List from '../components/List';
 import EditListHeader from '../components/EditListHeader';
 import LoadingError from '../components/LoadingError';
@@ -19,8 +19,8 @@ class WorkoutEditContainer extends Component {
   }
 
   fetchData() {
-    const { fetchWorkout, params } = this.props;
-    fetchWorkout(params.workoutId);
+    const { fetchWorkout, fetchWorkoutInstances, params } = this.props;
+    fetchWorkout(params.workoutId).then(() => fetchWorkoutInstances());
   }
 
   addExerciseToWorkout() {
@@ -68,6 +68,28 @@ class WorkoutEditContainer extends Component {
     ]
   }
 
+  startWorkoutComponent(id) {
+    const { addWorkoutInstance, router, workoutInstances } = this.props;
+    const props = {
+      onClick: () => {
+        let workoutInstance = workoutInstances.find((instance) => id === instance.workoutId && !instance.completed)
+        if(_.isEmpty(workoutInstance)) {
+          addWorkoutInstance(id).then(instance => {
+            workoutInstance = instance;
+            router.push("/workouts/" + workoutInstance.id);
+          });
+          return;
+        }
+        router.push("/workouts/" + workoutInstance.id);
+      },
+      className: "btn btn-default",
+      style: {
+        float: "right"
+      }
+    };
+    return this.actionComponent(id, "Start Workout", props);
+  }
+
   render() {
     const { isLoading, errorMessage, exercises, workout } = this.props;
     if(isLoading || exercises === null || _.isEmpty(workout))  {
@@ -93,6 +115,7 @@ class WorkoutEditContainer extends Component {
             className="btn btn-default">
           Back To Workouts
         </Link>
+        {this.startWorkoutComponent(workout.id)}
         <EditListHeader
             addType={"Exercise To Workout"}
             handleClick={this.addExerciseToWorkout.bind(this)}
@@ -121,7 +144,8 @@ const mapStateToProps = (state, { params }) => ({
   workout: getWorkoutById(state, params.workoutId),
   exercises: getExercisesForWorkout(state, params.workoutId),
   errorMessage: getErrorMessage(state),
-  isLoading: getIsLoading(state)
+  isLoading: getIsLoading(state),
+  workoutInstances: getWorkoutInstancesForWorkout(state, params.workoutId),
 });
 
 WorkoutEditContainer = withRouter(connect(
