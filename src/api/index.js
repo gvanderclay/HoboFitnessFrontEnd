@@ -256,14 +256,14 @@ export const addWorkoutInstance = (id) =>
     }
   });
 
-export const completeWorkoutInstance = (id, setNumber, reps) =>
+export const completeWorkoutInstance = (id) =>
   new Promise((resolve, reject) => {
     try {
       let db = loadDB();
-      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
-      db.exerciseInstances[index].completed = true;
+      const index = db.workoutInstances.findIndex((instance) => instance.id === id);
+      db.workoutInstances[index].completed = true;
       saveDB(db);
-      resolve(db.exerciseInstances[index]);
+      resolve(db.workoutInstances[index]);
     } catch(err) {
       reject(Error(err));
     }

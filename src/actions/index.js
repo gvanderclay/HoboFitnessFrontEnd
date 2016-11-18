@@ -195,6 +195,9 @@ export const completeWorkoutInstance = (id) => (dispatch, getState) => {
         type: 'UPDATE_WORKOUT_INSTANCE_SUCCESS',
         response: normalize(response, schema.workoutInstance)
       });
+      _.forEach(response.exerciseInstances, (instance) => {
+        completeExerciseInstance(instance.id);
+      });
     }
   );
 };
