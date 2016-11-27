@@ -10,7 +10,6 @@ class HeaderContainer extends Component {
     this.dropDownItems = [
       { title: "Workouts", route: "/workouts" },
       { title: "Exercises", route: "/exercises" },
-      { title: "History", route: "/workoutHistory"}
     ]
   }
 

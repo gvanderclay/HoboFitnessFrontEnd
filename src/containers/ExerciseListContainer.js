@@ -62,12 +62,20 @@ class ExerciseListContainer extends Component {
     return this.actionComponent(id, "Edit", props);
   }
 
+  exerciseHistoryComponent(id) {
+    const props = {
+      to: "exercises/" + id + "/history"
+    }
+    return this.actionComponent(id, "History", props);
+  }
+
   exerciseActionComponents(exercise) {
     const { id } = exercise;
     // put the components in the opposite order you want them to appear on screen
     return [
+      this.exerciseHistoryComponent(id),
       this.editExerciseComponent(id),
-      this.startExerciseComponent(id),
+      this.startExerciseComponent(id)
     ]
   }
 

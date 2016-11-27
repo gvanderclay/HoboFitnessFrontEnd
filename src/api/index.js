@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { v4 } from 'node-uuid';
 import _ from 'lodash';
 
@@ -138,7 +139,10 @@ export const completeExerciseInstance = (id, setNumber, reps) =>
     try {
       let db = loadDB();
       const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+      const exercise = db.exercises.find((instance) => instance.id === db.exerciseInstances[index].exerciseId);
       db.exerciseInstances[index].completed = true;
+      db.exerciseInstances[index].completedOn = moment().format("MMMM DD YYYY, hh:mm");
+      db.exerciseInstances[index].weight = exercise.weight;
       saveDB(db);
       resolve(db.exerciseInstances[index]);
     } catch(err) {
