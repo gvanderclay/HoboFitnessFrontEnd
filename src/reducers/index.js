@@ -43,12 +43,12 @@ export const getExerciseData = (state, id) => {
   if(_.isEmpty(exercise) || _.isEmpty(ids)) {
     return [];
   }
-  let data = {labels: [], datasets: [{data: [], label: exercise.name, fill: false, tension: false}]};
+  let data = {labels: [], data: []};
   return ids.reduce(((result, instanceId) => {
     const exerciseInstance = fromById.getExerciseInstance(state.exerciseInstancesById, instanceId);
     if(exerciseInstance.exerciseId === id) {
       result.labels.push(exerciseInstance.completedOn);
-      result.datasets[0].data.push(parseInt(exerciseInstance.weight));
+      result.data.push(parseInt(exerciseInstance.weight));
     }
     return result;
   }), data);

@@ -9,7 +9,7 @@ import Loading from '../components/Loading';
 import { getExerciseById, getAllExerciseInstances, getExerciseData, getIsLoading, getErrorMessage } from '../reducers';
 import * as actions from '../actions';
 
-class ExerciseHistoryContainer extends Component { 
+class ExerciseHistoryContainer extends Component {
   componentDidMount() {
     this.props.fetchExercises().then(() => {
       this.props.fetchExerciseInstances();
@@ -18,14 +18,36 @@ class ExerciseHistoryContainer extends Component {
   }
 
   componentDidUpdate() {
+    const { exercise, data } = this.props;
     var chartCtx = document.getElementById("chart");
     if(chartCtx){
       let myChart = new Chart(chartCtx, {
         type: 'line',
-        data: this.props.data,
+        data: {
+          labels: data.labels,
+          datasets: [
+            {
+              pointBackgroundColor: 'black',
+              data: data.data,
+              label: exercise.name,
+              fill: false,
+              tension: false
+            }
+          ]
+        },
         options: {
-          legend: {
+         legend: {
             display: false
+          },
+          tooltips: {
+            enabled: true,
+            displayColors: false,
+            mode: 'single',
+            callbacks: {
+              label: (tooltipItems, data) => {
+                return tooltipItems.yLabel + ' lbs';
+              }
+            }
           },
           scales: {
             yAxes: [{
