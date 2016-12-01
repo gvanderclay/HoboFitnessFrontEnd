@@ -45,9 +45,12 @@ class ExerciseStartContainer extends Component {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col xs={8}>
             <ExerciseButtons exerciseInstance={exerciseInstance} exercise={exercise}/>
           </Col>
+          <Col xs={4}>
+          </Col>
+
         </Row>
         <Row>
           <Col>
