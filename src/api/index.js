@@ -118,7 +118,6 @@ export const addExerciseInstance = (id) =>
               exerciseInstance : prevInstance;
           }
         });
-        console.log(prevInstance);
         let repsPerSet = [];
         _.times(exercise.sets, index => repsPerSet[index] = -1);
         const exerciseInstance = {

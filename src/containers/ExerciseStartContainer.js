@@ -9,6 +9,7 @@ import { getExerciseInstanceById, getExerciseByInstanceId, getIsLoading, getErro
 import * as actions from '../actions';
 import ExerciseButtons from '../components/ExerciseButtons';
 import H1Textbox from '../components/H1TextBox';
+import RestTimer from '../components/RestTimer';
 
 class ExerciseStartContainer extends Component {
   constructor(props) {
@@ -73,6 +74,10 @@ class ExerciseStartContainer extends Component {
           <Col xs={12} sm={5}>
             <ExerciseButtons exerciseInstance={exerciseInstance} exercise={exercise}/>
           </Col> 
+          <Col xs={12} sm={2}>
+            <h3>Rest Timer</h3>
+            <RestTimer />
+          </Col>
           <Col xs={12} sm={2}>
             <h3>
               Weight
