@@ -37,14 +37,14 @@ export const fetchExercises = () =>
     }
   });
 
-export const addExercise = (name, reps = 5, sets = 5, weight = 45) =>
+export const addExercise = (name, reps = 5, sets = 5, increments = 5) =>
   new Promise((resolve, reject) => {
     const exercise = {
       id: v4(),
       name,
       reps,
       sets,
-      weight
+      increments
     };
     try {
       var oldState = loadDB();
@@ -56,7 +56,7 @@ export const addExercise = (name, reps = 5, sets = 5, weight = 45) =>
     }
   });
 
-export const updateExercise = (id, name, reps, sets, weight) =>
+export const updateExercise = (id, name, reps, sets, increments) =>
   new Promise((resolve, reject) => {
     try {
       const db = loadDB();
@@ -67,7 +67,7 @@ export const updateExercise = (id, name, reps, sets, weight) =>
         name: name ? name : oldExercise.name,
         reps: reps ? reps : oldExercise.reps,
         sets: sets ? sets : oldExercise.sets,
-        weight: weight ? weight : oldExercise.weight
+        increments: increments ? increments : oldExercise.increments
       };
       db.exercises[indexOfExercise] = newExercise;
       saveDB(db);
@@ -104,13 +104,29 @@ export const addExerciseInstance = (id) =>
     try {
       fetchExercise(id).then((exercise) => {
         const db = loadDB();
+        let prevInstance;
+        db.exerciseInstances.forEach((exerciseInstance) => {
+          if(_.isEmpty(prevInstance)) {
+            prevInstance = exerciseInstance;
+            return;
+          }
+          const prevInstanceDate = moment(prevInstance.completedOn);
+          const exerciseInstanceDate = moment(exerciseInstance.completedOn);
+
+          if(exerciseInstance.exerciseId === exercise.id && exerciseInstance.completed) {
+            prevInstance = exerciseInstanceDate > prevInstanceDate ?
+              exerciseInstance : prevInstance;
+          }
+        });
+        console.log(prevInstance);
         let repsPerSet = [];
         _.times(exercise.sets, index => repsPerSet[index] = -1);
         const exerciseInstance = {
           id: v4(),
           exerciseId:  exercise.id,
           repsPerSet,
-          completed: false
+          completed: false,
+          weight: prevInstance ? parseInt(prevInstance.weight) + parseInt(exercise.increments) : 45
         };
         db.exerciseInstances.push(exerciseInstance);
         saveDB(db);
@@ -134,6 +150,19 @@ export const setExerciseInstanceSet = (id, setNumber, reps) =>
     }
   });
 
+export const setExerciseInstanceWeight = (id, weight) =>
+  new Promise((resolve, reject) => {
+    try {
+      let db = loadDB();
+      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+      db.exerciseInstances[index].weight = weight;
+      saveDB(db);
+      resolve(db.exerciseInstances[index]);
+    } catch(err) {
+      reject(Error(err));
+    }
+  });
+
 export const completeExerciseInstance = (id, setNumber, reps) =>
   new Promise((resolve, reject) => {
     try {
@@ -141,8 +170,7 @@ export const completeExerciseInstance = (id, setNumber, reps) =>
       const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
       const exercise = db.exercises.find((instance) => instance.id === db.exerciseInstances[index].exerciseId);
       db.exerciseInstances[index].completed = true;
-      db.exerciseInstances[index].completedOn = moment().format("MMMM DD YYYY, hh:mm");
-      db.exerciseInstances[index].weight = exercise.weight;
+      db.exerciseInstances[index].completedOn = moment().format("MMMM DD YYYY, hh:mm:ss");
       saveDB(db);
       resolve(db.exerciseInstances[index]);
     } catch(err) {

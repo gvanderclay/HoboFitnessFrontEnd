@@ -5,7 +5,7 @@ import {Row} from 'react-bootstrap';
 import ExerciseButtonContainer from '../containers/ExerciseButtonContainer';
 
 const ExerciseButtons = ({ exercise, exerciseInstance }) => (
-        <Row>
+        <div>
           <h3>
             {exercise.name}
           </h3>
@@ -17,7 +17,7 @@ const ExerciseButtons = ({ exercise, exerciseInstance }) => (
                 setNumber={index}
             />
           )}
-        </Row>
+        </div>
 );
 
 

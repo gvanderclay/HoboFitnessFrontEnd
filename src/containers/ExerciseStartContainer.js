@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Row, Col, Button } from 'react-bootstrap';
@@ -7,11 +8,35 @@ import LoadingError from '../components/LoadingError';
 import { getExerciseInstanceById, getExerciseByInstanceId, getIsLoading, getErrorMessage } from '../reducers';
 import * as actions from '../actions';
 import ExerciseButtons from '../components/ExerciseButtons';
+import H1Textbox from '../components/H1TextBox';
 
 class ExerciseStartContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.changeExerciseInstanceWeight =
+      _.debounce(this.changeExerciseInstanceWeight, 500);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
   componentWillMount() {
     const { fetchExerciseInstance, params } = this.props;
     fetchExerciseInstance(params.exerciseInstanceId);
+  }
+
+  handleChange(event) {
+    this.changeExerciseInstanceWeight(event.target.value);
+  }
+
+  changeExerciseInstanceWeight(weight) {
+    const { setExerciseInstanceWeight, exerciseInstance } = this.props;
+    setExerciseInstanceWeight(exerciseInstance.id, weight);
+  }
+
+  handleSubmit(event) {
+    const { exerciseInstance, dispatch, setExerciseInstanceWeight } = this.props;
+    event.preventDefault();
+    const instanceWeight = ReactDOM.findDOMNode(this.refs.instanceWeight).value;
+    dispatch(setExerciseInstanceWeight(exerciseInstance.id, instanceWeight));
   }
 
   handleClick() {
@@ -45,15 +70,25 @@ class ExerciseStartContainer extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={8}>
+          <Col xs={12} sm={5}>
             <ExerciseButtons exerciseInstance={exerciseInstance} exercise={exercise}/>
+          </Col> 
+          <Col xs={12} sm={2}>
+            <h3>
+              Weight
+            </h3>
+            <H1Textbox
+                placeHolder="weight"
+                value={exerciseInstance.weight}
+                handleChange={this.handleChange}
+                style= {{
+                        marginTop: 0
+                       }}
+            />
           </Col>
-          <Col xs={4}>
-          </Col>
-
         </Row>
         <Row>
-          <Col>
+          <Col xs={6}>
             <Button onClick={this.handleClick.bind(this)}>Complete Exercise</Button>
           </Col>
         </Row>

@@ -142,6 +142,25 @@ export const fetchExerciseInstance = (id) => (dispatch, getState) => {
   );
 };
 
+export const setExerciseInstanceWeight = (id, weight) => (dispatch, getState) => {
+  if(getIsLoading(getState())) {
+    return Promise.resolve();
+  }
+
+  dispatch({
+    type: 'UPDATE_EXERCISE_INSTANCE_REQUEST'
+  });
+
+  return api.setExerciseInstanceWeight(id, weight).then(
+    response => {
+      dispatch({
+        type: 'UPDATE_EXERCISE_INSTANCE_SUCCESS',
+        response: normalize(response, schema.exerciseInstance)
+      });
+    }
+  );
+};
+
 export const setExerciseInstanceSet = (id, setNumber, reps) => (dispatch, getState) => {
   if(getIsLoading(getState())) {
     return Promise.resolve();

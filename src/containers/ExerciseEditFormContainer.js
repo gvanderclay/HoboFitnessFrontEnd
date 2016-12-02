@@ -15,9 +15,9 @@ class ExerciseEditContainer extends Component {
       exerciseName: props.exercise.name,
       exerciseReps: props.exercise.reps,
       exerciseSets: props.exercise.sets,
-      exerciseWeight: props.exercise.weight,
+      exerciseIncrements: props.exercise.increments,
     }
-  }
+  } 
 
   handleChange(event){
     this.setState({ [event.target.id]: event.target.value });
@@ -30,11 +30,11 @@ class ExerciseEditContainer extends Component {
     const exerciseName= ReactDOM.findDOMNode(this.refs.exerciseName).value;
     const exerciseReps= ReactDOM.findDOMNode(this.refs.exerciseReps).value;
     const exerciseSets= ReactDOM.findDOMNode(this.refs.exerciseSets).value;
-    const exerciseWeight= ReactDOM.findDOMNode(this.refs.exerciseWeight).value;
+    const exerciseIncrements= ReactDOM.findDOMNode(this.refs.exerciseIncrements).value;
     if(exerciseName === exercise.name && exerciseName === '') {
       return;
     }
-    dispatch(updateExercise(exercise.id, exerciseName, exerciseReps, exerciseSets, exerciseWeight)); 
+    dispatch(updateExercise(exercise.id, exerciseName, exerciseReps, exerciseSets, exerciseIncrements)); 
   }
 
   render() {
@@ -81,13 +81,13 @@ class ExerciseEditContainer extends Component {
               />
             </Col>
             <Col sm={4} >
-              <ControlLabel>Weight</ControlLabel>
+              <ControlLabel>Increments</ControlLabel>
               <FormControl 
-                ref={'exerciseWeight'} 
-                id='exerciseWeight'
+                ref={'exerciseIncrements'} 
+                id='exerciseIncrements'
                 type='number'
-                placeholder='Weight' 
-                value={this.state.exerciseWeight} 
+                placeholder='Increments' 
+                value={this.state.exerciseIncrements} 
                 onChange={this.handleChange}
                 min={0}
               />
