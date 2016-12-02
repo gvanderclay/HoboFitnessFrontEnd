@@ -1,57 +1,29 @@
 import moment from 'moment';
-import { v4 } from 'node-uuid';
 import _ from 'lodash';
+var axios = require('axios');
 
-export const loadDB = () => {
-  try {
-    const serializedState = localStorage.getItem('fakeDB');
-    if(serializedState === null) {
-      return undefined;
-    }
-    return JSON.parse(serializedState);
-  } catch (err) {
-    return undefined;
-  }
-};
-
-export const saveDB = (state) => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem('fakeDB', serializedState);
-  } catch(err) {
-    // TODO findout how to handle write errors
-  }
-};
-
-let state = loadDB();
-state = state ? state : {exercises: [], workouts: [], workoutInstances: [], exerciseInstances: []};
-saveDB(state);
-
-export const fetchExercises = () =>
-  new Promise((resolve, reject) => {
-    try {
-      const state = loadDB();
-      resolve(state.exercises);
-    } catch (err) {
-      reject(Error(err));
-    }
+export const fetchExercises = () => {
+  axios.get('http://localhost:8000/exercises/')
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
   });
+}
 
 export const addExercise = (name, reps = 5, sets = 5, increments = 5) => {
-  const exercise = {
-    name,
-    reps,
-    sets,
-    increments
-  };
-
-  return axios.post('yourRoute', {
-    name,
-    sets,
-    reps,
-    increments
+  axios.post('http://localhost:8000/exercises/',
+  {name : name,
+   sets : sets,
+   reps : reps,
+   increments : increments})
+  .then(function(response){
+    console.log('posted!')
   });
 };
+
+// OLD CODE FOR REFERENCE
   // new Promise((resolve, reject) => {
   //   const exercise = {
   //     id: v4(),
@@ -70,26 +42,18 @@ export const addExercise = (name, reps = 5, sets = 5, increments = 5) => {
   //   }
   // });
 
-export const updateExercise = (id, name, reps, sets, increments) =>
-  new Promise((resolve, reject) => {
-    try {
-      const db = loadDB();
-      const indexOfExercise = db.exercises.findIndex(exercise => exercise.id === id);
-      const oldExercise = db.exercises[indexOfExercise];
-      const newExercise = {
-        id,
-        name: name ? name : oldExercise.name,
-        reps: reps ? reps : oldExercise.reps,
-        sets: sets ? sets : oldExercise.sets,
-        increments: increments ? increments : oldExercise.increments
-      };
-      db.exercises[indexOfExercise] = newExercise;
-      saveDB(db);
-      resolve(newExercise);
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+export const updateExercise = (id, name, reps, sets, increments) => {
+    axios.put('http://localhost:8000/exercises/' + id,
+    {id   : id,
+     name : name,
+     sets : sets,
+     reps : reps,
+     increments : increments})
+    .then(function(response){
+      console.log('updated!')
+    });
+  };
+
 
 export const fetchExercise = (id) =>
   new Promise((resolve, reject) => {
