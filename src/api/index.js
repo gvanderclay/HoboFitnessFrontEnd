@@ -37,24 +37,38 @@ export const fetchExercises = () =>
     }
   });
 
-export const addExercise = (name, reps = 5, sets = 5, increments = 5) =>
-  new Promise((resolve, reject) => {
-    const exercise = {
-      id: v4(),
-      name,
-      reps,
-      sets,
-      increments
-    };
-    try {
-      var oldState = loadDB();
-      oldState.exercises.push(exercise);
-      saveDB(oldState);
-      resolve(exercise);
-    } catch(err) {
-      reject(Error(err));
-    }
+export const addExercise = (name, reps = 5, sets = 5, increments = 5) => {
+  const exercise = {
+    name,
+    reps,
+    sets,
+    increments
+  };
+
+  return axios.post('yourRoute', {
+    name,
+    sets,
+    reps,
+    increments
   });
+};
+  // new Promise((resolve, reject) => {
+  //   const exercise = {
+  //     id: v4(),
+  //     name,
+  //     reps,
+  //     sets,
+  //     increments
+  //   };
+  //   try {
+  //     var oldState = loadDB();
+  //     oldState.exercises.push(exercise);
+  //     saveDB(oldState);
+  //     resolve(exercise);
+  //   } catch(err) {
+  //     reject(Error(err));
+  //   }
+  // });
 
 export const updateExercise = (id, name, reps, sets, increments) =>
   new Promise((resolve, reject) => {
@@ -118,7 +132,6 @@ export const addExerciseInstance = (id) =>
               exerciseInstance : prevInstance;
           }
         });
-        console.log(prevInstance);
         let repsPerSet = [];
         _.times(exercise.sets, index => repsPerSet[index] = -1);
         const exerciseInstance = {
