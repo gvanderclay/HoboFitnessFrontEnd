@@ -19,7 +19,7 @@ export const addExercise = (name, reps = 5, sets = 5, increments = 5) => {
    reps : reps,
    increments : increments})
   .then(function(response){
-    console.log('posted!')
+    console.log('posted exercise!')
   });
 };
 
@@ -50,31 +50,26 @@ export const updateExercise = (id, name, reps, sets, increments) => {
      reps : reps,
      increments : increments})
     .then(function(response){
-      console.log('updated!')
+      console.log('updated exercise!')
     });
   };
 
 
-export const fetchExercise = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      fetchExercises().then((exercises) => {
-        resolve(exercises.find(exercise => exercise.id === id));
-      });
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+export const fetchExercise = (id) => {
+  axios.get('http://localhost:8000/exercises/' + id)
+  .then(function(response){
+      console.log(response.data);
+    });
+  };
 
 export const fetchExerciseInstances = () =>
-  new Promise((resolve, reject) => {
-    try {
-      const state = loadDB();
-      resolve(state.exerciseInstances);
-    } catch (err) {
-      reject(Error(err));
-    }
-  });
+{
+  axios.get('http://localhost:8000/exerciseInstances/')
+  .then(function(response){
+      console.log(response.data);
+    });
+  };
+
 
 // id is id of the exercise not the instance
 export const addExerciseInstance = (id) =>
