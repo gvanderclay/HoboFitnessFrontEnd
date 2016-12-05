@@ -163,75 +163,50 @@ export const fetchExerciseInstance = (id) =>
   });
 
 
-export const fetchWorkouts = () =>
-  new Promise((resolve, reject) => {
-    try {
-      const db = loadDB();
-      resolve(db.workouts);
-    } catch (err) {
-      reject(Error(err));
-    }
+export const fetchWorkouts = () => {
+axios.get('http://localhost:8000/workouts/')
+.then(function(response){
+    console.log(response.data);
   });
+}
 
-export const addWorkout = (name) =>
-  new Promise((resolve, reject) => {
-    const workout = {
-      id: v4(),
-      name,
-      exercises: []
-    };
-    try {
-      var oldDB = loadDB();
-      oldDB.workouts.push(workout);
-      saveDB(oldDB);
-      resolve(workout);
-    } catch(err) {
-      reject(Error(err));
-    }
+
+export const addWorkout = (name) => {
+axios.post('http://localhost:8000/workouts/',
+{
+  name : name
+})
+.then(function(response){
+    console.log('added workout');
   });
+}
 
 export const updateWorkout = (id, name, newExercise) =>
-  new Promise((resolve, reject) => {
-    const db = loadDB();
-    try {
-      const indexOfWorkout = db.workouts.findIndex(workout => workout.id === id);
-      const oldWorkout = db.workouts[indexOfWorkout];
-      oldWorkout.name = name;
-      if(newExercise){
-        oldWorkout.exercises.push(newExercise.id);
-      }
-      db.workouts[indexOfWorkout] = oldWorkout;
-      saveDB(db);
-      resolve(oldWorkout);
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+{
+    axios.put('http://localhost:8000/workouts/' + id,
+    {id   : id,
+     name : name,
+     exercises : newExercise
+   })
+    .then(function(response){
+      console.log('updated workout!')
+    });
+  };
 
-export const fetchWorkout = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      fetchWorkouts().then((workouts) => {
-        resolve(workouts.find(workout => workout.id === id));
-      });
-    } catch(err) {
-      reject(Error(err));
-    }
+export const fetchWorkout = (id) =>{
+axios.get('http://localhost:8000/workouts/' + id)
+.then(function(response){
+    console.log(response.data);
   });
+}
 
 export const deleteWorkout = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      const db = loadDB();
-      const index = db.workouts.findIndex(workout => workout.id === id);
-      if (index > -1) {
-        db.workouts.splice(index, 1);
-      }
-      saveDB(db);
-      resolve(index);
-    } catch(err) {
-    }
+function deleteWorkout(id){
+  axios.delete('http://localhost:8000/workouts/' + id)
+  .then(function(response){
+    console.log('workout deleted')
   });
+};
 
 // id is id of the workout not the instance
 export const addWorkoutInstance = (id) =>
