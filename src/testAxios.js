@@ -56,8 +56,16 @@ var axios = require('axios');
           });
         }
 
+        //fetchExerciseInstance('5842090ba53e59104d36802e')
+        function fetchExerciseInstance(id){
+        axios.get('http://localhost:8000/exerciseInstances/' + id)
+        .then(function(response){
+            console.log(response.data);
+          });
+        }
+
         // testing POST exerciseInstance
-        // I STOPPED HERE
+        // I DIDNT FINISH THIS ONE
         function addExerciseInstance(exerciseId) {
             axios.post('http://localhost:8000/exerciseInstances/' + exerciseId,
             {name : name,
@@ -68,7 +76,7 @@ var axios = require('axios');
               console.log('posted exerciseInstance!' + id)
             });
           };
-          // i guess i'll come back to this one
+          // i guess i'll come back later
 
 // WORKOUTS
         // GET workouts
@@ -122,6 +130,7 @@ var axios = require('axios');
           };
 
 // WORKOUT INSTANCES
+// COMING BACK TO THIS ONE LATER
 // id is id of the workout not the instance
 function addWorkoutInstance (id){
   axios.post('http://localhost:8000/workoutInstances/',
@@ -133,23 +142,17 @@ function addWorkoutInstance (id){
     });
   }
 
-
-
+// PATCH completed to true
+function completeWorkoutInstance(id){
+  axios.patch('http://localhost:8000/workoutInstances/' + id,
+  {
+  })
+  .then(function(response){
+      console.log('completed workout Instance!');
+    });
 }
-export const completeWorkoutInstance = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      let db = loadDB();
-      const index = db.workoutInstances.findIndex((instance) => instance.id === id);
-      db.workoutInstances[index].completed = true;
-      saveDB(db);
-      resolve(db.workoutInstances[index]);
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
 
-const createExerciseInstancesForWorkout = (workout) => {
+function createExerciseInstancesForWorkout(workout){
   return _.map(workout.exercises, (exerciseId) => {
     return addExerciseInstance(exerciseId).then((exerciseInstance) => {
       return exerciseInstance.id;
@@ -157,23 +160,16 @@ const createExerciseInstancesForWorkout = (workout) => {
   });
 };
 
-export const fetchWorkoutInstance = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      fetchWorkoutInstances().then((workoutInstances) => {
-        resolve(workoutInstances.find(workout => workout.id === id));
-      });
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
 
-export const fetchWorkoutInstances = () =>
-  new Promise((resolve, reject) => {
-    try {
-      const state = loadDB();
-      resolve(state.workoutInstances);
-    } catch (err) {
-      reject(Error(err));
-    }
+function fetchWorkoutInstance(id){
+axios.get('http://localhost:8000/workoutInstances/' + id)
+.then(function(response){
+    console.log(response.data);
   });
+}
+function fetchWorkoutInstances(){
+  axios.get('http://localhost:8000/workoutInstances/')
+  .then(function(response){
+      console.log(response.data); // ex.: { user: 'Your User'}
+    });
+}

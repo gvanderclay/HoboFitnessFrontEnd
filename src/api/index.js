@@ -70,7 +70,7 @@ export const fetchExerciseInstances = () =>
     });
   };
 
-
+// COMING BACK TO THIS ONE
 // id is id of the exercise not the instance
 export const addExerciseInstance = (id) =>
   new Promise((resolve, reject) => {
@@ -152,15 +152,12 @@ export const completeExerciseInstance = (id, setNumber, reps) =>
 
 
 export const fetchExerciseInstance = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      fetchExerciseInstances().then((exerciseInstances) => {
-        resolve(exerciseInstances.find(exerciseInstance => exerciseInstance.id === id));
-      });
-    } catch(err) {
-      reject(Error(err));
-    }
+{
+axios.get('http://localhost:8000/exerciseInstances/' + id)
+.then(function(response){
+    console.log(response.data);
   });
+}
 
 
 export const fetchWorkouts = () => {
@@ -200,14 +197,14 @@ axios.get('http://localhost:8000/workouts/' + id)
   });
 }
 
-export const deleteWorkout = (id) =>
-function deleteWorkout(id){
+export const deleteWorkout = (id) =>{
   axios.delete('http://localhost:8000/workouts/' + id)
   .then(function(response){
     console.log('workout deleted')
   });
 };
 
+// COMING BACK TO THIS ONE
 // id is id of the workout not the instance
 export const addWorkoutInstance = (id) =>
   new Promise((resolve, reject) => {
@@ -236,17 +233,14 @@ export const addWorkoutInstance = (id) =>
   });
 
 export const completeWorkoutInstance = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      let db = loadDB();
-      const index = db.workoutInstances.findIndex((instance) => instance.id === id);
-      db.workoutInstances[index].completed = true;
-      saveDB(db);
-      resolve(db.workoutInstances[index]);
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+{
+  axios.patch('http://localhost:8000/workoutInstances/' + id,
+  {
+  })
+  .then(function(response){
+      console.log('workout Instance completed!');
+    });
+}
 
 const createExerciseInstancesForWorkout = (workout) => {
   return _.map(workout.exercises, (exerciseId) => {
@@ -257,22 +251,17 @@ const createExerciseInstancesForWorkout = (workout) => {
 };
 
 export const fetchWorkoutInstance = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      fetchWorkoutInstances().then((workoutInstances) => {
-        resolve(workoutInstances.find(workout => workout.id === id));
-      });
-    } catch(err) {
-      reject(Error(err));
-    }
+{
+axios.get('http://localhost:8000/workoutInstances/' + id)
+.then(function(response){
+    console.log(response.data);
   });
+}
 
 export const fetchWorkoutInstances = () =>
-  new Promise((resolve, reject) => {
-    try {
-      const state = loadDB();
-      resolve(state.workoutInstances);
-    } catch (err) {
-      reject(Error(err));
-    }
-  });
+{
+  axios.get('http://localhost:8000/workoutInstances/')
+  .then(function(response){
+      console.log(response.data);
+    });
+}
