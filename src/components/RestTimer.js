@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 
 
 class RestTimer extends Component {
@@ -10,8 +11,21 @@ class RestTimer extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return !_.isEqual(nextProps.exerciseInstance.repsPerSet, this.props.exerciseInstance.repsPerSet);
+  }
+
   tick() {
     this.setState({time: this.state.time + 1});
+  }
+
+  start() {
+    this.interval = setInterval(this.tick, 1000);
+  }
+
+  stop() {
+    clearInterval(this.interval);
+    this.setState({time: ""});
   }
 
   componentDidMount() {
@@ -19,7 +33,7 @@ class RestTimer extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    this.stop();
   }
 
   render() {

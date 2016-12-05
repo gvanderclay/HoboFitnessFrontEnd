@@ -9,6 +9,7 @@ const EditListHeader = ({ addType, handleClick, placeHolder, value, id, handleCh
         <Row>
           <Col sm={8}>
           <H1Textbox
+            key="editor"
             placeHolder={placeHolder}
             value={value}
             handleChange={handleChange}
