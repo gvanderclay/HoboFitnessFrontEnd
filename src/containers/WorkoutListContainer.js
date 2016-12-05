@@ -12,6 +12,7 @@ import '../styles/ListHeader.scss';
 
 class WorkoutListContainer extends Component {
   componentDidMount() {
+    console.log("hi");
     this.fetchData();
   }
 
@@ -71,11 +72,19 @@ class WorkoutListContainer extends Component {
     return this.actionComponent(id, "Delete", props);
   }
 
+  workoutHistoryComponent(id) {
+    const props = {
+      to: "workouts/" + id + "/history"
+    }
+    return this.actionComponent(id, "History", props);
+  }
+
   workoutActionComponents(workout) {
     const { id } = workout;
     // put the components in the opposite order you want theme to appear on screen
     return [
       this.deleteWorkoutComponent(id),
+      this.workoutHistoryComponent(id),
       this.editWorkoutComponent(id),
       this.startWorkoutComponent(id),
     ];

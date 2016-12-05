@@ -10,16 +10,9 @@ import { getExerciseById, getAllExerciseInstances, getExerciseData, getIsLoading
 import * as actions from '../actions';
 
 class ExerciseHistoryContainer extends Component {
-  componentDidMount() {
-    this.props.fetchExercises().then(() => {
-      this.props.fetchExerciseInstances();
-    });
-
-  }
-
-  componentDidUpdate() {
+  createChart() {
     const { exercise, data } = this.props;
-    var chartCtx = document.getElementById("chart");
+    var chartCtx = document.getElementById(exercise.id + "-canvas");
     if(chartCtx){
       let myChart = new Chart(chartCtx, {
         type: 'line',
@@ -62,22 +55,14 @@ class ExerciseHistoryContainer extends Component {
     }
   }
 
+  componentDidMount() {
+    console.log('here');
+    this.createChart();
+  }
+
   render() {
-    const { isLoading, errorMessage, exercise, exerciseInstances, data, router, backRoute, backText } = this.props;
-    if(isLoading || !exercise || _.isEmpty(exerciseInstances) || _.isEmpty(data)) {
-      return (
-        <Loading />
-      )
-    }
-    if(errorMessage || !exercise || _.isEmpty(exerciseInstances) || _.isEmpty(data)) {
-      return (
-        <LoadingError
-          message={errorMessage}
-          onRetry={() => this.fetchData}
-        />
-      );
-    }
-    return(
+    const { exercise } = this.props;
+    return (
       <div className="container">
         <Row>
           <Col>
@@ -86,7 +71,7 @@ class ExerciseHistoryContainer extends Component {
         </Row>
         <Row>
           <Col>
-            <canvas id={'chart'}></canvas>
+            <canvas id={exercise.id + '-canvas'}></canvas>
           </Col>
         </Row>
       </div>
@@ -94,21 +79,5 @@ class ExerciseHistoryContainer extends Component {
   }
 }
 
-ExerciseHistoryContainer.propTypes = {
-  errorMessage: PropTypes.string,
-  exercise: PropTypes.object,
-  isLoading: PropTypes.bool.isRequired,
-}
 
-
-const mapStateToProps = (state, { params }) => {
-  return {
-    exercise: getExerciseById(state, params.exerciseId),
-    isLoading: getIsLoading(state),
-    errorMessage: getErrorMessage(state),
-    exerciseInstances: getAllExerciseInstances(state),
-    data: getExerciseData(state, params.exerciseId)
-  }
-}
-
-export default withRouter(connect(mapStateToProps, actions)(ExerciseHistoryContainer));
+export default ExerciseHistoryContainer;

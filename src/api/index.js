@@ -98,6 +98,18 @@ export const fetchExerciseInstances = () =>
     }
   });
 
+const allSetsCompleted = (exerciseInstance) => {
+  let finished = true;
+  _.forEach(exerciseInstance.repsPerSet, (reps) => {
+    if(reps === -1) {
+      finished = false;
+      return;
+    }
+  });
+  console.log(finished);
+  return finished;
+};
+
 // id is id of the exercise not the instance
 export const addExerciseInstance = (id) =>
   new Promise((resolve, reject) => {
@@ -113,8 +125,8 @@ export const addExerciseInstance = (id) =>
           const prevInstanceDate = moment(prevInstance.completedOn);
           const exerciseInstanceDate = moment(exerciseInstance.completedOn);
 
-          if(exerciseInstance.exerciseId === exercise.id && exerciseInstance.completed) {
-            prevInstance = exerciseInstanceDate > prevInstanceDate ?
+          if(exerciseInstance.exerciseId === exercise.id && exerciseInstance.completed && allSetsCompleted(exerciseInstance)) {
+            prevInstance = exerciseInstanceDate > prevInstanceDate?
               exerciseInstance : prevInstance;
           }
         });
