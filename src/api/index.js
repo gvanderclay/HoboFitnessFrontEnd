@@ -1,26 +1,16 @@
-import moment from 'moment';
 import _ from 'lodash';
 var axios = require('axios');
 
 export const fetchExercises = () => {
-  axios.get('http://localhost:8000/exercises/')
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
+  return axios.get('http://localhost:8000/exercises/');
+};
 
 export const addExercise = (name, reps = 5, sets = 5, increments = 5) => {
-  axios.post('http://localhost:8000/exercises/',
+  return axios.post('http://localhost:8000/exercises/',
   {name : name,
    sets : sets,
    reps : reps,
-   increments : increments})
-  .then(function(response){
-    console.log('posted exercise!')
-  });
+   increments : increments});
 };
 
 // OLD CODE FOR REFERENCE
@@ -43,225 +33,189 @@ export const addExercise = (name, reps = 5, sets = 5, increments = 5) => {
   // });
 
 export const updateExercise = (id, name, reps, sets, increments) => {
-    axios.put('http://localhost:8000/exercises/' + id,
+    return axios.put('http://localhost:8000/exercises/' + id,
     {id   : id,
      name : name,
      sets : sets,
      reps : reps,
-     increments : increments})
-    .then(function(response){
-      console.log('updated exercise!')
-    });
+     increments : increments});
   };
 
 
 export const fetchExercise = (id) => {
-  axios.get('http://localhost:8000/exercises/' + id)
-  .then(function(response){
-      console.log(response.data);
-    });
+  return axios.get('http://localhost:8000/exercises/' + id);
   };
 
 export const fetchExerciseInstances = () =>
 {
-  axios.get('http://localhost:8000/exerciseInstances/')
-  .then(function(response){
-      console.log(response.data);
-    });
-  };
+  return axios.get('http://localhost:8000/exerciseInstances/');
+};
 
 // COMING BACK TO THIS ONE
 // id is id of the exercise not the instance
-export const addExerciseInstance = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      fetchExercise(id).then((exercise) => {
-        const db = loadDB();
-        let prevInstance;
-        db.exerciseInstances.forEach((exerciseInstance) => {
-          if(_.isEmpty(prevInstance)) {
-            prevInstance = exerciseInstance;
-            return;
-          }
-          const prevInstanceDate = moment(prevInstance.completedOn);
-          const exerciseInstanceDate = moment(exerciseInstance.completedOn);
+// export const addExerciseInstance = (id) =>
+//   new Promise((resolve, reject) => {
+//     try {
+//       fetchExercise(id).then((exercise) => {
+//         const db = loadDB();
+//         let prevInstance;
+//         db.exerciseInstances.forEach((exerciseInstance) => {
+//           if(_.isEmpty(prevInstance)) {
+//             prevInstance = exerciseInstance;
+//             return;
+//           }
+//           const prevInstanceDate = moment(prevInstance.completedOn);
+//           const exerciseInstanceDate = moment(exerciseInstance.completedOn);
 
-          if(exerciseInstance.exerciseId === exercise.id && exerciseInstance.completed) {
-            prevInstance = exerciseInstanceDate > prevInstanceDate ?
-              exerciseInstance : prevInstance;
-          }
-        });
-        let repsPerSet = [];
-        _.times(exercise.sets, index => repsPerSet[index] = -1);
-        const exerciseInstance = {
-          id: v4(),
-          exerciseId:  exercise.id,
-          repsPerSet,
-          completed: false,
-          weight: prevInstance ? parseInt(prevInstance.weight) + parseInt(exercise.increments) : 45
-        };
-        db.exerciseInstances.push(exerciseInstance);
-        saveDB(db);
-        resolve(exerciseInstance);
-      });
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+//           if(exerciseInstance.exerciseId === exercise.id && exerciseInstance.completed) {
+//             prevInstance = exerciseInstanceDate > prevInstanceDate ?
+//               exerciseInstance : prevInstance;
+//           }
+//         });
+//         let repsPerSet = [];
+//         _.times(exercise.sets, index => repsPerSet[index] = -1);
+//         const exerciseInstance = {
+//           id: v4(),
+//           exerciseId:  exercise.id,
+//           repsPerSet,
+//           completed: false,
+//           weight: prevInstance ? parseInt(prevInstance.weight) + parseInt(exercise.increments) : 45
+//         };
+//         db.exerciseInstances.push(exerciseInstance);
+//         saveDB(db);
+//         resolve(exerciseInstance);
+//       });
+//     } catch(err) {
+//       reject(Error(err));
+//     }
+//   });
 
-export const setExerciseInstanceSet = (id, setNumber, reps) =>
-  new Promise((resolve, reject) => {
-    try {
-      let db = loadDB();
-      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
-      db.exerciseInstances[index].repsPerSet[setNumber] = reps;
-      saveDB(db);
-      resolve(db.exerciseInstances[index]);
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+// export const setExerciseInstanceSet = (id, setNumber, reps) =>
+//   new Promise((resolve, reject) => {
+//     try {
+//       let db = loadDB();
+//       const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+//       db.exerciseInstances[index].repsPerSet[setNumber] = reps;
+//       saveDB(db);
+//       resolve(db.exerciseInstances[index]);
+//     } catch(err) {
+//       reject(Error(err));
+//     }
+//   });
 
-export const setExerciseInstanceWeight = (id, weight) =>
-  new Promise((resolve, reject) => {
-    try {
-      let db = loadDB();
-      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
-      db.exerciseInstances[index].weight = weight;
-      saveDB(db);
-      resolve(db.exerciseInstances[index]);
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+// export const setExerciseInstanceWeight = (id, weight) =>
+//   new Promise((resolve, reject) => {
+//     try {
+//       let db = loadDB();
+//       const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+//       db.exerciseInstances[index].weight = weight;
+//       saveDB(db);
+//       resolve(db.exerciseInstances[index]);
+//     } catch(err) {
+//       reject(Error(err));
+//     }
+//   });
 
-export const completeExerciseInstance = (id, setNumber, reps) =>
-  new Promise((resolve, reject) => {
-    try {
-      let db = loadDB();
-      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
-      const exercise = db.exercises.find((instance) => instance.id === db.exerciseInstances[index].exerciseId);
-      db.exerciseInstances[index].completed = true;
-      db.exerciseInstances[index].completedOn = moment().format("MMMM DD YYYY, hh:mm:ss");
-      saveDB(db);
-      resolve(db.exerciseInstances[index]);
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+// export const completeExerciseInstance = (id, setNumber, reps) =>
+//   new Promise((resolve, reject) => {
+//     try {
+//       let db = loadDB();
+//       const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+//       const exercise = db.exercises.find((instance) => instance.id === db.exerciseInstances[index].exerciseId);
+//       db.exerciseInstances[index].completed = true;
+//       db.exerciseInstances[index].completedOn = moment().format("MMMM DD YYYY, hh:mm:ss");
+//       saveDB(db);
+//       resolve(db.exerciseInstances[index]);
+//     } catch(err) {
+//       reject(Error(err));
+//     }
+//   });
 
 
 export const fetchExerciseInstance = (id) =>
 {
-axios.get('http://localhost:8000/exerciseInstances/' + id)
-.then(function(response){
-    console.log(response.data);
-  });
-}
+  return axios.get('http://localhost:8000/exerciseInstances/' + id);
+};
 
 
 export const fetchWorkouts = () => {
-axios.get('http://localhost:8000/workouts/')
-.then(function(response){
-    console.log(response.data);
-  });
-}
+  return axios.get('http://localhost:8000/workouts/');
+};
 
 
 export const addWorkout = (name) => {
-axios.post('http://localhost:8000/workouts/',
-{
-  name : name
-})
-.then(function(response){
-    console.log('added workout');
+  return axios.post('http://localhost:8000/workouts/',
+  {
+    name : name
   });
-}
+};
 
 export const updateWorkout = (id, name, newExercise) =>
 {
-    axios.put('http://localhost:8000/workouts/' + id,
+    return axios.put('http://localhost:8000/workouts/' + id,
     {id   : id,
      name : name,
      exercises : newExercise
-   })
-    .then(function(response){
-      console.log('updated workout!')
     });
-  };
+};
 
 export const fetchWorkout = (id) =>{
-axios.get('http://localhost:8000/workouts/' + id)
-.then(function(response){
-    console.log(response.data);
-  });
-}
+  return axios.get('http://localhost:8000/workouts/' + id);
+};
 
 export const deleteWorkout = (id) =>{
-  axios.delete('http://localhost:8000/workouts/' + id)
-  .then(function(response){
-    console.log('workout deleted')
-  });
+  return axios.delete('http://localhost:8000/workouts/' + id);
 };
 
 // COMING BACK TO THIS ONE
 // id is id of the workout not the instance
-export const addWorkoutInstance = (id) =>
-  new Promise((resolve, reject) => {
-    try {
-      fetchWorkout(id).then((workout) => {
-        let repsPerSet = [];
-        const workoutInstance = {
-          id: v4(),
-          workoutId: workout.id,
-          exerciseInstances: [],
-          completed: false
-        };
-        const instances = createExerciseInstancesForWorkout(workout);
-        Promise.all(instances).then(values => {
-          console.log(values);
-          workoutInstance.exerciseInstances = values;
-          const db = loadDB();
-          db.workoutInstances.push(workoutInstance);
-          saveDB(db);
-          resolve(workoutInstance);
-        });
-      });
-    } catch(err) {
-      reject(Error(err));
-    }
-  });
+// export const addWorkoutInstance = (id) =>
+//   new Promise((resolve, reject) => {
+//     try {
+//       fetchWorkout(id).then((workout) => {
+//         let repsPerSet = [];
+//         const workoutInstance = {
+//           id: v4(),
+//           workoutId: workout.id,
+//           exerciseInstances: [],
+//           completed: false
+//         };
+//         const instances = createExerciseInstancesForWorkout(workout);
+//         Promise.all(instances).then(values => {
+//           console.log(values);
+//           workoutInstance.exerciseInstances = values;
+//           const db = loadDB();
+//           db.workoutInstances.push(workoutInstance);
+//           saveDB(db);
+//           resolve(workoutInstance);
+//         });
+//       });
+//     } catch(err) {
+//       reject(Error(err));
+//     }
+//   });
 
 export const completeWorkoutInstance = (id) =>
 {
-  axios.patch('http://localhost:8000/workoutInstances/' + id,
+  return axios.patch('http://localhost:8000/workoutInstances/' + id,
   {
-  })
-  .then(function(response){
-      console.log('workout Instance completed!');
-    });
-}
-
-const createExerciseInstancesForWorkout = (workout) => {
-  return _.map(workout.exercises, (exerciseId) => {
-    return addExerciseInstance(exerciseId).then((exerciseInstance) => {
-      return exerciseInstance.id;
-    });
   });
 };
 
+// const createExerciseInstancesForWorkout = (workout) => {
+//   return _.map(workout.exercises, (exerciseId) => {
+//     return addExerciseInstance(exerciseId).then((exerciseInstance) => {
+//       return exerciseInstance.id;
+//     });
+//   });
+// };
+
 export const fetchWorkoutInstance = (id) =>
 {
-axios.get('http://localhost:8000/workoutInstances/' + id)
-.then(function(response){
-    console.log(response.data);
-  });
-}
+  return axios.get('http://localhost:8000/workoutInstances/' + id);
+};
 
 export const fetchWorkoutInstances = () =>
 {
-  axios.get('http://localhost:8000/workoutInstances/')
-  .then(function(response){
-      console.log(response.data);
-    });
-}
+  return axios.get('http://localhost:8000/workoutInstances/');
+};

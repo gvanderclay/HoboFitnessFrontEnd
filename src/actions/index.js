@@ -24,7 +24,7 @@ const fetchEntities = (entity) => () => (dispatch, getState) => {
     response => {
       dispatch({
         type: `FETCH_${toSnakeCase(entity).toUpperCase()}S_SUCCESS`,
-        response: normalize(response, schema[`arrayOf${capitalized}s`])
+        response: normalize(response.data, schema[`arrayOf${capitalized}s`])
       });
     }
   );
@@ -51,9 +51,9 @@ export const addExercise = (name, reps, sets, weight) => (dispatch, getState) =>
         response => {
             dispatch({
                 type: 'ADD_EXERCISE_SUCCESS',
-                response: normalize(response, schema.exercise)
+                response: normalize(response.data, schema.exercise)
             });
-            return Promise.resolve(response);
+            return Promise.resolve(response.data);
         },
         error => {
             dispatch({
@@ -79,9 +79,9 @@ export const updateExercise = (id, name, reps, sets, weight) => (dispatch, getSt
         response => {
             dispatch({
                 type: 'UPDATE_EXERCISE_SUCCESS',
-                response: normalize(response, schema.exercise)
+                response: normalize(response.data, schema.exercise)
             });
-            return Promise.resolve(response);
+            return Promise.resolve(response.data);
         },
         error => {
             dispatch({
@@ -106,14 +106,14 @@ export const addExerciseInstance = (id) => (dispatch, getState) => {
     const exerciseInstance = api.addExerciseInstance(id).then(
         response => {
             let repsPerSet = [];
-            _.times(response.sets, (index) => {
+            _.times(response.data.sets, (index) => {
               repsPerSet[index] = -1;
             });
             dispatch({
               type: 'ADD_EXERCISE_INSTANCE_SUCCESS',
-              response: normalize(response, schema.exerciseInstance)
+              response: normalize(response.data, schema.exerciseInstance)
             });
-          return Promise.resolve(response);
+          return Promise.resolve(response.data);
         },
         error => {
 
@@ -135,7 +135,7 @@ export const fetchExerciseInstance = (id) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'FETCH_EXERCISE_INSTANCE_SUCCESS',
-        response: normalize(response, schema.exerciseInstance)
+        response: normalize(response.data, schema.exerciseInstance)
       });
       dispatch(fetchExercises());
     }
@@ -155,7 +155,7 @@ export const setExerciseInstanceWeight = (id, weight) => (dispatch, getState) =>
     response => {
       dispatch({
         type: 'UPDATE_EXERCISE_INSTANCE_SUCCESS',
-        response: normalize(response, schema.exerciseInstance)
+        response: normalize(response.data, schema.exerciseInstance)
       });
     }
   );
@@ -174,7 +174,7 @@ export const setExerciseInstanceSet = (id, setNumber, reps) => (dispatch, getSta
     response => {
       dispatch({
         type: 'UPDATE_EXERCISE_INSTANCE_SUCCESS',
-        response: normalize(response, schema.exerciseInstance)
+        response: normalize(response.data, schema.exerciseInstance)
       });
     }
   );
@@ -193,7 +193,7 @@ export const completeExerciseInstance = (id) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'UPDATE_EXERCISE_INSTANCE_SUCCESS',
-        response: normalize(response, schema.exerciseInstance)
+        response: normalize(response.data, schema.exerciseInstance)
       });
     }
   );
@@ -212,11 +212,9 @@ export const completeWorkoutInstance = (id) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'UPDATE_WORKOUT_INSTANCE_SUCCESS',
-        response: normalize(response, schema.workoutInstance)
+        response: normalize(response.data, schema.workoutInstance)
       });
-      _.forEach(response.exerciseInstances, (instance) => {
-        completeExerciseInstance(instance.id);
-      });
+      Promise.resolve(response.data);
     }
   );
 };
@@ -235,7 +233,7 @@ export const fetchWorkout = (id) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'FETCH_WORKOUT_SUCCESS',
-        response: normalize(response, schema.workout)
+        response: normalize(response.data, schema.workout)
       });
       dispatch(fetchExercises());
     }
@@ -256,9 +254,9 @@ export const addWorkout = (name) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'ADD_WORKOUT_SUCCESS',
-        response: normalize(response, schema.workout)
+        response: normalize(response.data, schema.workout)
       });
-      return Promise.resolve(response);
+      return Promise.resolve(response.data);
     },
     error => {
       dispatch({
@@ -284,10 +282,10 @@ export const addWorkoutInstance = (workoutId) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'ADD_WORKOUT_INSTANCE_SUCCESS',
-        response: normalize(response, schema.workoutInstance)
+        response: normalize(response.data, schema.workoutInstance)
       });
       fetchExerciseInstances();
-      return Promise.resolve(response);
+      return Promise.resolve(response.data);
     },
     error => {
       dispatch({
@@ -314,7 +312,7 @@ export const fetchWorkoutInstance = (id) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'FETCH_WORKOUT_INSTANCE_SUCCESS',
-        response: normalize(response, schema.workoutInstance)
+        response: normalize(response.data, schema.workoutInstance)
       });
       dispatch(fetchExerciseInstances()).then(() => {
         dispatch(fetchExercises());
@@ -336,9 +334,9 @@ export const updateWorkout = (id, name, newExercise) => (dispatch, getState) => 
     response => {
       dispatch({
         type: 'UPDATE_WORKOUT_SUCCESS',
-        response: normalize(response, schema.workout)
+        response: normalize(response.data, schema.workout)
       });
-      return Promise.resolve(response);
+      return Promise.resolve(response.data);
     },
     error => {
       dispatch({
@@ -364,9 +362,9 @@ export const deleteWorkout = (id) => (dispatch, getState) => {
     response => {
       dispatch({
         type: 'DELETE_WORKOUT_SUCCESS',
-        index: response
+        index: response.data
       });
-      return Promise.resolve(response);
+      return Promise.resolve(response.data);
     },
     error => {
       dispatch({
