@@ -1,24 +1,24 @@
 import { Schema, arrayOf } from 'normalizr';
 
-export const exercise = new Schema('exercises');
-export const arrayOfExercises = arrayOf(exercise);
+export const workout = new Schema('exercises');
+export const arrayOfExercises = arrayOf(workout);
 export const exerciseInstance = new Schema('exerciseInstances');
 export const arrayOfExerciseInstances = arrayOf(exerciseInstance);
 
 
-const workout = new Schema('workouts');
+const workout = new Schema('exercises');
 workout.define({
   exercises: arrayOfExercises
 });
-export const arrayOfWorkouts = arrayOf(workout);
+export const arrayOfExercise = arrayOf(workout);
 
-const workoutInstance = new Schema('workoutInstances');
-workoutInstance.define({
+const exerciseInstance = new Schema('exerciseInstances');
+exerciseInstance.define({
   exerciseInstances: arrayOfExerciseInstances
 });
 
-export const arrayOfWorkoutInstances = arrayOf(workoutInstance);
+export const arrayOfExerciseInstances = arrayOf(exerciseInstance);
 
-export { workout, workoutInstance };
+export { workout, exerciseInstance };
 
 

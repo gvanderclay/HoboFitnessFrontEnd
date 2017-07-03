@@ -8,7 +8,7 @@ class HomePage extends Component {
     super();
     this.sections = [
       {
-        title: "Customize Workouts",
+        title: "Customize Excercises",
         description: "Bless up. Bless up. The key is to drink coconut, fresh coconut, trust me. Learning is cool, but knowing is better, and I know the key to success. Congratulations, you played yourself. The ladies always say Khaled you smell good, I use no cologne. Cocoa butter is the key. Don’t ever play yourself. They never said winning was easy. Some people can’t handle success, I can. Major key, don’t fall for the trap, stay focused. It’s the ones closest to you that want to see you fail. " 
       },
       {
@@ -27,9 +27,9 @@ class HomePage extends Component {
         <Jumbotron>
           <div className="container">
             <h1 className="title">Welcome To HoboFitness</h1>
-            <p>Track your workouts effortlessly!</p>
+            <p>Track your excercises effortlessly!</p>
             <p><Button onClick={() => {
-              this.props.router.push('/workouts');
+              this.props.router.push('/excercises');
             }}>
             Get Started
             </Button></p>

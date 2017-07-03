@@ -5,13 +5,13 @@ import App from './App';
 import HomePage from './HomePage';
 import ExerciseListContainer from '../containers/ExerciseListContainer';
 import MainExerciseEdit from '../components/MainExerciseEdit';
-import WorkoutExerciseEdit from '../components/WorkoutExerciseEdit';
+import ExcerciseExerciseEdit from '../components/ExcerciseExerciseEdit';
 import ExerciseStartContainer from '../containers/ExerciseStartContainer';
 import MainExerciseHistoryContainer from '../containers/MainExerciseHistoryContainer';
-import WorkoutHistoryContainer from '../containers/WorkoutHistoryContainer';
-import WorkoutStartContainer from '../containers/WorkoutStartContainer';
-import WorkoutListContainer from '../containers/WorkoutListContainer';
-import WorkoutEditContainer from '../containers/WorkoutEditContainer';
+import ExcerciseHistoryContainer from '../containers/ExcerciseHistoryContainer';
+import ExcerciseStartContainer from '../containers/ExcerciseStartContainer';
+import ExcerciseListContainer from '../containers/ExcerciseListContainer';
+import ExcerciseEditContainer from '../containers/ExcerciseEditContainer';
 
 const Root = ({ store }) => (
   <Provider store={store}>
@@ -22,11 +22,11 @@ const Root = ({ store }) => (
         <Route path='/exercises/:exerciseId/edit' component={MainExerciseEdit}> </Route>
         <Route path='/exercises/:exerciseId/history' component={MainExerciseHistoryContainer}> </Route>
         <Route path='/exercises/:exerciseInstanceId' component={ExerciseStartContainer}> </Route>
-        <Route path='/workouts' component={WorkoutListContainer}> </Route>
-        <Route path='/workouts/:workoutId/edit' component={WorkoutEditContainer}> </Route>
-        <Route path='/workouts/:workoutId/exercise/:exerciseId' component={WorkoutExerciseEdit}> </Route>
-        <Route path='/workouts/:workoutId/history' component={WorkoutHistoryContainer}> </Route>
-        <Route path='/workouts/:workoutInstanceId' component={WorkoutStartContainer}> </Route>
+        <Route path='/excercises' component={ExcerciseListContainer}> </Route>
+        <Route path='/excercises/:excerciseId/edit' component={ExcerciseEditContainer}> </Route>
+        <Route path='/excercises/:excerciseId/exercise/:exerciseId' component={ExcerciseExerciseEdit}> </Route>
+        <Route path='/excercises/:excerciseId/history' component={ExcerciseHistoryContainer}> </Route>
+        <Route path='/excercises/:excerciseInstanceId' component={ExcerciseStartContainer}> </Route>
       </Route>
     </Router>
   </Provider>
