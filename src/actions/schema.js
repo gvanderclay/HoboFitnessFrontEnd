@@ -6,19 +6,19 @@ export const exerciseInstance = new Schema('exerciseInstances');
 export const arrayOfExerciseInstances = arrayOf(exerciseInstance);
 
 
-const workout = new Schema('workouts');
-workout.define({
+const exercise = new Schema('workouts');
+exercise.define({
   exercises: arrayOfExercises
 });
-export const arrayOfWorkouts = arrayOf(workout);
+export const arrayOfExercises = arrayOf(workout);
 
-const workoutInstance = new Schema('workoutInstances');
-workoutInstance.define({
+const exerciseInstance = new Schema('workoutInstances');
+exerciseInstance.define({
   exerciseInstances: arrayOfExerciseInstances
 });
 
-export const arrayOfWorkoutInstances = arrayOf(workoutInstance);
+export const arrayOfExerciseInstances = arrayOf(workoutInstance);
 
-export { workout, workoutInstance };
+export { exercise, workoutInstance };
 
 

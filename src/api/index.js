@@ -24,7 +24,7 @@ export const saveDB = (state) => {
 };
 
 let state = loadDB();
-state = state ? state : {exercises: [], workouts: [], workoutInstances: [], exerciseInstances: []};
+state = state ? state : {exercises: [], exercises: [], workoutInstances: [], exerciseInstances: []};
 saveDB(state);
 
 export const fetchExercises = () =>
@@ -202,69 +202,69 @@ export const fetchExerciseInstance = (id) =>
   });
 
 
-export const fetchWorkouts = () =>
+export const fetchExercises = () =>
   new Promise((resolve, reject) => {
     try {
       const db = loadDB();
-      resolve(db.workouts);
+      resolve(db.exercises);
     } catch (err) {
       reject(Error(err));
     }
   });
 
-export const addWorkout = (name) =>
+export const addExercise = (name) =>
   new Promise((resolve, reject) => {
-    const workout = {
+    const exercise = {
       id: v4(),
       name,
       exercises: []
     };
     try {
       var oldDB = loadDB();
-      oldDB.workouts.push(workout);
+      oldDB.exercises.push(workout);
       saveDB(oldDB);
-      resolve(workout);
+      resolve(exercise);
     } catch(err) {
       reject(Error(err));
     }
   });
 
-export const updateWorkout = (id, name, newExercise) =>
+export const updateExercise = (id, name, newExercise) =>
   new Promise((resolve, reject) => {
     const db = loadDB();
     try {
-      const indexOfWorkout = db.workouts.findIndex(workout => workout.id === id);
-      const oldWorkout = db.workouts[indexOfWorkout];
-      oldWorkout.name = name;
+      const indexOfExercise = db.workouts.findIndex(workout => workout.id === id);
+      const oldExercise = db.workouts[indexOfWorkout];
+      oldExercise.name = name;
       if(newExercise){
-        oldWorkout.exercises.push(newExercise.id);
+        oldExercise.exercises.push(newExercise.id);
       }
-      db.workouts[indexOfWorkout] = oldWorkout;
+      db.exercises[indexOfWorkout] = oldWorkout;
       saveDB(db);
-      resolve(oldWorkout);
+      resolve(oldExercise);
     } catch(err) {
       reject(Error(err));
     }
   });
 
-export const fetchWorkout = (id) =>
+export const fetchExercise = (id) =>
   new Promise((resolve, reject) => {
     try {
-      fetchWorkouts().then((workouts) => {
-        resolve(workouts.find(workout => workout.id === id));
+      fetchExercises().then((workouts) => {
+        resolve(exercises.find(workout => workout.id === id));
       });
     } catch(err) {
       reject(Error(err));
     }
   });
 
-export const deleteWorkout = (id) =>
+export const deleteExercise = (id) =>
   new Promise((resolve, reject) => {
     try {
       const db = loadDB();
-      const index = db.workouts.findIndex(workout => workout.id === id);
+      const index = db.exercises.findIndex(workout => workout.id === id);
       if (index > -1) {
-        db.workouts.splice(index, 1);
+        db.exercises.splice(index, 1);
       }
       saveDB(db);
       resolve(index);
@@ -272,26 +272,26 @@ export const deleteWorkout = (id) =>
     }
   });
 
-// id is id of the workout not the instance
-export const addWorkoutInstance = (id) =>
+// id is id of the exercise not the instance
+export const addExerciseInstance = (id) =>
   new Promise((resolve, reject) => {
     try {
-      fetchWorkout(id).then((workout) => {
+      fetchExercise(id).then((workout) => {
         let repsPerSet = [];
-        const workoutInstance = {
+        const exerciseInstance = {
           id: v4(),
-          workoutId: workout.id,
+          exerciseId: workout.id,
           exerciseInstances: [],
           completed: false
         };
-        const instances = createExerciseInstancesForWorkout(workout);
+        const instances = createExerciseInstancesForExercise(workout);
         Promise.all(instances).then(values => {
           console.log(values);
-          workoutInstance.exerciseInstances = values;
+          exerciseInstance.exerciseInstances = values;
           const db = loadDB();
-          db.workoutInstances.push(workoutInstance);
+          db.exerciseInstances.push(workoutInstance);
           saveDB(db);
-          resolve(workoutInstance);
+          resolve(exerciseInstance);
         });
       });
     } catch(err) {
@@ -299,43 +299,43 @@ export const addWorkoutInstance = (id) =>
     }
   });
 
-export const completeWorkoutInstance = (id) =>
+export const completeExerciseInstance = (id) =>
   new Promise((resolve, reject) => {
     try {
       let db = loadDB();
-      const index = db.workoutInstances.findIndex((instance) => instance.id === id);
-      db.workoutInstances[index].completed = true;
+      const index = db.exerciseInstances.findIndex((instance) => instance.id === id);
+      db.exerciseInstances[index].completed = true;
       saveDB(db);
-      resolve(db.workoutInstances[index]);
+      resolve(db.exerciseInstances[index]);
     } catch(err) {
       reject(Error(err));
     }
   });
 
-const createExerciseInstancesForWorkout = (workout) => {
-  return _.map(workout.exercises, (exerciseId) => {
+const createExerciseInstancesForExercise = (workout) => {
+  return _.map(exercise.exercises, (exerciseId) => {
     return addExerciseInstance(exerciseId).then((exerciseInstance) => {
       return exerciseInstance.id;
     });
   });
 };
 
-export const fetchWorkoutInstance = (id) =>
+export const fetchExerciseInstance = (id) =>
   new Promise((resolve, reject) => {
     try {
-      fetchWorkoutInstances().then((workoutInstances) => {
-        resolve(workoutInstances.find(workout => workout.id === id));
+      fetchExerciseInstances().then((workoutInstances) => {
+        resolve(exerciseInstances.find(workout => workout.id === id));
       });
     } catch(err) {
       reject(Error(err));
     }
   });
 
-export const fetchWorkoutInstances = () =>
+export const fetchExerciseInstances = () =>
   new Promise((resolve, reject) => {
     try {
       const state = loadDB();
-      resolve(state.workoutInstances);
+      resolve(state.exerciseInstances);
     } catch (err) {
       reject(Error(err));
     }
